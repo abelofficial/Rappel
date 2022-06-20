@@ -1,5 +1,5 @@
-using API.Data.Entities;
-using API.Data.Repositories;
+using API.Application.Queries;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
@@ -9,17 +9,20 @@ namespace API.Controllers;
 public class UserController : ControllerBase
 {
     private readonly ILogger<UserController> _logger;
-    private readonly IRepository<User> _repo;
+    private readonly IMediator _mediator;
 
-    public UserController(ILogger<UserController> logger, IRepository<User> repo)
+    public UserController(ILogger<UserController> logger, IMediator mediator)
     {
         _logger = logger;
-        _repo = repo;
+        _mediator = mediator;
     }
 
+    /// <summary>
+    /// Get all a list of all users.
+    /// </summary>
     [HttpGet]
     public async Task<ActionResult> Get()
     {
-        return Ok(await _repo.GetAll());
+        return Ok(await _mediator.Send(new GetAllUsersQuery()));
     }
 }
