@@ -1,4 +1,5 @@
 using API.Application.Commands;
+using API.Application.Results;
 using API.Controllers;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -16,7 +17,7 @@ public class ControllersTest
 
     private void setupMock()
     {
-        _mock.Setup(m => m.Send(It.IsAny<RegisterUserCommand>(), default(CancellationToken))).ReturnsAsync(Unit.Value);
+        _mock.Setup(m => m.Send(It.IsAny<RegisterUserCommand>(), default(CancellationToken))).ReturnsAsync(new UserResponseDto());
     }
 
     [Fact]
