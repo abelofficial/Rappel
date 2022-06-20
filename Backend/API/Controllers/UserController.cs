@@ -1,6 +1,6 @@
-using API.Data;
+using API.Data.Entities;
+using API.Data.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers;
 
@@ -9,17 +9,17 @@ namespace API.Controllers;
 public class UserController : ControllerBase
 {
     private readonly ILogger<UserController> _logger;
-    private readonly AppDbContext _db;
+    private readonly IRepository<User> _repo;
 
-    public UserController(ILogger<UserController> logger, AppDbContext db)
+    public UserController(ILogger<UserController> logger, IRepository<User> repo)
     {
         _logger = logger;
-        _db = db;
+        _repo = repo;
     }
 
     [HttpGet]
     public async Task<ActionResult> Get()
     {
-        return Ok(await _db.Users.ToListAsync());
+        return Ok(await _repo.GetAll());
     }
 }
