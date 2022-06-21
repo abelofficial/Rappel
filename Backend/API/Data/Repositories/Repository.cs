@@ -1,4 +1,5 @@
 
+using System.Linq.Expressions;
 using API.Data;
 using API.Data.Entities;
 using API.Data.Repositories;
@@ -47,5 +48,15 @@ public class Repository<T> : IRepository<T> where T : class, IEntity
     public T Update(T t)
     {
         return _dbSet.Update(t).Entity;
+    }
+
+    public async Task<bool> Exists(int id)
+    {
+        return await _dbSet.AnyAsync(e => e.Id == id);
+    }
+
+    public async Task<IEnumerable<T>> GetAll(Expression<Func<T, bool>> filterExp)
+    {
+        return await _dbSet.Where(filterExp).ToListAsync();
     }
 }
