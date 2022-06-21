@@ -43,7 +43,7 @@ public class LoginUserHandler : BaseHandler<User>, IRequestHandler<LoginUserComm
             };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
-            _configuration.GetSection("JWT:secret").Value));
+            _configuration["JWT:secret"]));
 
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
