@@ -1,5 +1,6 @@
 using API.Application.Commands;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
@@ -33,5 +34,15 @@ public class AuthController : ControllerBase
     public async Task<ActionResult> LoginUser(LoginUserCommand request)
     {
         return Ok(await _mediator.Send(request));
+    }
+    /// <summary>
+    /// Test auth endpoint. (ToDo: remove)
+    /// </summary>
+
+    [HttpPost("TestAuth")]
+    [Authorize]
+    public ActionResult TestAuth()
+    {
+        return Ok(new { Message = "You are now authenticated." });
     }
 }
