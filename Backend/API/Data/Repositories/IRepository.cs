@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using API.Data.Entities;
 
 namespace API.Data.Repositories;
@@ -13,4 +14,6 @@ public interface IRepository<T> where T : IEntity
     public T Update(T t);
 
     public Task SaveChanges();
+
+    public Task<IEnumerable<T>> GetAll(Expression<Func<T, bool>> filterExp);
 }

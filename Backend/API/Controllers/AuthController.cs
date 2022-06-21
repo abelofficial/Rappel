@@ -20,7 +20,7 @@ public class AuthController : ControllerBase
     /// <summary>
     /// Register new user.
     /// </summary>
-    [HttpPost]
+    [HttpPost("register")]
     public async Task<ActionResult> RegisterUser(RegisterUserCommand request)
     {
         return Ok(await _mediator.Send(request));
