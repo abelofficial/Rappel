@@ -25,4 +25,13 @@ public class AuthController : ControllerBase
     {
         return Ok(await _mediator.Send(request));
     }
+
+    /// <summary>
+    /// Authenticate user.
+    /// </summary>
+    [HttpPost("login")]
+    public async Task<ActionResult> LoginUser(LoginUserCommand request)
+    {
+        return Ok(await _mediator.Send(request));
+    }
 }
