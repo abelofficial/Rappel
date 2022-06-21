@@ -13,6 +13,7 @@ public class ControllersTest
     public ControllersTest()
     {
         _mock = new Mock<IMediator>();
+        setupMock();
     }
 
     private void setupMock()
