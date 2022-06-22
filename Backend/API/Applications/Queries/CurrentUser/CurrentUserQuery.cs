@@ -4,5 +4,5 @@ using MediatR;
 namespace API.Application.Queries;
 
 
-public class GetAllUsersQuery : IRequest<IEnumerable<UserResponseDto>>
+public class CurrentUserQuery : IRequest<UserResponseDto>
 { }
