@@ -1,7 +1,7 @@
 import { Grid, Input, Text } from "@nextui-org/react";
 import { useField } from "formik";
 import React from "react";
-
+import { v4 as uuid } from "uuid";
 export interface TextFieldProps {
   type: string;
   name: string;
@@ -11,6 +11,7 @@ export interface TextFieldProps {
 
 const Index = ({ label, ...restProps }: TextFieldProps) => {
   const [field, meta, helpers] = useField(restProps);
+
   return (
     <Grid
       xs={12}
@@ -19,11 +20,13 @@ const Index = ({ label, ...restProps }: TextFieldProps) => {
         flexDirection: "column",
       }}
     >
-      <label>
+      <label title={label}>
         {label}
         <Input
           {...field}
           {...restProps}
+          id={uuid()}
+          aria-label={`${restProps.name} input field`}
           status={meta.touched && meta.error ? "error" : "default"}
         />
       </label>

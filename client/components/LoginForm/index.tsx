@@ -5,16 +5,17 @@ import {
   validationSchema,
   fieldNames,
   fieldLabels,
-} from "./registerProps";
-import { RegisterUserRequest } from "../../types";
+} from "./loginProps";
+import { LoginUserRequest } from "../../types";
 import { Button, Grid, useTheme } from "@nextui-org/react";
 import TextField from "../TextField";
 
 const Index = () => {
   const { theme } = useTheme();
+
   const onSubmitHandler = async (
-    values: RegisterUserRequest,
-    actions: FormikHelpers<RegisterUserRequest>
+    values: LoginUserRequest,
+    actions: FormikHelpers<LoginUserRequest>
   ) => {
     console.log("Values: " + values + "\n action: " + actions);
   };
@@ -38,25 +39,6 @@ const Index = () => {
           >
             <TextField
               type='text'
-              name={fieldNames.firstName}
-              label={fieldLabels.firstName}
-              fullWidth
-            />
-
-            <TextField
-              type='text'
-              name={fieldNames.lastName}
-              label={fieldLabels.lastName}
-              fullWidth
-            />
-            <TextField
-              type='email'
-              name={fieldNames.email}
-              label={fieldLabels.email}
-              fullWidth
-            />
-            <TextField
-              type='text'
               name={fieldNames.username}
               label={fieldLabels.username}
               fullWidth
@@ -68,16 +50,9 @@ const Index = () => {
               fullWidth
             />
 
-            <TextField
-              type='password'
-              name={fieldNames.confirmPassword}
-              label={fieldLabels.confirmPassword}
-              fullWidth
-            />
-
             <Grid xs={12}>
               <Button type='submit' color='success' disabled={isSubmitting}>
-                Register
+                Login
               </Button>
             </Grid>
           </Grid.Container>
