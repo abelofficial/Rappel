@@ -37,10 +37,10 @@ public class AuthController : ControllerBase
         return Ok(await _mediator.Send(request));
     }
     /// <summary>
-    /// Test auth endpoint. (ToDo: remove)
+    /// Get the authenticated user
     /// </summary>
 
-    [HttpPost("user")]
+    [HttpGet("user")]
     [Authorize]
     public async Task<ActionResult> CurrentUser()
     {
