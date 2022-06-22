@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Form, Formik } from "formik";
 import {
   initialValues,
@@ -7,7 +7,7 @@ import {
   fieldLabels,
 } from "./loginProps";
 import { LoginUserRequest } from "../../types";
-import { Button, Card, Grid, useTheme } from "@nextui-org/react";
+import { Button, Card, Grid, Text, Tooltip, useTheme } from "@nextui-org/react";
 import TextField from "../TextField";
 import { loginUserCommand } from "../../services/commands";
 import { useRouter } from "next/router";
@@ -15,6 +15,7 @@ import { useRouter } from "next/router";
 const Index = () => {
   const { theme } = useTheme();
   const router = useRouter();
+  const [errors, setErrors] = useState<string[] | undefined>();
 
   const onSubmitHandler = async (values: LoginUserRequest) => {
     try {
@@ -22,9 +23,22 @@ const Index = () => {
       console.log("Result: ", result.data.token);
       router.push("/");
     } catch (e: any) {
-      console.log("Error: ", e?.response?.data);
+      console.log("Error: ", e?.response?.data.errors);
+      setErrors(e?.response?.data.errors);
     }
   };
+
+  const displayErrors = () => (
+    <Tooltip content='' contentColor='error'>
+      <Grid.Container alignItems='center' gap={1}>
+        {errors?.map((e) => (
+          <Grid key={e} xs={12}>
+            <Text color='error'>{e}</Text>
+          </Grid>
+        ))}
+      </Grid.Container>
+    </Tooltip>
+  );
   return (
     <Formik
       initialValues={initialValues}
@@ -45,6 +59,7 @@ const Index = () => {
                 padding: theme?.space.lg,
               }}
             >
+              {errors && displayErrors()}
               <TextField
                 type='text'
                 name={fieldNames.username}
