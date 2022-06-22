@@ -1,3 +1,4 @@
+using API.Application.Commands;
 using API.Application.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -36,6 +37,16 @@ public class UsersController : ControllerBase
     public async Task<ActionResult> GetUserById(int id)
     {
         return Ok(await _mediator.Send(new GetUserByIdQuery() { Id = id }));
+    }
+
+    /// <summary>
+    /// Updated current user information.
+    /// </summary>
+    [HttpPut()]
+    [Authorize]
+    public async Task<ActionResult> UpdateCurrentUserInfo(UpdateUserInfoCommand request)
+    {
+        return Ok(await _mediator.Send(request));
     }
 
 }
