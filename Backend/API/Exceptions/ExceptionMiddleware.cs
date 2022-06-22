@@ -29,8 +29,8 @@ public class ExceptionMiddleware
             var result = JsonSerializer.Serialize(
                 new ExceptionMessage()
                 {
-                    Message = HttpStatusCode.GetName(errorStatus),
-                    StatusCode = errorStatus,
+                    Title = HttpStatusCode.GetName(errorStatus),
+                    status = errorStatus,
                     Errors = new List<string>(error.Message.Split("\n")) { },
                 });
             await response.WriteAsync(result);
@@ -45,8 +45,8 @@ public class ExceptionMiddleware
             var result = JsonSerializer.Serialize(
                 new ExceptionMessage()
                 {
-                    Message = HttpStatusCode.GetName(errorStatus),
-                    StatusCode = errorStatus,
+                    Title = HttpStatusCode.GetName(errorStatus),
+                    status = errorStatus,
                     Errors = new List<string>(error.Message.Split("\n")) { },
                 });
             await response.WriteAsync(result);
