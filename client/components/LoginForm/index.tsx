@@ -7,7 +7,7 @@ import {
   fieldLabels,
 } from "./loginProps";
 import { LoginUserRequest } from "../../types";
-import { Button, Grid, useTheme } from "@nextui-org/react";
+import { Button, Card, Grid, useTheme } from "@nextui-org/react";
 import TextField from "../TextField";
 
 const Index = () => {
@@ -27,35 +27,38 @@ const Index = () => {
     >
       {({ isSubmitting }) => (
         <Form>
-          <Grid.Container
-            gap={1}
-            justify='center'
-            alignItems='center'
-            css={{
-              backgroundColor: theme?.colors.primaryShadow,
-              border: theme?.borderWeights.light,
-              boxShadow: theme?.shadows.lg,
-            }}
-          >
-            <TextField
-              type='text'
-              name={fieldNames.username}
-              label={fieldLabels.username}
-              fullWidth
-            />
-            <TextField
-              type='password'
-              name={fieldNames.password}
-              label={fieldLabels.password}
-              fullWidth
-            />
+          <Card variant='bordered'>
+            <Grid.Container
+              gap={1}
+              justify='center'
+              alignItems='center'
+              css={{
+                backgroundColor: theme?.colors.primaryShadow,
+                border: theme?.borderWeights.light,
+                boxShadow: theme?.shadows.lg,
+                padding: theme?.space.lg,
+              }}
+            >
+              <TextField
+                type='text'
+                name={fieldNames.username}
+                label={fieldLabels.username}
+                fullWidth
+              />
+              <TextField
+                type='password'
+                name={fieldNames.password}
+                label={fieldLabels.password}
+                fullWidth
+              />
 
-            <Grid xs={12}>
-              <Button type='submit' color='success' disabled={isSubmitting}>
-                Login
-              </Button>
-            </Grid>
-          </Grid.Container>
+              <Grid xs={12}>
+                <Button type='submit' color='success' disabled={isSubmitting}>
+                  Login
+                </Button>
+              </Grid>
+            </Grid.Container>
+          </Card>
         </Form>
       )}
     </Formik>
