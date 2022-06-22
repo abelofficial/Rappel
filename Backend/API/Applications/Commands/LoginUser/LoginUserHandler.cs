@@ -26,7 +26,7 @@ public class LoginUserHandler : BaseHandler<User>, IRequestHandler<LoginUserComm
         var targetUser = (await _repo.GetAll(u => u.Username == request.Username)).SingleOrDefault();
 
         if (targetUser == null || !Password.VerifyPasswordHash(request.Password, targetUser.PasswordHash, targetUser.PasswordSalt))
-            throw new HttpRequestException("Unauthorized", null, HttpStatusCode.Unauthorized);
+            throw new HttpRequestException("Wrong credential", null, HttpStatusCode.Unauthorized);
 
 
         return new LoginResponseDto() { Token = CreateToken(targetUser) };
