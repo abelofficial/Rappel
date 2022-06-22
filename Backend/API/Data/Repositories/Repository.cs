@@ -23,15 +23,8 @@ public class Repository<T> : IRepository<T> where T : class, IEntity
 
     public async Task<T> GetOne(int id)
     {
-        try
-        {
-            var result = await _dbSet.AsNoTracking<T>().SingleAsync(e => e.Id == id);
-            return result;
-        }
-        catch (ArgumentNullException)
-        {
-            throw new Exception("Key not found");
-        }
+        var result = await _dbSet.SingleAsync(e => e.Id == id);
+        return result;
 
     }
 
