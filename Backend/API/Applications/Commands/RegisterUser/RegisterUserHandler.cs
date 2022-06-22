@@ -18,12 +18,12 @@ public class RegisterUserHandler : BaseHandler<User>, IRequestHandler<RegisterUs
         string? errors = null;
 
         if (usernameTaken)
-            errors = "Username is already taken.";
+            errors = "Username is already taken.\n";
 
         var emailAddressTaken = (await _repo.GetAll(u => u.Email == request.Email)).Any();
 
         if (emailAddressTaken)
-            errors += "\nEmail address is already taken.";
+            errors += "Email address is already taken.";
 
         if (errors != null) throw new HttpRequestException(errors, null, HttpStatusCode.BadRequest);
 
