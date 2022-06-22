@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, Formik, FormikHelpers } from "formik";
+import { Form, Formik } from "formik";
 import {
   initialValues,
   validationSchema,
@@ -9,20 +9,26 @@ import {
 import { LoginUserRequest } from "../../types";
 import { Button, Card, Grid, useTheme } from "@nextui-org/react";
 import TextField from "../TextField";
+import { loginUserCommand } from "../../services/commands";
+import { useRouter } from "next/router";
 
 const Index = () => {
   const { theme } = useTheme();
+  const router = useRouter();
 
-  const onSubmitHandler = async (
-    values: LoginUserRequest,
-    actions: FormikHelpers<LoginUserRequest>
-  ) => {
-    console.log("Values: " + values + "\n action: " + actions);
+  const onSubmitHandler = async (values: LoginUserRequest) => {
+    try {
+      var result = await loginUserCommand(values);
+      console.log("Result: ", result.data.token);
+      router.push("/");
+    } catch (e: any) {
+      console.log("Error: ", e?.response?.data);
+    }
   };
   return (
     <Formik
       initialValues={initialValues}
-      onSubmit={async (values, actions) => onSubmitHandler(values, actions)}
+      onSubmit={onSubmitHandler}
       validationSchema={validationSchema}
     >
       {({ isSubmitting }) => (
