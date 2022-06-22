@@ -30,7 +30,7 @@ public class ExceptionMiddleware
                 new ExceptionMessage()
                 {
                     Title = HttpStatusCode.GetName(errorStatus),
-                    status = errorStatus,
+                    Status = errorStatus,
                     Errors = new List<string>(error.Message.Split("\n")) { },
                 });
             await response.WriteAsync(result);
@@ -46,7 +46,7 @@ public class ExceptionMiddleware
                 new ExceptionMessage()
                 {
                     Title = HttpStatusCode.GetName(errorStatus),
-                    status = errorStatus,
+                    Status = errorStatus,
                     Errors = new List<string>(error.Message.Split("\n")) { },
                 });
             await response.WriteAsync(result);
