@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Form, Formik } from "formik";
 import {
   initialValues,
@@ -6,24 +6,26 @@ import {
   fieldNames,
   fieldLabels,
 } from "./loginProps";
-import { LoginUserRequest } from "../../types";
+import { LoginUserRequest, UserResponse } from "../../types";
 import { Button, Card, Grid, Text, Tooltip, useTheme } from "@nextui-org/react";
 import TextField from "../TextField";
 import { loginUserCommand } from "../../services/commands";
 import { useRouter } from "next/router";
+import { AuthContext, AuthContextInterface } from "../../Contexts/Auth";
 
 const Index = () => {
   const { theme } = useTheme();
   const router = useRouter();
   const [errors, setErrors] = useState<string[] | undefined>();
+  const { setUser } = useContext<AuthContextInterface>(AuthContext);
 
   const onSubmitHandler = async (values: LoginUserRequest) => {
     try {
       var result = await loginUserCommand(values);
       console.log("Result: ", result.data.token);
+      setUser({} as UserResponse);
       router.push("/");
     } catch (e: any) {
-      console.log("Error: ", e?.response?.data.errors);
       setErrors(e?.response?.data.errors);
     }
   };

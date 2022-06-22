@@ -22,7 +22,6 @@ const Index = () => {
       await registerUserCommand(values);
       router.push("/");
     } catch (e: any) {
-      console.log("Error: ", e?.response?.data.errors);
       setErrors(e?.response?.data.errors);
     }
   };
