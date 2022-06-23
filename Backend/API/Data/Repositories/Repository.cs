@@ -27,6 +27,12 @@ public class Repository<T> : IRepository<T> where T : class, IEntity
         return result;
     }
 
+    public async Task<T> GetOne(int id, string? include)
+    {
+        var result = await _dbSet.Include(include).SingleAsync(e => e.Id == id);
+        return result;
+    }
+
     public async Task<T> GetOne(Expression<Func<T, bool>> filterExp)
     {
         return await _dbSet.Where(filterExp).SingleAsync();
@@ -37,9 +43,9 @@ public class Repository<T> : IRepository<T> where T : class, IEntity
         await _dbContext.SaveChangesAsync();
     }
 
-    public void Create(T t)
+    public T Create(T t)
     {
-        _dbSet.Add(t);
+        return _dbSet.Add(t).Entity;
     }
 
     public T Update(T t)
