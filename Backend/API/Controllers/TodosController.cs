@@ -1,4 +1,5 @@
 using API.Application.Commands;
+using API.Application.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -26,6 +27,17 @@ public class TodosController : ControllerBase
     public async Task<ActionResult> CreateTodoItem(CreateTodoCommand request)
     {
         var response = await _mediator.Send(request);
+        return Ok(response);
+    }
+
+    /// <summary>
+    // Create Todo item.
+    /// </summary>
+    [HttpGet()]
+    [Authorize]
+    public async Task<ActionResult> GetAllUserTodos()
+    {
+        var response = await _mediator.Send(new GetAllUserTodosQuery());
         return Ok(response);
     }
 }
