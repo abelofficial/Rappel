@@ -18,14 +18,21 @@ const Index = () => {
   const { theme } = useTheme();
   const router = useRouter();
   const [errors, setErrors] = useState<string[] | undefined>();
-  const { setUser } = useContext<AuthContextInterface>(AuthContext);
+  const { setUser, setToken } = useContext<AuthContextInterface>(AuthContext);
 
   const onSubmitHandler = async (values: LoginUserRequest) => {
     try {
       var result = await loginUserCommand(values);
       var userResp = await getCurrentUserQuery(result.data.token);
       setUser(userResp.data);
+      setToken(result.data.token);
+
       localStorage.setItem("user", JSON.stringify(userResp.data));
+      localStorage.setItem(
+        userResp.data.username,
+        JSON.stringify(result.data.token)
+      );
+
       router.push("/");
     } catch (e: any) {
       setErrors(e?.response?.data.errors);

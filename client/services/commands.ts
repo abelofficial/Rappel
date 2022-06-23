@@ -1,7 +1,9 @@
 import {
+  CreateTodoCommand,
   LoginUserRequest,
   LoginUserResponse,
   RegisterUserRequest,
+  TodoResponseDto,
   UserResponse,
 } from "../types";
 import { api } from "../utils/apiAxiosInstance";
@@ -12,3 +14,6 @@ export const registerUserCommand = (
 
 export const loginUserCommand = (body: LoginUserRequest) =>
   api().post<LoginUserResponse>(`/auth/login`, body);
+
+export const createTodoCommand = (token: string, body: CreateTodoCommand) =>
+  api(token).post<TodoResponseDto>(`/todos`, body);

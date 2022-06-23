@@ -18,6 +18,7 @@ import {
 } from "@nextui-org/react";
 import TextField, { TextAreaField } from "../TextField";
 import { AuthContext, AuthContextInterface } from "../../Contexts/Auth";
+import { createTodoCommand } from "../../services/commands";
 
 const Index = () => {
   const { theme } = useTheme();
@@ -27,16 +28,16 @@ const Index = () => {
 
   const closeHandler = () => {
     setVisible(false);
-    console.log("closed");
   };
   const [errors, setErrors] = useState<string[] | undefined>();
-  const { setUser } = useContext<AuthContextInterface>(AuthContext);
+  const { token } = useContext<AuthContextInterface>(AuthContext);
 
   const onSubmitHandler = async (values: CreateTodoCommand) => {
     try {
-      console.log(values);
+      const resp = await createTodoCommand(token + "", values);
+      setVisible(false);
     } catch (e: any) {
-      setErrors(e?.response?.data.errors);
+      setErrors(e?.response?.data?.errors);
     }
   };
 

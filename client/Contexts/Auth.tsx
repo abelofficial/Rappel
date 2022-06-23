@@ -10,7 +10,9 @@ import { UserResponse } from "../types";
 
 export interface AuthContextInterface {
   user: UserResponse | undefined;
+  token: string | undefined;
   setUser: Dispatch<SetStateAction<UserResponse | undefined>>;
+  setToken: Dispatch<SetStateAction<string | undefined>>;
 }
 
 export const AuthContext = createContext<AuthContextInterface>(
@@ -33,12 +35,15 @@ export const AuthProvider = ({ children }: { children: JSX.Element }) => {
     if (!auth.user) {
       const savedUserString = localStorage.getItem("user");
 
-      if (savedUserString == null) redirectToAuth();
+      if (savedUserString === null) redirectToAuth();
 
       const savedUser: UserResponse = JSON.parse(
-        savedUserString ? savedUserString : ""
+        savedUserString ? savedUserString : "{}"
       );
+      const userToken = localStorage.getItem(savedUser.username);
+
       auth.setUser(savedUser);
+      auth.setToken(userToken ? userToken : undefined);
       redirectToHome();
     }
   }, []);
@@ -50,6 +55,7 @@ export const AuthProvider = ({ children }: { children: JSX.Element }) => {
 
 function AuthActions(): AuthContextInterface {
   const [user, setUser] = useState<UserResponse | undefined>();
+  const [token, setToken] = useState<string | undefined>();
 
-  return { user, setUser };
+  return { user, token, setUser, setToken };
 }
