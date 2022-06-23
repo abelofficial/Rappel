@@ -1,16 +1,17 @@
 using API.Application.Results;
+using API.Data;
 using API.Data.Entities;
-using API.Data.Repositories;
 using AutoMapper;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Application.Queries;
 
 public class CurrentUserHandler : BaseHandler<User>, IRequestHandler<CurrentUserQuery, UserResponseDto>
 {
     public readonly HttpContext _context;
-    public CurrentUserHandler(IMapper mapper, IRepository<User> repo, IHttpContextAccessor httpContextAccessor)
-            : base(mapper, repo)
+    public CurrentUserHandler(IMapper mapper, AppDbContext db, IHttpContextAccessor httpContextAccessor)
+            : base(mapper, db)
     {
         _context = httpContextAccessor.HttpContext;
     }
@@ -18,7 +19,7 @@ public class CurrentUserHandler : BaseHandler<User>, IRequestHandler<CurrentUser
     public async Task<UserResponseDto> Handle(CurrentUserQuery request, CancellationToken cancellationToken)
     {
         var currentUserName = _context.User.Identity.Name;
-        var currentUser = await _repo.GetAll(u => u.Username.Equals(currentUserName));
-        return _mapper.Map<UserResponseDto>(currentUser.Single());
+        var currentUser = await _db.Users.SingleAsync(u => u.Username.Equals(currentUserName));
+        return _mapper.Map<UserResponseDto>(currentUser);
     }
 }

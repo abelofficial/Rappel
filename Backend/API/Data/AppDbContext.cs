@@ -9,4 +9,8 @@ public class AppDbContext : DbContext
     { }
 
     public DbSet<User> Users { get; set; }
+
+    public DbSet<Todo> Todos { get; set; }
+
+    public DbSet<SubTask> SubTasks { get; set; }
 }

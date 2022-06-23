@@ -10,6 +10,8 @@ public class CommandToEntity : Profile
 
     public CommandToEntity()
     {
+        CreateMap<CreateSubTaskCommand, SubTask>();
+        CreateMap<CreateTodoCommand, Todo>();
         CreateMap<UpdateUserInfoCommand, User>();
         CreateMap<RegisterUserCommand, User>()
         .AfterMap((src, dest) =>

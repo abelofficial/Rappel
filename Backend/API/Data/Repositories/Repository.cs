@@ -32,14 +32,19 @@ public class Repository<T> : IRepository<T> where T : class, IEntity
         return await _dbSet.Where(filterExp).SingleAsync();
     }
 
+    public async Task<T> GetOne(Expression<Func<T, bool>> filterExp, string include)
+    {
+        return await _dbSet.Include(include).Where(filterExp).SingleAsync();
+    }
+
     public async Task SaveChanges()
     {
         await _dbContext.SaveChangesAsync();
     }
 
-    public void Create(T t)
+    public T Create(T t)
     {
-        _dbSet.Add(t);
+        return _dbSet.Add(t).Entity;
     }
 
     public T Update(T t)
@@ -57,4 +62,8 @@ public class Repository<T> : IRepository<T> where T : class, IEntity
         return await _dbSet.Where(filterExp).ToListAsync();
     }
 
+    public async Task<IEnumerable<T>> GetAllWith<I>(Expression<Func<T, bool>> filterExp) where I : IEntity
+    {
+        return await _dbSet.Include(nameof(I)).Where(filterExp).ToListAsync();
+    }
 }

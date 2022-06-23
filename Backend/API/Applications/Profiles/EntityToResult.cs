@@ -10,5 +10,7 @@ public class EntityToResult : Profile
     public EntityToResult()
     {
         CreateMap<User, UserResponseDto>();
+        CreateMap<Todo, TodoResponseDto>().ReverseMap();
+        CreateMap<SubTask, SubTaskResponseDto>().ReverseMap();
     }
 }

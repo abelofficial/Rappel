@@ -1,5 +1,5 @@
+using API.Data;
 using API.Data.Entities;
-using API.Data.Repositories;
 using AutoMapper;
 
 namespace API.Application;
@@ -7,11 +7,11 @@ namespace API.Application;
 public class BaseHandler<T> where T : IEntity
 {
 
-    protected readonly IRepository<T> _repo;
+    protected readonly AppDbContext _db;
     protected readonly IMapper _mapper;
-    public BaseHandler(IMapper mapper, IRepository<T> repo)
+    public BaseHandler(IMapper mapper, AppDbContext db)
     {
         _mapper = mapper;
-        _repo = repo;
+        _db = db;
     }
 }

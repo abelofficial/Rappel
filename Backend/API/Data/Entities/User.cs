@@ -20,5 +20,8 @@ public class User : IEntity
     public byte[] PasswordHash { get; set; }
     [JsonIgnore]
     public byte[] PasswordSalt { get; set; }
+    [JsonIgnore]
+    public virtual IEnumerable<Todo> TodoItems { get; set; }
 
+    public DateTime CreatedAt { get; set; }
 }
