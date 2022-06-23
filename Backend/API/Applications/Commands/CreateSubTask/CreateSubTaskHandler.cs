@@ -1,30 +1,40 @@
+using System.Net;
 using API.Application.Results;
+using API.Data;
 using API.Data.Entities;
-using API.Data.Repositories;
 using AutoMapper;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Application.Commands;
 
 public class CreateSubTaskHandler : BaseHandler<SubTask>, IRequestHandler<CreateSubTaskCommand, SubTaskResponseDto>
 {
-    private readonly IMediator _mediator;
-    private readonly IRepository<Todo> _todoRepo;
-
-    public CreateSubTaskHandler(IMapper mapper, IRepository<SubTask> repo, IRepository<Todo> todoRepo, IMediator mediator)
-            : base(mapper, repo)
+    private readonly HttpContext _context;
+    public CreateSubTaskHandler(IMapper mapper, AppDbContext db, IHttpContextAccessor httpContextAccessor)
+            : base(mapper, db)
     {
-        _mediator = mediator;
-        _todoRepo = todoRepo;
+        _context = httpContextAccessor.HttpContext;
     }
 
     public async Task<SubTaskResponseDto> Handle(CreateSubTaskCommand request, CancellationToken cancellationToken)
     {
-        var newTodoItem = _mapper.Map<SubTask>(request);
-        newTodoItem.Todo = await _todoRepo.GetOne(request.ParentId);
+        var currentUserName = _context.User.Identity.Name;
+        var targetUser = await _db.Users.SingleAsync(u => u.Username.Equals(currentUserName));
 
-        var result = _repo.Create(newTodoItem);
-        await _repo.SaveChanges();
+        var newTodoItem = _mapper.Map<SubTask>(request);
+
+        try
+        {
+            newTodoItem.Todo = await _db.Todos.SingleAsync(td => td.Id == request.ParentId && td.User.Id == targetUser.Id);
+        }
+        catch (Exception)
+        {
+            throw new HttpRequestException($"A todo item with id {request.ParentId} doesn't exists", null, HttpStatusCode.NotFound);
+        }
+
+        var result = _db.SubTasks.Add(newTodoItem).Entity;
+        await _db.SaveChangesAsync();
 
         return _mapper.Map<SubTaskResponseDto>(result);
     }

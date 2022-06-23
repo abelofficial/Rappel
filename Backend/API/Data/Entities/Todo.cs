@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace API.Data.Entities;
@@ -15,10 +14,10 @@ public class Todo : IEntity
 
     [Required]
     [JsonIgnore]
-    [ForeignKey("UserId")]
     public virtual User User { get; set; }
 
     [Required]
+    [JsonIgnore]
     public virtual IEnumerable<SubTask> SubTask { get; set; }
 
     public virtual void AddSubTask(SubTask todo)

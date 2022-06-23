@@ -7,4 +7,5 @@ public class TodoResponseDto
     public string Description { get; set; }
 
     public UserResponseDto User { get; set; }
+
 }
