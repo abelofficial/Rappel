@@ -23,3 +23,15 @@ export interface LoginUserResponse {
   token: string;
   createdAt: Date;
 }
+
+export interface CreateTodoCommand {
+  title: string;
+  description: string;
+}
+
+export interface TodoResponseDto {
+  id: number;
+  title: string;
+  description: string;
+  user: UserResponse;
+}

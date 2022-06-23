@@ -26,14 +26,24 @@ export const AuthProvider = ({ children }: { children: JSX.Element }) => {
       await router.push("/auth");
     };
 
-    if (shouldUserAuth()) {
-      redirectToAuth();
+    const redirectToHome = async () => {
+      if (router.pathname == "/auth") await router.push("/");
+    };
+
+    if (!auth.user) {
+      const savedUserString = localStorage.getItem("user");
+
+      if (savedUserString == null) redirectToAuth();
+
+      const savedUser: UserResponse = JSON.parse(
+        savedUserString ? savedUserString : ""
+      );
+      auth.setUser(savedUser);
+      redirectToHome();
     }
   }, []);
 
-  const shouldUserAuth = () => !auth.user && !router.pathname.endsWith("/auth");
-
-  if (shouldUserAuth()) return <h1> loading...</h1>;
+  if (!auth.user) return <h1> loading...</h1>;
 
   return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
 };

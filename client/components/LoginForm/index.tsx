@@ -6,12 +6,13 @@ import {
   fieldNames,
   fieldLabels,
 } from "./loginProps";
-import { LoginUserRequest, UserResponse } from "../../types";
+import { LoginUserRequest } from "../../types";
 import { Button, Card, Grid, Text, Tooltip, useTheme } from "@nextui-org/react";
 import TextField from "../TextField";
 import { loginUserCommand } from "../../services/commands";
 import { useRouter } from "next/router";
 import { AuthContext, AuthContextInterface } from "../../Contexts/Auth";
+import { getCurrentUserQuery } from "../../services/Queries";
 
 const Index = () => {
   const { theme } = useTheme();
@@ -22,8 +23,9 @@ const Index = () => {
   const onSubmitHandler = async (values: LoginUserRequest) => {
     try {
       var result = await loginUserCommand(values);
-      console.log("Result: ", result.data.token);
-      setUser({} as UserResponse);
+      var userResp = await getCurrentUserQuery(result.data.token);
+      setUser(userResp.data);
+      localStorage.setItem("user", JSON.stringify(userResp.data));
       router.push("/");
     } catch (e: any) {
       setErrors(e?.response?.data.errors);

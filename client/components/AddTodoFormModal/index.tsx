@@ -1,0 +1,129 @@
+import React, { useContext, useState } from "react";
+import { Form, Formik } from "formik";
+import {
+  initialValues,
+  validationSchema,
+  fieldNames,
+  fieldLabels,
+} from "./addTodoFormProps";
+import { CreateTodoCommand } from "../../types";
+import {
+  Button,
+  Card,
+  Grid,
+  Modal,
+  Text,
+  Tooltip,
+  useTheme,
+} from "@nextui-org/react";
+import TextField, { TextAreaField } from "../TextField";
+import { AuthContext, AuthContextInterface } from "../../Contexts/Auth";
+
+const Index = () => {
+  const { theme } = useTheme();
+  const [visible, setVisible] = React.useState(false);
+
+  const handler = () => setVisible(true);
+
+  const closeHandler = () => {
+    setVisible(false);
+    console.log("closed");
+  };
+  const [errors, setErrors] = useState<string[] | undefined>();
+  const { setUser } = useContext<AuthContextInterface>(AuthContext);
+
+  const onSubmitHandler = async (values: CreateTodoCommand) => {
+    try {
+      console.log(values);
+    } catch (e: any) {
+      setErrors(e?.response?.data.errors);
+    }
+  };
+
+  const displayErrors = () => (
+    <Tooltip content='' contentColor='error'>
+      <Grid.Container alignItems='center' gap={1}>
+        {errors?.map((e) => (
+          <Grid key={e} xs={12}>
+            <Text color='error'>{e}</Text>
+          </Grid>
+        ))}
+      </Grid.Container>
+    </Tooltip>
+  );
+  return (
+    <div>
+      <Button auto color='warning' shadow onClick={handler}>
+        Open modal
+      </Button>
+      <Modal
+        closeButton
+        blur
+        aria-labelledby='modal-title'
+        open={visible}
+        onClose={closeHandler}
+      >
+        <Modal.Header>
+          <Text id='modal-title' size={18}>
+            Welcome to
+            <Text b size={18}>
+              NextUI
+            </Text>
+          </Text>
+        </Modal.Header>
+        <Modal.Body>
+          <Formik
+            initialValues={initialValues}
+            onSubmit={onSubmitHandler}
+            validationSchema={validationSchema}
+          >
+            {({ isSubmitting }) => (
+              <Form>
+                <Card variant='bordered'>
+                  <Grid.Container
+                    gap={1}
+                    justify='center'
+                    alignItems='center'
+                    css={{
+                      backgroundColor: theme?.colors.primaryShadow,
+                      border: theme?.borderWeights.light,
+                      boxShadow: theme?.shadows.lg,
+                      padding: theme?.space.lg,
+                    }}
+                  >
+                    {errors && displayErrors()}
+                    <TextField
+                      type='text'
+                      name={fieldNames.title}
+                      label={fieldLabels.title}
+                      fullWidth
+                    />
+                    <TextAreaField
+                      type='password'
+                      name={fieldNames.description}
+                      label={fieldLabels.description}
+                      placeholder='Enter your amazing ideas.'
+                      fullWidth
+                    />
+
+                    <Grid xs={12}>
+                      <Button
+                        type='submit'
+                        color='success'
+                        disabled={isSubmitting}
+                      >
+                        Create
+                      </Button>
+                    </Grid>
+                  </Grid.Container>
+                </Card>
+              </Form>
+            )}
+          </Formik>
+        </Modal.Body>
+      </Modal>
+    </div>
+  );
+};
+
+export default Index;
