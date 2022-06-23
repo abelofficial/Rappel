@@ -22,6 +22,32 @@ namespace API.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("API.Data.Entities.SubTask", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TodoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TodoId");
+
+                    b.ToTable("SubTasks");
+                });
+
             modelBuilder.Entity("API.Data.Entities.Todo", b =>
                 {
                     b.Property<int>("Id")
@@ -38,15 +64,10 @@ namespace API.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("TodoId")
-                        .HasColumnType("int");
-
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("TodoId");
 
                     b.HasIndex("UserId");
 
@@ -91,12 +112,19 @@ namespace API.Data.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("API.Data.Entities.SubTask", b =>
+                {
+                    b.HasOne("API.Data.Entities.Todo", "Todo")
+                        .WithMany("SubTask")
+                        .HasForeignKey("TodoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Todo");
+                });
+
             modelBuilder.Entity("API.Data.Entities.Todo", b =>
                 {
-                    b.HasOne("API.Data.Entities.Todo", null)
-                        .WithMany("SubTodoList")
-                        .HasForeignKey("TodoId");
-
                     b.HasOne("API.Data.Entities.User", "User")
                         .WithMany("TodoItems")
                         .HasForeignKey("UserId")
@@ -108,7 +136,7 @@ namespace API.Data.Migrations
 
             modelBuilder.Entity("API.Data.Entities.Todo", b =>
                 {
-                    b.Navigation("SubTodoList");
+                    b.Navigation("SubTask");
                 });
 
             modelBuilder.Entity("API.Data.Entities.User", b =>

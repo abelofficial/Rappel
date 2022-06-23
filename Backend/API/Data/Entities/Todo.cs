@@ -19,15 +19,11 @@ public class Todo : IEntity
     public virtual User User { get; set; }
 
     [Required]
-    public IEnumerable<Todo> SubTodoList { get; set; } = new List<Todo>() { };
+    public virtual IEnumerable<SubTask> SubTask { get; set; }
 
-    public void AddSubTodo(Todo todo)
+    public virtual void AddSubTask(SubTask todo)
     {
-        if (todo.Id == Id) throw new ArgumentException("A todo can not be its own sub todo.");
-
-        if (todo.SubTodoList.Count() != 0) throw new ArgumentException("A parent todo can not be a subtask.");
-
-        SubTodoList.Append(todo);
+        SubTask.Append(todo);
     }
 
     public void AddOwner(User owner)

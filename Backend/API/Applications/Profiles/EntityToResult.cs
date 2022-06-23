@@ -11,5 +11,6 @@ public class EntityToResult : Profile
     {
         CreateMap<User, UserResponseDto>();
         CreateMap<Todo, TodoResponseDto>();
+        CreateMap<SubTask, SubTaskResponseDto>();
     }
 }

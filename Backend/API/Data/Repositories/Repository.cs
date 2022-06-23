@@ -27,15 +27,14 @@ public class Repository<T> : IRepository<T> where T : class, IEntity
         return result;
     }
 
-    public async Task<T> GetOne(int id, string? include)
-    {
-        var result = await _dbSet.Include(include).SingleAsync(e => e.Id == id);
-        return result;
-    }
-
     public async Task<T> GetOne(Expression<Func<T, bool>> filterExp)
     {
         return await _dbSet.Where(filterExp).SingleAsync();
+    }
+
+    public async Task<T> GetOne(Expression<Func<T, bool>> filterExp, string include)
+    {
+        return await _dbSet.Include(include).Where(filterExp).SingleAsync();
     }
 
     public async Task SaveChanges()
@@ -63,4 +62,8 @@ public class Repository<T> : IRepository<T> where T : class, IEntity
         return await _dbSet.Where(filterExp).ToListAsync();
     }
 
+    public async Task<IEnumerable<T>> GetAllWith<I>(Expression<Func<T, bool>> filterExp) where I : IEntity
+    {
+        return await _dbSet.Include(nameof(I)).Where(filterExp).ToListAsync();
+    }
 }
