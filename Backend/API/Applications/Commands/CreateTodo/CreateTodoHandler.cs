@@ -23,6 +23,7 @@ public class CreateTodoHandler : BaseHandler<Todo>, IRequestHandler<CreateTodoCo
         var targetUser = await _db.Users.SingleAsync(u => u.Username.Equals(currentUserName));
 
         var newTodoItem = _mapper.Map<Todo>(request);
+        newTodoItem.Status = ProgressStatus.CREATED;
         newTodoItem.AddOwner(targetUser);
         var result = _db.Todos.Add(newTodoItem).Entity;
         await _db.SaveChangesAsync();

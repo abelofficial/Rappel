@@ -1,4 +1,5 @@
 using API.Application.Commands;
+using API.Application.Dtos;
 using API.Application.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -31,7 +32,18 @@ public class TodosController : ControllerBase
     }
 
     /// <summary>
-    // Create Todo item.
+    /// Create Todo item.
+    /// </summary>
+    [HttpPatch("{id}/status")]
+    [Authorize]
+    public async Task<ActionResult> CreateTodoItem(int id, UpdateTodoStatusRequestDto request)
+    {
+        var response = await _mediator.Send(new UpdateTodoStatusCommand() { Id = id, Status = request.Status });
+        return Ok(response);
+    }
+
+    /// <summary>
+    // Get all user todos
     /// </summary>
     [HttpGet()]
     [Authorize]
