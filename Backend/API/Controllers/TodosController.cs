@@ -40,4 +40,26 @@ public class TodosController : ControllerBase
         var response = await _mediator.Send(new GetAllUserTodosQuery());
         return Ok(response);
     }
+
+    /// <summary>
+    // Get user Todo item.
+    /// </summary>
+    [HttpGet("{id}")]
+    [Authorize]
+    public async Task<ActionResult> GetUserTodo(int id)
+    {
+        var response = await _mediator.Send(new GetUserTodoQuery() { Id = id });
+        return Ok(response);
+    }
+
+    /// <summary>
+    // Create a subtask for a todo item.
+    /// </summary>
+    [HttpGet("{id}/subtask")]
+    [Authorize]
+    public async Task<ActionResult> CreateSubTaskItem(CreateSubTaskCommand request)
+    {
+        var response = await _mediator.Send(request);
+        return Ok(response);
+    }
 }
