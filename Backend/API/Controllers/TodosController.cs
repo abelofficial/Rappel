@@ -55,11 +55,22 @@ public class TodosController : ControllerBase
     /// <summary>
     // Create a subtask for a todo item.
     /// </summary>
-    [HttpGet("{id}/subtask")]
+    [HttpPost("{id}/subtask")]
     [Authorize]
     public async Task<ActionResult> CreateSubTaskItem(CreateSubTaskCommand request)
     {
         var response = await _mediator.Send(request);
+        return Ok(response);
+    }
+
+    /// <summary>
+    // Create a subtask for a todo item.
+    /// </summary>
+    [HttpGet("{id}/subtask/{subtaskId}")]
+    [Authorize]
+    public async Task<ActionResult> GetUserTodoSubTaskItem(int id, int subtaskId)
+    {
+        var response = await _mediator.Send(new GetUserTodoSubtaskQuery() { Id = id, SubTaskId = subtaskId });
         return Ok(response);
     }
 }
