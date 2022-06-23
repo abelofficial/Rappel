@@ -1,7 +1,7 @@
 using System.Net;
 using API.Application.Results;
+using API.Data;
 using API.Data.Entities;
-using API.Data.Repositories;
 using AutoMapper;
 using MediatR;
 
@@ -10,14 +10,14 @@ namespace API.Application.Queries;
 public class GetUserByIdHandler : BaseHandler<User>, IRequestHandler<GetUserByIdQuery, UserResponseDto>
 {
 
-    public GetUserByIdHandler(IMapper mapper, IRepository<User> repo)
-            : base(mapper, repo) { }
+    public GetUserByIdHandler(IMapper mapper, AppDbContext db)
+            : base(mapper, db) { }
 
     public async Task<UserResponseDto> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
     {
         try
         {
-            var result = await _repo.GetOne(request.Id);
+            var result = await _db.Users.FindAsync(request.Id);
             return _mapper.Map<UserResponseDto>(result);
         }
         catch (Exception)

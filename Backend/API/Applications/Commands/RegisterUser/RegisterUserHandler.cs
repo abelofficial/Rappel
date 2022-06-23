@@ -1,26 +1,27 @@
 using System.Net;
 using API.Application.Results;
+using API.Data;
 using API.Data.Entities;
-using API.Data.Repositories;
 using AutoMapper;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Application.Commands;
 
 public class RegisterUserHandler : BaseHandler<User>, IRequestHandler<RegisterUserCommand, UserResponseDto>
 {
-    public RegisterUserHandler(IMapper mapper, IRepository<User> repo)
-            : base(mapper, repo) { }
+    public RegisterUserHandler(IMapper mapper, AppDbContext db)
+            : base(mapper, db) { }
 
     public async Task<UserResponseDto> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
     {
-        var usernameTaken = (await _repo.GetAll(u => u.Username == request.Username)).Any();
+        var usernameTaken = (await _db.Users.AnyAsync(u => u.Username == request.Username));
         string? errors = null;
 
         if (usernameTaken)
             errors = "Username is already taken.\n";
 
-        var emailAddressTaken = (await _repo.GetAll(u => u.Email == request.Email)).Any();
+        var emailAddressTaken = (await _db.Users.AnyAsync(u => u.Email == request.Email));
 
         if (emailAddressTaken)
             errors += "Email address is already taken.";
@@ -28,8 +29,8 @@ public class RegisterUserHandler : BaseHandler<User>, IRequestHandler<RegisterUs
         if (errors != null) throw new HttpRequestException(errors, null, HttpStatusCode.BadRequest);
 
         var user = _mapper.Map<User>(request);
-        _repo.Create(user);
-        await _repo.SaveChanges();
+        _db.Users.Add(user);
+        await _db.SaveChangesAsync();
         return _mapper.Map<UserResponseDto>(user);
     }
 }

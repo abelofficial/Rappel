@@ -3,11 +3,12 @@ using System.Net;
 using System.Security.Claims;
 using System.Text;
 using API.Application.Results;
+using API.Data;
 using API.Data.Entities;
-using API.Data.Repositories;
 using API.Data.ValueObjects;
 using AutoMapper;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 namespace API.Application.Commands;
@@ -15,15 +16,15 @@ namespace API.Application.Commands;
 public class LoginUserHandler : BaseHandler<User>, IRequestHandler<LoginUserCommand, LoginResponseDto>
 {
     public readonly IConfiguration _configuration;
-    public LoginUserHandler(IMapper mapper, IRepository<User> repo, IConfiguration configuration)
-            : base(mapper, repo)
+    public LoginUserHandler(IMapper mapper, AppDbContext db, IConfiguration configuration)
+            : base(mapper, db)
     {
         _configuration = configuration;
     }
 
     public async Task<LoginResponseDto> Handle(LoginUserCommand request, CancellationToken cancellationToken)
     {
-        var targetUser = (await _repo.GetAll(u => u.Username == request.Username)).SingleOrDefault();
+        var targetUser = (await _db.Users.SingleOrDefaultAsync(u => u.Username == request.Username));
 
         if (targetUser == null || !Password.VerifyPasswordHash(request.Password, targetUser.PasswordHash, targetUser.PasswordSalt))
             throw new HttpRequestException("Wrong credential", null, HttpStatusCode.Unauthorized);

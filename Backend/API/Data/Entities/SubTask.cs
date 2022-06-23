@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace API.Data.Entities;
 
@@ -15,6 +14,5 @@ public class SubTask : IEntity
     public string Description { get; set; }
 
     [Required]
-    [ForeignKey("TodoId")]
     public Todo Todo { get; set; }
 }
