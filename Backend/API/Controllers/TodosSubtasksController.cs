@@ -27,11 +27,11 @@ public class TodosSubtasksController : ControllerBase
     public async Task<ActionResult> CreateSubTaskItem(int id, CreateTodoCommand request)
     {
         var response = await _mediator.Send(new CreateSubTaskCommand() { ParentId = id, Title = request.Title, Description = request.Description });
-        return Ok(response);
+        return CreatedAtAction(nameof(GetUserTodoSubTaskItem), new { id = response.Todo.Id, subtaskId = response.Id }, response);
     }
 
     /// <summary>
-    // Create a subtask for a todo item.
+    // Get a subtask item user todo item
     /// </summary>
     [HttpGet("{id}/[controller]/{subtaskId}")]
     [Authorize]
@@ -42,7 +42,7 @@ public class TodosSubtasksController : ControllerBase
     }
 
     /// <summary>
-    // Create a subtask for a todo item.
+    // Get all subtask item for user todo item
     /// </summary>
     [HttpGet("{id}/[controller]")]
     [Authorize]

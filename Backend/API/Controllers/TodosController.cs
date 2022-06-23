@@ -27,7 +27,7 @@ public class TodosController : ControllerBase
     public async Task<ActionResult> CreateTodoItem(CreateTodoCommand request)
     {
         var response = await _mediator.Send(request);
-        return Ok(response);
+        return CreatedAtAction(nameof(GetUserTodo), new { id = response.Id }, response);
     }
 
     /// <summary>
