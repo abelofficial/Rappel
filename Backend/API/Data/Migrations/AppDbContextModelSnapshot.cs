@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace API.Migrations
+namespace API.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     partial class AppDbContextModelSnapshot : ModelSnapshot
@@ -30,9 +30,6 @@ namespace API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -44,9 +41,14 @@ namespace API.Migrations
                     b.Property<int?>("TodoId")
                         .HasColumnType("int");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("TodoId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Todos");
                 });
@@ -94,11 +96,24 @@ namespace API.Migrations
                     b.HasOne("API.Data.Entities.Todo", null)
                         .WithMany("SubTodoList")
                         .HasForeignKey("TodoId");
+
+                    b.HasOne("API.Data.Entities.User", "User")
+                        .WithMany("TodoItems")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("API.Data.Entities.Todo", b =>
                 {
                     b.Navigation("SubTodoList");
+                });
+
+            modelBuilder.Entity("API.Data.Entities.User", b =>
+                {
+                    b.Navigation("TodoItems");
                 });
 #pragma warning restore 612, 618
         }

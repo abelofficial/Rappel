@@ -21,5 +21,7 @@ public class User : IEntity
     [JsonIgnore]
     public byte[] PasswordSalt { get; set; }
 
-    public DateTime CreatedAt { get; set; } = DateTime.Now;
+    public virtual IEnumerable<Todo> TodoItems { get; set; }
+
+    public DateTime CreatedAt { get; set; }
 }

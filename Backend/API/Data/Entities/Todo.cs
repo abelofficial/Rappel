@@ -1,4 +1,6 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace API.Data.Entities;
 
@@ -10,11 +12,14 @@ public class Todo : IEntity
     public string Title { get; set; }
     [Required]
     public string Description { get; set; }
+
+    [Required]
+    [JsonIgnore]
+    [ForeignKey("UserId")]
+    public virtual User User { get; set; }
+
     [Required]
     public IEnumerable<Todo> SubTodoList { get; set; } = new List<Todo>() { };
-
-    public DateTime CreatedAt { get; set; } = DateTime.Now;
-
 
     public void AddSubTodo(Todo todo)
     {
@@ -25,5 +30,9 @@ public class Todo : IEntity
         SubTodoList.Append(todo);
     }
 
+    public void AddOwner(User owner)
+    {
+        User = owner;
+    }
 
 }
