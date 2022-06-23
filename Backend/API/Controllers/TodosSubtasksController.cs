@@ -1,4 +1,5 @@
 using API.Application.Commands;
+using API.Application.Dtos;
 using API.Application.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -28,6 +29,17 @@ public class TodosSubtasksController : ControllerBase
     {
         var response = await _mediator.Send(new CreateSubTaskCommand() { ParentId = id, Title = request.Title, Description = request.Description });
         return CreatedAtAction(nameof(GetUserTodoSubTaskItem), new { id = response.Todo.Id, subtaskId = response.Id }, response);
+    }
+
+    /// <summary>
+    /// Update SUbtask items progress status
+    /// </summary>
+    [HttpPatch("{id}/[controller]/{subtaskId}")]
+    [Authorize]
+    public async Task<ActionResult> CreateTodoItem(int id, int subtaskId, UpdateTodoStatusRequestDto request)
+    {
+        var response = await _mediator.Send(new UpdateSubtaskStatusCommand() { TodoId = id, SubTaskId = subtaskId, Status = request.Status });
+        return Ok(response);
     }
 
     /// <summary>

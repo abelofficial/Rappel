@@ -32,7 +32,7 @@ public class TodosController : ControllerBase
     }
 
     /// <summary>
-    /// Create Todo item.
+    /// Update Todo items progress status.
     /// </summary>
     [HttpPatch("{id}/status")]
     [Authorize]

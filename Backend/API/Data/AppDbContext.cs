@@ -20,5 +20,9 @@ public class AppDbContext : DbContext
             .Property(u => u.Status)
             .HasConversion<string>()
             .HasMaxLength(50);
+        modelBuilder.Entity<SubTask>()
+           .Property(u => u.Status)
+           .HasConversion<string>()
+           .HasMaxLength(50);
     }
 }
