@@ -53,10 +53,15 @@ const Index = () => {
     </Tooltip>
   );
   return (
-    <div>
-      <Button auto color='warning' shadow onClick={handler}>
-        Open modal
-      </Button>
+    <Grid.Container
+      gap={2}
+      css={{ backgroundColor: theme?.colors.backgroundContrast }}
+    >
+      <Grid xs={12}>
+        <Button auto color='warning' shadow onClick={handler}>
+          Add new todo
+        </Button>
+      </Grid>
       <Modal
         closeButton
         blur
@@ -123,7 +128,7 @@ const Index = () => {
           </Formik>
         </Modal.Body>
       </Modal>
-    </div>
+    </Grid.Container>
   );
 };
 
