@@ -4,7 +4,6 @@ using API.Application.Commands;
 using API.Application.Profiles;
 using API.Application.Results;
 using API.Data.Entities;
-using API.Data.Repositories;
 using API.Data.ValueObjects;
 using AutoMapper;
 using FluentAssertions;
@@ -91,6 +90,7 @@ public class LoginUserTest
         var handler = new LoginUserHandler(_mapper, _repoMock.Object, _configMock.Object);
         var command = new LoginUserCommand()
         {
+            Username = "TestUser",
             Password = "WrongPassword"
         };
 
