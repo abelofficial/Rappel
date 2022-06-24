@@ -37,6 +37,14 @@ export interface TodoResponseDto {
   user: UserResponse;
 }
 
+export interface SubtaskResponseDto {
+  id: number;
+  title: string;
+  description: string;
+  status: ProgressBar;
+  todo: TodoResponseDto;
+}
+
 export enum ProgressBar {
   COMPLETED = 0,
   STARTED = 1,

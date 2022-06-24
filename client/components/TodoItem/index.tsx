@@ -1,10 +1,27 @@
 import { Card, Row, Button, Text, Tooltip } from "@nextui-org/react";
-import React from "react";
+import React, { useContext } from "react";
 import { ProgressBar, TodoResponseDto } from "../../types";
+import useSWR from "swr";
+import { getUserTodoSubtasksListQuery } from "../../services/Queries";
+import { AuthContextInterface, AuthContext } from "../../Contexts/Auth";
+("../../types");
 
 export interface TodoItemProps extends Omit<TodoResponseDto, "user"> {}
 
-const Index = ({ title, status, description }: TodoItemProps) => {
+const Index = ({ id, title, status, description }: TodoItemProps) => {
+  const { token } = useContext<AuthContextInterface>(AuthContext);
+
+  const { data, error } = useSWR(`/todo/${id}/todossubtasks`, () =>
+    getUserTodoSubtasksListQuery(token + "", id)
+  );
+
+  const displaySubTasks = () => {
+    if (!data) return <div>loading subtasks...</div>;
+
+    if (data.data.length === 0) return <div>No subtasks</div>;
+
+    return <>{data.data.length} subtasks</>;
+  };
   return (
     <Card>
       <Card.Header>
@@ -13,6 +30,7 @@ const Index = ({ title, status, description }: TodoItemProps) => {
       <Card.Divider />
       <Card.Body>
         <Text>{description}</Text>
+        {displaySubTasks()}
       </Card.Body>
 
       <Card.Divider />
