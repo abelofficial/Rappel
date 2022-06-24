@@ -1,5 +1,5 @@
-using System.Text.Json.Serialization;
 using API.Data.Entities;
+using Newtonsoft.Json.Converters;
 
 namespace API.Application.Results;
 
@@ -9,7 +9,7 @@ public class TodoResponseDto
     public string Title { get; set; }
     public string Description { get; set; }
 
-    [Newtonsoft.Json.JsonConverter(typeof(JsonStringEnumConverter))]
+    [Newtonsoft.Json.JsonConverter(typeof(StringEnumConverter))]
     public ProgressStatus Status { get; set; }
 
     public UserResponseDto User { get; set; }
