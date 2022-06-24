@@ -8,9 +8,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
+
+[Route("[controller]"), Authorize]
 [ApiController]
 [Produces("application/json")]
-[Route("[controller]")]
+
 public class AuthController : ControllerBase
 {
     private readonly ILogger<AuthController> _logger;
@@ -46,8 +48,8 @@ public class AuthController : ControllerBase
     /// Get the authenticated user
     /// </summary>
 
-    [HttpGet("user")]
     [Authorize]
+    [HttpGet("user")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserResponseDto))]
     [ProducesResponseType(typeof(ExceptionMessage), StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult> CurrentUser()
