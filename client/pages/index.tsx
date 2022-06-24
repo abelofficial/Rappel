@@ -15,7 +15,6 @@ const Home: NextPage = () => {
 
   if (!data) return <div>loading...</div>;
 
-  console.log("error: ", error);
   return (
     <Container>
       <AddTodoFormModal />

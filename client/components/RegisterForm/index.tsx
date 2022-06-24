@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Form, Formik } from "formik";
 import {
   initialValues,
@@ -9,17 +9,30 @@ import {
 import { RegisterUserRequest } from "../../types";
 import { Button, Card, Grid, Text, Tooltip, useTheme } from "@nextui-org/react";
 import TextField from "../TextField";
-import { registerUserCommand } from "../../services/commands";
+import { loginUserCommand, registerUserCommand } from "../../services/commands";
 import { useRouter } from "next/router";
+import { getCurrentUserQuery } from "../../services/Queries";
+import { AuthContext, AuthContextInterface } from "../../Contexts/Auth";
 
 const Index = () => {
   const { theme } = useTheme();
   const router = useRouter();
   const [errors, setErrors] = useState<string[] | undefined>();
+  const { setUser, setToken } = useContext<AuthContextInterface>(AuthContext);
 
   const onSubmitHandler = async (values: RegisterUserRequest) => {
     try {
       await registerUserCommand(values);
+      var result = await loginUserCommand(values);
+      var userResp = await getCurrentUserQuery(result.data.token);
+      setUser(userResp.data);
+      setToken(result.data.token);
+
+      localStorage.setItem("user", JSON.stringify(userResp.data));
+      localStorage.setItem(
+        userResp.data.username,
+        JSON.stringify(result.data.token)
+      );
       router.push("/");
     } catch (e: any) {
       setErrors(e?.response?.data.errors);
