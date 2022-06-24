@@ -7,13 +7,9 @@ builder.Services.InstallServicesFromAssembly(builder.Configuration);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-app.UseOpenApi();
-app.UseSwaggerUi3();
-app.UseReDoc(c =>
-{
-    c.DocumentTitle = "Todo API";
-    c.SpecUrl = "/swagger/v1/swagger.json";
-});
+app.UseSwagger();
+app.UseSwaggerUI();
+
 app.UseRouting();
 
 app.UseCors();
