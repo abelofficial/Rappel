@@ -45,6 +45,8 @@ export interface SubtaskResponseDto {
   todo: TodoResponseDto;
 }
 
+export interface CreateSubtaskCommand extends CreateTodoCommand {}
+
 export enum ProgressBar {
   COMPLETED = 0,
   STARTED = 1,

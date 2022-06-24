@@ -7,5 +7,5 @@ export const getCurrentUserQuery = (token: string) =>
 export const getUserTodoListQuery = (token: string) =>
   api(token).get<TodoResponseDto[]>(`/todos`);
 
-export const getUserTodoSubtasksListQuery = (token: string, id: number) =>
-  api(token).get<SubtaskResponseDto[]>(`/todo/${id}/todossubtasks`);
+export const getUserTodoSubtasksListQuery = async (token: string, id: number) =>
+  await api(token).get<SubtaskResponseDto[]>(`/todo/${id}/todossubtasks`);

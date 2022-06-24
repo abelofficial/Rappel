@@ -1,4 +1,5 @@
 import {
+  CreateSubtaskCommand,
   CreateTodoCommand,
   LoginUserRequest,
   LoginUserResponse,
@@ -17,3 +18,9 @@ export const loginUserCommand = (body: LoginUserRequest) =>
 
 export const createTodoCommand = (token: string, body: CreateTodoCommand) =>
   api(token).post<TodoResponseDto>(`/todos`, body);
+
+export const createSubtaskCommand = (
+  token: string,
+  id: number,
+  body: CreateSubtaskCommand
+) => api(token).post<CreateSubtaskCommand>(`/todo/${id}/todossubtasks`, body);

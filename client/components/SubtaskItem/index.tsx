@@ -13,7 +13,7 @@ const Index = ({ id, title, status, description }: SubtaskItemProps) => {
     <Card>
       <Card.Header css={{ display: "flex", justifyContent: "space-between" }}>
         <Text b>{title}</Text>
-        <Tooltip content={Object.values(status)[0]}>
+        <Tooltip content={"status"}>
           <Button auto flat>
             {ProgressBar[status]}
           </Button>

@@ -1,18 +1,11 @@
-import {
-  Card,
-  Row,
-  Button,
-  Text,
-  Tooltip,
-  Grid,
-  Collapse,
-} from "@nextui-org/react";
+import { Card, Button, Text, Grid, Collapse } from "@nextui-org/react";
 import React, { useContext } from "react";
-import { ProgressBar, TodoResponseDto } from "../../types";
+import { TodoResponseDto } from "../../types";
 import useSWR from "swr";
 import { getUserTodoSubtasksListQuery } from "../../services/Queries";
 import { AuthContextInterface, AuthContext } from "../../Contexts/Auth";
 import SubtaskItem from "../SubtaskItem";
+import AddSubtaskFormModal from "../AddSubtaskFormModal";
 ("../../types");
 
 export interface TodoItemProps extends Omit<TodoResponseDto, "user"> {}
@@ -27,7 +20,7 @@ const Index = ({ id, title, status, description }: TodoItemProps) => {
   const displaySubTasks = () => {
     if (!data) return <div>loading subtasks...</div>;
 
-    if (data.data.length === 0) return <div>No subtasks</div>;
+    if (data?.data?.length === 0) return <div>No subtasks</div>;
 
     return (
       <Collapse title='' subtitle={`${data.data.length} total subtasks`}>
@@ -44,6 +37,7 @@ const Index = ({ id, title, status, description }: TodoItemProps) => {
       </Collapse>
     );
   };
+
   return (
     <Card>
       <Card.Header
@@ -54,11 +48,11 @@ const Index = ({ id, title, status, description }: TodoItemProps) => {
         }}
       >
         <Text b>{title}</Text>
-        <Tooltip content={Object.values(status)[0]}>
+        {/* <Tooltip content={Object.values(status)[0]}>
           <Button auto flat>
             {ProgressBar[status]}
           </Button>
-        </Tooltip>
+        </Tooltip> */}
       </Card.Header>
       <Card.Divider />
       <Card.Body>
@@ -67,15 +61,17 @@ const Index = ({ id, title, status, description }: TodoItemProps) => {
       </Card.Body>
 
       <Card.Divider />
-      <Card.Footer>
-        <Row justify='space-around' align='center'>
-          <Button size='sm' color='error' disabled={data?.data.length != 0}>
-            Delete
-          </Button>
-          <Button size='sm' color='success'>
-            New subtask
-          </Button>
-        </Row>
+      <Card.Footer
+        css={{
+          display: "flex",
+          alignItem: "center",
+          justifyContent: "space-evenly",
+        }}
+      >
+        <Button size='sm' color='error' disabled={data?.data.length != 0}>
+          Delete
+        </Button>
+        <AddSubtaskFormModal todoId={id} />
       </Card.Footer>
     </Card>
   );
