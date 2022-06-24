@@ -1,4 +1,5 @@
 using API.Application.Commands;
+using API.Application.Dtos;
 using API.Application.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -27,11 +28,22 @@ public class TodosController : ControllerBase
     public async Task<ActionResult> CreateTodoItem(CreateTodoCommand request)
     {
         var response = await _mediator.Send(request);
+        return CreatedAtAction(nameof(GetUserTodo), new { id = response.Id }, response);
+    }
+
+    /// <summary>
+    /// Update Todo items progress status.
+    /// </summary>
+    [HttpPatch("{id}/status")]
+    [Authorize]
+    public async Task<ActionResult> CreateTodoItem(int id, UpdateTodoStatusRequestDto request)
+    {
+        var response = await _mediator.Send(new UpdateTodoStatusCommand() { Id = id, Status = request.Status });
         return Ok(response);
     }
 
     /// <summary>
-    // Create Todo item.
+    // Get all user todos
     /// </summary>
     [HttpGet()]
     [Authorize]
@@ -49,39 +61,6 @@ public class TodosController : ControllerBase
     public async Task<ActionResult> GetUserTodo(int id)
     {
         var response = await _mediator.Send(new GetUserTodoQuery() { Id = id });
-        return Ok(response);
-    }
-
-    /// <summary>
-    // Create a subtask for a todo item.
-    /// </summary>
-    [HttpPost("{id}/subtask")]
-    [Authorize]
-    public async Task<ActionResult> CreateSubTaskItem(int id, CreateTodoCommand request)
-    {
-        var response = await _mediator.Send(new CreateSubTaskCommand() { ParentId = id, Title = request.Title, Description = request.Description });
-        return Ok(response);
-    }
-
-    /// <summary>
-    // Create a subtask for a todo item.
-    /// </summary>
-    [HttpGet("{id}/subtask/{subtaskId}")]
-    [Authorize]
-    public async Task<ActionResult> GetUserTodoSubTaskItem(int id, int subtaskId)
-    {
-        var response = await _mediator.Send(new GetUserTodoSubtaskQuery() { TodoId = id, SubTaskId = subtaskId });
-        return Ok(response);
-    }
-
-    /// <summary>
-    // Create a subtask for a todo item.
-    /// </summary>
-    [HttpGet("{id}/subtask")]
-    [Authorize]
-    public async Task<ActionResult> GetAllUserTodoSubtasks(int id)
-    {
-        var response = await _mediator.Send(new GetAllUserTodoSubtasksQuery() { Id = id });
         return Ok(response);
     }
 }
