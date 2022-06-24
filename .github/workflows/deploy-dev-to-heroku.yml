@@ -7,7 +7,7 @@ on:
     types: [closed]
     branches: [main]
     paths:
-      - "API/**"
+    
 jobs:
   merge-status-check:
     runs-on: ubuntu-latest
