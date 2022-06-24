@@ -14,6 +14,8 @@ app.UseReDoc(c =>
     c.DocumentTitle = "Todo API";
     c.SpecUrl = "/swagger/v1/swagger.json";
 });
+app.UseRouting();
+
 app.UseCors();
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseHttpsRedirection();

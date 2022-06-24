@@ -16,7 +16,9 @@ public class AppServicesInstaller : IInstaller
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<RegisterUserValidator>());
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+        services.AddHttpContextAccessor();
         services.AddEndpointsApiExplorer();
+        services.AddHttpContextAccessor();
 
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
