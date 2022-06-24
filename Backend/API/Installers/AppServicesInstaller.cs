@@ -37,7 +37,7 @@ public class AppServicesInstaller : IInstaller
             {
                 options.AddDefaultPolicy(builder =>
                     {
-                        builder.WithOrigins("http://localhost:3000")
+                        builder.WithOrigins("http://localhost:3000", "https://todo.abelsintaro.com")
                             .AllowAnyHeader()
                             .AllowAnyMethod()
                             .AllowCredentials();
