@@ -13,6 +13,10 @@ public class Todo : IEntity
     public string Description { get; set; }
 
     [Required]
+    [Newtonsoft.Json.JsonConverter(typeof(JsonStringEnumConverter))]
+    public ProgressStatus Status { get; set; }
+
+    [Required]
     [JsonIgnore]
     public virtual User User { get; set; }
 
@@ -29,5 +33,14 @@ public class Todo : IEntity
     {
         User = owner;
     }
+}
 
+public enum ProgressStatus
+{
+    [Display(Name = "COMPLETED")]
+    COMPLETED,
+    [Display(Name = "STARTED")]
+    STARTED,
+    [Display(Name = "CREATED")]
+    CREATED,
 }

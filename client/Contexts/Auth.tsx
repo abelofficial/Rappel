@@ -10,7 +10,9 @@ import { UserResponse } from "../types";
 
 export interface AuthContextInterface {
   user: UserResponse | undefined;
+  token: string | undefined;
   setUser: Dispatch<SetStateAction<UserResponse | undefined>>;
+  setToken: Dispatch<SetStateAction<string | undefined>>;
 }
 
 export const AuthContext = createContext<AuthContextInterface>(
@@ -26,20 +28,34 @@ export const AuthProvider = ({ children }: { children: JSX.Element }) => {
       await router.push("/auth");
     };
 
-    if (shouldUserAuth()) {
-      redirectToAuth();
+    const redirectToHome = async () => {
+      if (router.pathname == "/auth") await router.push("/");
+    };
+
+    if (!auth.user) {
+      const savedUserString = localStorage.getItem("user");
+
+      if (savedUserString === null) redirectToAuth();
+
+      const savedUser: UserResponse = JSON.parse(
+        savedUserString ? savedUserString : "{}"
+      );
+      const userToken = localStorage.getItem(savedUser.username);
+
+      auth.setUser(savedUser);
+      auth.setToken(userToken ? userToken : undefined);
+      redirectToHome();
     }
   }, []);
 
-  const shouldUserAuth = () => !auth.user && !router.pathname.endsWith("/auth");
-
-  if (shouldUserAuth()) return <h1> loading...</h1>;
+  if (!auth.user) return <h1> loading...</h1>;
 
   return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
 };
 
 function AuthActions(): AuthContextInterface {
   const [user, setUser] = useState<UserResponse | undefined>();
+  const [token, setToken] = useState<string | undefined>();
 
-  return { user, setUser };
+  return { user, token, setUser, setToken };
 }

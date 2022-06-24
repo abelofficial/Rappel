@@ -13,4 +13,16 @@ public class AppDbContext : DbContext
     public DbSet<Todo> Todos { get; set; }
 
     public DbSet<SubTask> SubTasks { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Todo>()
+            .Property(u => u.Status)
+            .HasConversion<string>()
+            .HasMaxLength(50);
+        modelBuilder.Entity<SubTask>()
+           .Property(u => u.Status)
+           .HasConversion<string>()
+           .HasMaxLength(50);
+    }
 }

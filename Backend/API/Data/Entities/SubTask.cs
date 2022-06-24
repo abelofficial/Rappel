@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace API.Data.Entities;
 
@@ -15,4 +16,8 @@ public class SubTask : IEntity
 
     [Required]
     public Todo Todo { get; set; }
+
+    [Required]
+    [Newtonsoft.Json.JsonConverter(typeof(JsonStringEnumConverter))]
+    public ProgressStatus Status { get; set; }
 }

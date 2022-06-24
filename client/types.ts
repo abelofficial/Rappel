@@ -23,3 +23,32 @@ export interface LoginUserResponse {
   token: string;
   createdAt: Date;
 }
+
+export interface CreateTodoCommand {
+  title: string;
+  description: string;
+}
+
+export interface TodoResponseDto {
+  id: number;
+  title: string;
+  description: string;
+  status: ProgressBar;
+  user: UserResponse;
+}
+
+export interface SubtaskResponseDto {
+  id: number;
+  title: string;
+  description: string;
+  status: ProgressBar;
+  todo: TodoResponseDto;
+}
+
+export interface CreateSubtaskCommand extends CreateTodoCommand {}
+
+export enum ProgressBar {
+  COMPLETED = 0,
+  STARTED = 1,
+  CREATED = 2,
+}
