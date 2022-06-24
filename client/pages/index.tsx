@@ -28,7 +28,7 @@ const Home: NextPage = () => {
         }}
       >
         {data.data?.map((td) => (
-          <Grid xs={12} sm={5} md={3} key={td.id}>
+          <Grid xs={12} md={5} key={td.id}>
             <TodoItem
               id={td.id}
               title={td.title}
