@@ -6,7 +6,7 @@ import {
   fieldNames,
   fieldLabels,
 } from "./addTodoFormProps";
-import { CreateTodoCommand } from "../../types";
+import { CreateTodoCommand, TodoResponseDto } from "../../types";
 import {
   Button,
   Card,
@@ -19,7 +19,8 @@ import {
 import TextField, { TextAreaField } from "../TextField";
 import { AuthContext, AuthContextInterface } from "../../Contexts/Auth";
 import { createTodoCommand } from "../../services/commands";
-
+import { mutate } from "swr";
+import { AxiosResponse } from "axios";
 const Index = () => {
   const { theme } = useTheme();
   const [visible, setVisible] = React.useState(false);
@@ -34,7 +35,14 @@ const Index = () => {
 
   const onSubmitHandler = async (values: CreateTodoCommand) => {
     try {
-      const resp = await createTodoCommand(token + "", values);
+      mutate(
+        "/todos",
+        async ({ data }: AxiosResponse<TodoResponseDto[], any>) => {
+          await createTodoCommand(token + "", values);
+          return [...data, values];
+        }
+      );
+
       setVisible(false);
     } catch (e: any) {
       setErrors(e?.response?.data?.errors);

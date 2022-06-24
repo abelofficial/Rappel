@@ -33,5 +33,12 @@ export interface TodoResponseDto {
   id: number;
   title: string;
   description: string;
+  status: ProgressBar;
   user: UserResponse;
+}
+
+export enum ProgressBar {
+  COMPLETED = 0,
+  STARTED = 1,
+  CREATED = 2,
 }

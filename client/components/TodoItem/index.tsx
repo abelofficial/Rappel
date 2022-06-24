@@ -1,10 +1,10 @@
-import { Card, Row, Button, Text } from "@nextui-org/react";
+import { Card, Row, Button, Text, Tooltip } from "@nextui-org/react";
 import React from "react";
-import { TodoResponseDto } from "../../types";
+import { ProgressBar, TodoResponseDto } from "../../types";
 
 export interface TodoItemProps extends Omit<TodoResponseDto, "user"> {}
 
-const Index = ({ title, description }: TodoItemProps) => {
+const Index = ({ title, status, description }: TodoItemProps) => {
   return (
     <Card>
       <Card.Header>
@@ -14,12 +14,15 @@ const Index = ({ title, description }: TodoItemProps) => {
       <Card.Body>
         <Text>{description}</Text>
       </Card.Body>
+
       <Card.Divider />
       <Card.Footer>
-        <Row justify='flex-end'>
-          <Button size='sm' light>
-            Share
-          </Button>
+        <Row justify='space-around' align='center'>
+          <Tooltip content={Object.values(status)[0]}>
+            <Button auto flat>
+              {ProgressBar[status]}
+            </Button>
+          </Tooltip>
           <Button size='sm' color='primary'>
             Learn more
           </Button>

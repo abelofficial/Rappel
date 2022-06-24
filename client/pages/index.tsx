@@ -1,27 +1,21 @@
 import { Container, Grid } from "@nextui-org/react";
 import type { NextPage } from "next";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import AddTodoFormModal from "../components/AddTodoFormModal";
 import TodoItem from "../components/TodoItem";
 import { AuthContext, AuthContextInterface } from "../Contexts/Auth";
 import { getUserTodoListQuery } from "../services/Queries";
-import { TodoResponseDto } from "../types";
+import useSWR from "swr";
 
 const Home: NextPage = () => {
-  const [todoItems, setTodoItems] = useState(
-    [] as Omit<TodoResponseDto[], "user">
-  );
   const { user, token } = useContext<AuthContextInterface>(AuthContext);
+  const { data, error } = useSWR("/todos", () =>
+    getUserTodoListQuery(token + "")
+  );
 
-  useEffect(() => {
-    const fetchUserTodoList = async () => {
-      const resp = await getUserTodoListQuery(token + "");
-      setTodoItems(resp.data);
-    };
-    fetchUserTodoList();
-  }, []);
+  if (!data) return <div>loading...</div>;
 
-  console.log("User: ", todoItems);
+  console.log("error: ", error);
   return (
     <Container>
       <AddTodoFormModal />
@@ -33,9 +27,14 @@ const Home: NextPage = () => {
           justifyContent: "space-between",
         }}
       >
-        {todoItems?.map((td) => (
+        {data.data?.map((td) => (
           <Grid xs={12} sm={5} md={3} key={td.id}>
-            <TodoItem id={0} title={td.title} description={td.description} />
+            <TodoItem
+              id={0}
+              title={td.title}
+              description={td.description}
+              status={td.status}
+            />
           </Grid>
         ))}
       </Grid.Container>
