@@ -17,4 +17,4 @@ RUN dotnet publish "API.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-CMD ASPNETCORE_URLS=http://*:$PORT dotnet Saltimer.Api.dll
+CMD ASPNETCORE_URLS=http://*:$PORT dotnet API.dll

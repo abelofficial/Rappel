@@ -2,7 +2,7 @@ name: deploy dev to Heroku
 
 defaults:
   run:
-    working-directory: ./
+    working-directory: ./Backend
 
 on:
   pull_request:
@@ -13,7 +13,6 @@ on:
 
 jobs:
   build:
-    if: github.event.pull_request.merged == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

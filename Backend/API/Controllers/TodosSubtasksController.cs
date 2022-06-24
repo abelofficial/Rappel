@@ -1,6 +1,8 @@
 using API.Application.Commands;
 using API.Application.Dtos;
 using API.Application.Queries;
+using API.Application.Results;
+using API.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers;
 
 [ApiController]
+[Produces("application/json")]
 [Route("todo/")]
 public class TodosSubtasksController : ControllerBase
 {
@@ -25,6 +28,9 @@ public class TodosSubtasksController : ControllerBase
     /// </summary>
     [HttpPost("{id}/[controller]")]
     [Authorize]
+    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(SubTaskResponseDto))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ExceptionMessage))]
+    [ProducesResponseType(typeof(ExceptionMessage), StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult> CreateSubTaskItem(int id, CreateTodoCommand request)
     {
         var response = await _mediator.Send(new CreateSubTaskCommand() { ParentId = id, Title = request.Title, Description = request.Description });
@@ -36,6 +42,9 @@ public class TodosSubtasksController : ControllerBase
     /// </summary>
     [HttpPatch("{id}/[controller]/{subtaskId}")]
     [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SubTaskResponseDto))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
+    [ProducesResponseType(typeof(ExceptionMessage), StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult> CreateTodoItem(int id, int subtaskId, UpdateTodoStatusRequestDto request)
     {
         var response = await _mediator.Send(new UpdateSubtaskStatusCommand() { TodoId = id, SubTaskId = subtaskId, Status = request.Status });
@@ -47,6 +56,9 @@ public class TodosSubtasksController : ControllerBase
     /// </summary>
     [HttpGet("{id}/[controller]/{subtaskId}")]
     [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SubTaskResponseDto))]
+    [ProducesResponseType(typeof(ExceptionMessage), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ExceptionMessage), StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult> GetUserTodoSubTaskItem(int id, int subtaskId)
     {
         var response = await _mediator.Send(new GetUserTodoSubtaskQuery() { TodoId = id, SubTaskId = subtaskId });
@@ -58,6 +70,8 @@ public class TodosSubtasksController : ControllerBase
     /// </summary>
     [HttpGet("{id}/[controller]")]
     [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<SubTaskResponseDto>))]
+    [ProducesResponseType(typeof(ExceptionMessage), StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult> GetAllUserTodoSubtasks(int id)
     {
         var response = await _mediator.Send(new GetAllUserTodoSubtasksQuery() { Id = id });
