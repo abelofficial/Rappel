@@ -20,7 +20,6 @@ import TextField, { TextAreaField } from "../TextField";
 import { AuthContext, AuthContextInterface } from "../../Contexts/Auth";
 import { createTodoCommand } from "../../services/commands";
 import { mutate } from "swr";
-import { AxiosResponse } from "axios";
 const Index = () => {
   const { theme } = useTheme();
   const [visible, setVisible] = React.useState(false);
@@ -35,13 +34,10 @@ const Index = () => {
 
   const onSubmitHandler = async (values: CreateTodoCommand) => {
     try {
-      mutate(
-        "/todos",
-        async ({ data }: AxiosResponse<TodoResponseDto[], any>) => {
-          await createTodoCommand(token + "", values);
-          return [...data, values];
-        }
-      );
+      mutate("/todos", async (data: TodoResponseDto[]) => {
+        await createTodoCommand(token + "", values);
+        return [...data, values];
+      });
 
       setVisible(false);
     } catch (e: any) {
@@ -79,9 +75,9 @@ const Index = () => {
       >
         <Modal.Header>
           <Text id='modal-title' size={18}>
-            Welcome to
+            Add your new{" "}
             <Text b size={18}>
-              NextUI
+              todo item
             </Text>
           </Text>
         </Modal.Header>

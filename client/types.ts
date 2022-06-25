@@ -48,7 +48,11 @@ export interface SubtaskResponseDto {
 export interface CreateSubtaskCommand extends CreateTodoCommand {}
 
 export enum ProgressBar {
-  COMPLETED = 0,
+  COMPLETED = 2,
   STARTED = 1,
-  CREATED = 2,
+  CREATED = 0,
+}
+
+export interface UpdateSubtaskStatusCommandDto {
+  status: ProgressBar;
 }

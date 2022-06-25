@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { Form, Formik } from "formik";
 import {
   initialValues,
@@ -9,40 +9,24 @@ import {
 import { LoginUserRequest } from "../../types";
 import { Button, Card, Grid, Text, Tooltip, useTheme } from "@nextui-org/react";
 import TextField from "../TextField";
-import { loginUserCommand } from "../../services/commands";
 import { useRouter } from "next/router";
 import { AuthContext, AuthContextInterface } from "../../Contexts/Auth";
-import { getCurrentUserQuery } from "../../services/Queries";
 
 const Index = () => {
   const { theme } = useTheme();
   const router = useRouter();
-  const [errors, setErrors] = useState<string[] | undefined>();
-  const { setUser, setToken } = useContext<AuthContextInterface>(AuthContext);
+  const { loginUser, logInErrors } =
+    useContext<AuthContextInterface>(AuthContext);
 
   const onSubmitHandler = async (values: LoginUserRequest) => {
-    try {
-      var result = await loginUserCommand(values);
-      var userResp = await getCurrentUserQuery(result.data.token);
-      setUser(userResp.data);
-      setToken(result.data.token);
-
-      localStorage.setItem("user", JSON.stringify(userResp.data));
-      localStorage.setItem(
-        userResp.data.username,
-        JSON.stringify(result.data.token)
-      );
-
-      router.push("/");
-    } catch (e: any) {
-      setErrors(e?.response?.data.errors);
-    }
+    var ok = await loginUser(values);
+    ok && router.push("/");
   };
 
   const displayErrors = () => (
     <Tooltip content='' contentColor='error'>
       <Grid.Container alignItems='center' gap={1}>
-        {errors?.map((e) => (
+        {logInErrors?.map((e) => (
           <Grid key={e} xs={12}>
             <Text color='error'>{e}</Text>
           </Grid>
@@ -70,7 +54,7 @@ const Index = () => {
                 padding: theme?.space.lg,
               }}
             >
-              {errors && displayErrors()}
+              {logInErrors && displayErrors()}
               <TextField
                 type='text'
                 name={fieldNames.username}

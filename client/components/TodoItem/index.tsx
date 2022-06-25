@@ -1,41 +1,97 @@
-import { Card, Button, Text, Grid, Collapse } from "@nextui-org/react";
-import React, { useContext } from "react";
-import { TodoResponseDto } from "../../types";
-import useSWR from "swr";
-import { getUserTodoSubtasksListQuery } from "../../services/Queries";
+import { Card, Text, Grid, Collapse } from "@nextui-org/react";
+import React, { useContext, useState } from "react";
+import { ProgressBar, SubtaskResponseDto, TodoResponseDto } from "../../types";
+import useSWR, { useSWRConfig } from "swr";
+import {
+  getUserTodoItemQuery,
+  getUserTodoSubtasksListQuery,
+} from "../../services/Queries";
 import { AuthContextInterface, AuthContext } from "../../Contexts/Auth";
 import SubtaskItem from "../SubtaskItem";
 import AddSubtaskFormModal from "../AddSubtaskFormModal";
+import FilterBar from "../FilterBar";
 ("../../types");
 
 export interface TodoItemProps extends Omit<TodoResponseDto, "user"> {}
 
-const Index = ({ id, title, status, description }: TodoItemProps) => {
-  const { token } = useContext<AuthContextInterface>(AuthContext);
+export enum ShowFilterType {
+  ALL = "all",
+  COMPLETED = "completed",
+  STARTED = "started",
+}
 
-  const { data, error } = useSWR(`/todo/${id}/todossubtasks`, () =>
+const Index = ({ id }: TodoItemProps) => {
+  const { mutate } = useSWRConfig();
+  const [currentShowing, setCurrentShowing] = useState<ShowFilterType>(
+    ShowFilterType.ALL
+  );
+  const { token } = useContext<AuthContextInterface>(AuthContext);
+  const { data } = useSWR(`/todo/${id}`, () =>
+    getUserTodoItemQuery(token + "", id)
+  );
+  const tasks = useSWR(`/todo/${id}/todossubtasks`, () =>
     getUserTodoSubtasksListQuery(token + "", id)
   );
 
-  const displaySubTasks = () => {
-    if (!data) return <div>loading subtasks...</div>;
+  const subTasks = tasks.data;
 
-    if (data?.data?.length === 0) return <div>No subtasks</div>;
+  if (!data || !subTasks) return <div>loading subtasks...</div>;
 
-    return (
-      <Collapse title='' subtitle={`${data.data.length} total subtasks`}>
-        {data.data?.map((td) => (
-          <Grid xs={12} key={td.id}>
-            <SubtaskItem
-              id={td.id}
-              title={td.title}
-              description={td.description}
-              status={td.status}
-            />
-          </Grid>
-        ))}
-      </Collapse>
+  const getCompletedCount = () =>
+    subTasks.reduce(
+      (p: number, c: SubtaskResponseDto) =>
+        c.status === ProgressBar.COMPLETED ? (p += 1) : p,
+      0
     );
+  const getStartedCount = () =>
+    subTasks.reduce(
+      (p: number, c: SubtaskResponseDto) =>
+        c.status === ProgressBar.STARTED ? (p += 1) : p,
+      0
+    );
+
+  const onChangeHandler = (value?: ShowFilterType) => {
+    value && setCurrentShowing(value);
+    mutate(`/todo/${id}/todossubtasks`, subTasks, true);
+  };
+
+  const displayFilterSubtaskList = () => {
+    switch (currentShowing) {
+      case ShowFilterType.ALL:
+        return subTasks.map((td) => (
+          <Grid xs={12} key={td.id}>
+            <SubtaskItem id={td.id} parentId={id} onChange={onChangeHandler} />
+          </Grid>
+        ));
+
+      case ShowFilterType.COMPLETED:
+        return subTasks
+          .filter((td) => td.status === ProgressBar.COMPLETED)
+          .map((td) => (
+            <Grid xs={12} key={td.id}>
+              <SubtaskItem
+                id={td.id}
+                parentId={id}
+                onChange={onChangeHandler}
+              />
+            </Grid>
+          ));
+      case ShowFilterType.STARTED:
+        return subTasks
+          .filter((td) => td.status === ProgressBar.STARTED)
+          .map((td) => (
+            <Grid xs={12} key={td.id}>
+              <SubtaskItem
+                id={td.id}
+                parentId={id}
+                onChange={onChangeHandler}
+              />
+            </Grid>
+          ));
+
+      default:
+        break;
+    }
   };
 
   return (
@@ -47,17 +103,31 @@ const Index = ({ id, title, status, description }: TodoItemProps) => {
           justifyContent: "space-between",
         }}
       >
-        <Text b>{title}</Text>
-        {/* <Tooltip content={Object.values(status)[0]}>
-          <Button auto flat>
-            {ProgressBar[status]}
-          </Button>
-        </Tooltip> */}
+        <Grid.Container justify='space-between'>
+          <Grid>
+            <Text b>{data.title}</Text>
+          </Grid>
+          <Grid>
+            <AddSubtaskFormModal todoId={data.id} />
+          </Grid>
+        </Grid.Container>
       </Card.Header>
       <Card.Divider />
       <Card.Body>
-        <Text>{description}</Text>
-        {displaySubTasks()}
+        {subTasks.length !== 0 && (
+          <FilterBar current={currentShowing} setter={onChangeHandler} />
+        )}
+        <Text>{data.description}</Text>
+        {subTasks.length !== 0 && (
+          <Collapse
+            title='Sub tasks'
+            subtitle={`${
+              getCompletedCount() + "/" + subTasks.length
+            } competed | ${getStartedCount() + "/" + subTasks.length} on going`}
+          >
+            {displayFilterSubtaskList()}
+          </Collapse>
+        )}
       </Card.Body>
 
       <Card.Divider />
@@ -67,12 +137,7 @@ const Index = ({ id, title, status, description }: TodoItemProps) => {
           alignItem: "center",
           justifyContent: "space-evenly",
         }}
-      >
-        <Button size='sm' color='error' disabled={data?.data.length != 0}>
-          Delete
-        </Button>
-        <AddSubtaskFormModal todoId={id} />
-      </Card.Footer>
+      ></Card.Footer>
     </Card>
   );
 };

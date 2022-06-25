@@ -20,7 +20,6 @@ import TextField, { TextAreaField } from "../TextField";
 import { AuthContext, AuthContextInterface } from "../../Contexts/Auth";
 import { createSubtaskCommand } from "../../services/commands";
 import { mutate } from "swr";
-import { AxiosResponse } from "axios";
 
 export interface AddSubtaskFormModal {
   todoId: number;
@@ -42,9 +41,9 @@ const Index = ({ todoId }: AddSubtaskFormModal) => {
     try {
       mutate(
         `/todo/${todoId}/todossubtasks`,
-        async (data: AxiosResponse<SubtaskResponseDto[], any>) => {
+        async (data: SubtaskResponseDto[]) => {
           await createSubtaskCommand(token + "", todoId, values);
-          return { data: [...data.data, values] };
+          return { data: [...data, values] };
         }
       );
       setVisible(false);
@@ -73,7 +72,7 @@ const Index = ({ todoId }: AddSubtaskFormModal) => {
       }}
     >
       <Grid xs={12}>
-        <Button auto color='success' shadow onClick={handler}>
+        <Button auto color='success' size='sm' shadow onClick={handler}>
           Add subtask
         </Button>
       </Grid>
@@ -86,7 +85,7 @@ const Index = ({ todoId }: AddSubtaskFormModal) => {
       >
         <Modal.Header>
           <Text id='modal-title' size={18}>
-            Create new
+            Create new{" "}
             <Text b size={18}>
               subtask
             </Text>

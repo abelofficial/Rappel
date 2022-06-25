@@ -9,13 +9,10 @@ import useSWR from "swr";
 
 const Home: NextPage = () => {
   const { user, token } = useContext<AuthContextInterface>(AuthContext);
-  const { data, error } = useSWR("/todos", () =>
-    getUserTodoListQuery(token + "")
-  );
+  const { data } = useSWR("/todos", () => getUserTodoListQuery(token + ""));
 
   if (!data) return <div>loading...</div>;
 
-  console.log("error: ", error);
   return (
     <Container>
       <AddTodoFormModal />
@@ -27,7 +24,7 @@ const Home: NextPage = () => {
           justifyContent: "space-between",
         }}
       >
-        {data.data?.map((td) => (
+        {data?.map((td) => (
           <Grid xs={12} md={5} key={td.id}>
             <TodoItem
               id={td.id}
