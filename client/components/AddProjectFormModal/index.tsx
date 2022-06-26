@@ -63,7 +63,7 @@ const Index = () => {
       css={{ backgroundColor: theme?.colors.backgroundContrast }}
     >
       <Grid xs={12}>
-        <Button auto color='warning' shadow onClick={handler}>
+        <Button auto color='success' shadow onClick={handler}>
           Add new project
         </Button>
       </Grid>

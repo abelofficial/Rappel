@@ -60,9 +60,10 @@ const Index = ({ id }: ProjectCardProps) => {
       <Card.Divider />
       <Card.Body>
         <Text>{data.description}</Text>
-        <Grid.Container direction='column' alignContent='center' gap={1}>
-          <Grid>
-            {data.members.length > 0 && (
+
+        {data.members.length > 1 && (
+          <Grid.Container direction='column' alignContent='center' gap={1}>
+            <Grid>
               <Avatar.Group count={data.members.length}>
                 {data.members.map((m, i) => (
                   <Avatar
@@ -78,12 +79,12 @@ const Index = ({ id }: ProjectCardProps) => {
                   />
                 ))}
               </Avatar.Group>
-            )}
-          </Grid>
-          <Grid>
-            <Text h4>Members</Text>
-          </Grid>
-        </Grid.Container>
+            </Grid>
+            <Grid>
+              <Text h4>Members</Text>
+            </Grid>
+          </Grid.Container>
+        )}
       </Card.Body>
 
       <Card.Divider />
@@ -96,10 +97,12 @@ const Index = ({ id }: ProjectCardProps) => {
       >
         <Button
           size='sm'
-          color='success'
+          color='gradient'
+          bordered
+          rounded
           onPress={() => router.push("project/" + id)}
         >
-          Join
+          Open
         </Button>
       </Card.Footer>
     </Card>

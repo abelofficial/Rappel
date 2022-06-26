@@ -1,4 +1,4 @@
-import { Container, Grid } from "@nextui-org/react";
+import { Grid, Row } from "@nextui-org/react";
 import type { NextPage } from "next";
 import { useContext } from "react";
 import { AuthContext, AuthContextInterface } from "../Contexts/Auth";
@@ -16,26 +16,20 @@ const Home: NextPage = () => {
   if (!data) return <div>loading...</div>;
   console.log("DATA: ", data);
   return (
-    <Container>
-      <Grid.Container
-        gap={1}
-        css={{
-          width: "100vw",
-          display: "flex",
-          alignItem: "center",
-          justifyContent: "center",
-        }}
-      >
+    <Grid.Container direction='column' alignItems='flex-end'>
+      <Grid>
         <AddProjectFormModal />
-        <Grid.Container direction='column' gap={1} justify='center'>
+      </Grid>
+      <Row>
+        <Grid.Container alignItems='flex-end' gap={1}>
           {data.map((p) => (
-            <Grid key={p.id}>
+            <Grid xs={12} key={p.id}>
               <ProjectCard id={p.id} />
             </Grid>
           ))}
         </Grid.Container>
-      </Grid.Container>
-    </Container>
+      </Row>
+    </Grid.Container>
   );
 };
 
