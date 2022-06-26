@@ -11,14 +11,18 @@ export const getCurrentUserQuery = (token: string) =>
     .get<UserResponse>(`/auth/user`)
     .then((d) => d.data);
 
-export const getUserTodoItemQuery = (token: string, id: number) =>
+export const getUserTodoItemQuery = (
+  token: string,
+  id: number,
+  projectId: number
+) =>
   api(token)
-    .get<TodoResponseDto>(`/todos/${id}`)
+    .get<TodoResponseDto>(`project/${projectId}/todos/${id}`)
     .then((d) => d.data);
 
-export const getUserTodoListQuery = (token: string) =>
+export const getUserTodoListQuery = (token: string, id: number) =>
   api(token)
-    .get<TodoResponseDto[]>(`/todos`)
+    .get<TodoResponseDto[]>(`project/${id}/todos`)
     .then((d) => d.data);
 
 export const getUserTodoSubtasksListQuery = async (token: string, id: number) =>

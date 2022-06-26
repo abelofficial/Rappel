@@ -30,7 +30,7 @@ export const createTodoCommand = (
   body: CreateTodoCommand
 ) =>
   api(token)
-    .post<TodoResponseDto>(`${id}/todos`, body)
+    .post<TodoResponseDto>(`project/${id}/todos`, body)
     .then((d) => d.data);
 
 export const createSubtaskCommand = (

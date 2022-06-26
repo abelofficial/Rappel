@@ -1,5 +1,6 @@
 import { Container, Grid } from "@nextui-org/react";
 import type { NextPage } from "next";
+import { useRouter } from "next/router";
 import { useContext } from "react";
 
 import useSWR from "swr";
@@ -9,14 +10,20 @@ import { AuthContextInterface, AuthContext } from "../../Contexts/Auth";
 import { getUserTodoListQuery } from "../../services/Queries";
 
 const Home: NextPage = () => {
-  const { user, token } = useContext<AuthContextInterface>(AuthContext);
-  const { data } = useSWR("/todos", () => getUserTodoListQuery(token + ""));
+  const router = useRouter();
+  const { id } = router.query;
+  var projectId: number = +(id + "");
+  const { token } = useContext<AuthContextInterface>(AuthContext);
+
+  const { data } = useSWR(`projects/${id}/todos`, () =>
+    getUserTodoListQuery(token + "", projectId)
+  );
 
   if (!data) return <div>loading...</div>;
 
   return (
     <Container>
-      <AddTodoFormModal />
+      <AddTodoFormModal id={projectId} />
       <Grid.Container
         gap={1}
         css={{
@@ -29,6 +36,7 @@ const Home: NextPage = () => {
           <Grid xs={12} md={5} key={td.id}>
             <TodoItem
               id={td.id}
+              projectId={projectId}
               title={td.title}
               description={td.description}
               status={td.status}

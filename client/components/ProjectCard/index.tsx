@@ -1,5 +1,6 @@
 import { Card, Text, Grid, Button, Avatar } from "@nextui-org/react";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import React, { useContext } from "react";
 import useSWR from "swr";
 
@@ -12,6 +13,7 @@ export interface ProjectCardProps {
 }
 
 const Index = ({ id }: ProjectCardProps) => {
+  const router = useRouter();
   const { user, token } = useContext<AuthContextInterface>(AuthContext);
 
   const { data } = useSWR(`/project/${id}`, () =>
@@ -92,7 +94,11 @@ const Index = ({ id }: ProjectCardProps) => {
           justifyContent: "space-evenly",
         }}
       >
-        <Button size='sm' color='success'>
+        <Button
+          size='sm'
+          color='success'
+          onPress={() => router.push("project/" + id)}
+        >
           Join
         </Button>
       </Card.Footer>

@@ -19,13 +19,14 @@ import {
 import TextField, { TextAreaField } from "../TextField";
 import { AuthContext, AuthContextInterface } from "../../Contexts/Auth";
 import { createTodoCommand } from "../../services/commands";
-import { mutate } from "swr";
+import { useSWRConfig } from "swr";
 
 export interface AddTodoFormModalProps {
   id: number;
 }
 const Index = ({ id }: AddTodoFormModalProps) => {
   const { theme } = useTheme();
+  const { mutate } = useSWRConfig();
   const [visible, setVisible] = React.useState(false);
 
   const handler = () => setVisible(true);
@@ -38,9 +39,9 @@ const Index = ({ id }: AddTodoFormModalProps) => {
 
   const onSubmitHandler = async (values: CreateTodoCommand) => {
     try {
-      mutate(`${id}/todos`, async (data: TodoResponseDto[]) => {
-        await createTodoCommand(token + "", id, values);
-        return [...data, values];
+      mutate(`projects/${id}/todos`, async (data: TodoResponseDto[]) => {
+        const newTodo = await createTodoCommand(token + "", id, values);
+        return [...data, newTodo];
       });
 
       setVisible(false);

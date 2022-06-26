@@ -42,8 +42,12 @@ const Index = ({ todoId }: AddSubtaskFormModal) => {
       mutate(
         `/todo/${todoId}/todossubtasks`,
         async (data: SubtaskResponseDto[]) => {
-          await createSubtaskCommand(token + "", todoId, values);
-          return { data: [...data, values] };
+          const newSubTask = await createSubtaskCommand(
+            token + "",
+            todoId,
+            values
+          );
+          return [...data, newSubTask];
         }
       );
       setVisible(false);
