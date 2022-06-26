@@ -1,39 +1,39 @@
 import { Container, Grid } from "@nextui-org/react";
 import type { NextPage } from "next";
 import { useContext } from "react";
-import AddTodoFormModal from "../components/AddTodoFormModal";
-import TodoItem from "../components/TodoItem";
 import { AuthContext, AuthContextInterface } from "../Contexts/Auth";
-import { getUserTodoListQuery } from "../services/Queries";
+import AddProjectFormModal from "../components/AddProjectFormModal";
+import { getUserProjectsListQuery } from "../services/Queries";
 import useSWR from "swr";
+import ProjectCard from "../components/ProjectCard";
 
 const Home: NextPage = () => {
   const { user, token } = useContext<AuthContextInterface>(AuthContext);
-  const { data } = useSWR("/todos", () => getUserTodoListQuery(token + ""));
+  const { data } = useSWR(`/projects`, () =>
+    getUserProjectsListQuery(token + "")
+  );
 
   if (!data) return <div>loading...</div>;
-
+  console.log("DATA: ", data);
   return (
     <Container>
-      <AddTodoFormModal />
       <Grid.Container
         gap={1}
         css={{
+          width: "100vw",
           display: "flex",
           alignItem: "center",
-          justifyContent: "space-between",
+          justifyContent: "center",
         }}
       >
-        {data?.map((td) => (
-          <Grid xs={12} md={5} key={td.id}>
-            <TodoItem
-              id={td.id}
-              title={td.title}
-              description={td.description}
-              status={td.status}
-            />
-          </Grid>
-        ))}
+        <AddProjectFormModal />
+        <Grid.Container direction='column' gap={1} justify='center'>
+          {data.map((p) => (
+            <Grid key={p.id}>
+              <ProjectCard id={p.id} />
+            </Grid>
+          ))}
+        </Grid.Container>
       </Grid.Container>
     </Container>
   );

@@ -6,7 +6,7 @@ import {
   fieldNames,
   fieldLabels,
 } from "./addTodoFormProps";
-import { CreateTodoCommand, TodoResponseDto } from "../../types";
+import { CreateProjectRequestDto, ProjectResponse } from "../../types";
 import {
   Button,
   Card,
@@ -18,13 +18,10 @@ import {
 } from "@nextui-org/react";
 import TextField, { TextAreaField } from "../TextField";
 import { AuthContext, AuthContextInterface } from "../../Contexts/Auth";
-import { createTodoCommand } from "../../services/commands";
+import { createProjectCommand } from "../../services/commands";
 import { mutate } from "swr";
 
-export interface AddTodoFormModalProps {
-  id: number;
-}
-const Index = ({ id }: AddTodoFormModalProps) => {
+const Index = () => {
   const { theme } = useTheme();
   const [visible, setVisible] = React.useState(false);
 
@@ -36,16 +33,15 @@ const Index = ({ id }: AddTodoFormModalProps) => {
   const [errors, setErrors] = useState<string[] | undefined>();
   const { token } = useContext<AuthContextInterface>(AuthContext);
 
-  const onSubmitHandler = async (values: CreateTodoCommand) => {
+  const onSubmitHandler = async (values: CreateProjectRequestDto) => {
     try {
-      mutate(`${id}/todos`, async (data: TodoResponseDto[]) => {
-        await createTodoCommand(token + "", id, values);
-        return [...data, values];
+      mutate(`/projects`, async (data: ProjectResponse[]) => {
+        const newProject = await createProjectCommand(token + "", values);
+        return [...data, newProject];
       });
 
       setVisible(false);
     } catch (e: any) {
-      console.log("Error: ", e);
       setErrors(e?.response?.data?.errors);
     }
   };
@@ -68,7 +64,7 @@ const Index = ({ id }: AddTodoFormModalProps) => {
     >
       <Grid xs={12}>
         <Button auto color='warning' shadow onClick={handler}>
-          Add new todo
+          Add new project
         </Button>
       </Grid>
       <Modal
@@ -82,7 +78,7 @@ const Index = ({ id }: AddTodoFormModalProps) => {
           <Text id='modal-title' size={18}>
             Add your new{" "}
             <Text b size={18}>
-              todo item
+              project
             </Text>
           </Text>
         </Modal.Header>

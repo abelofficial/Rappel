@@ -37,6 +37,21 @@ export interface TodoResponseDto {
   user: UserResponse;
 }
 
+export interface CreateProjectRequestDto {
+  title: string;
+  description: string;
+  isOrdered: boolean;
+}
+
+export interface ProjectResponse {
+  id: number;
+  title: string;
+  description: string;
+  isOrdered: boolean;
+  owner: UserResponse;
+  members: UserResponse[];
+}
+
 export interface SubtaskResponseDto {
   id: number;
   title: string;

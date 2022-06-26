@@ -1,4 +1,9 @@
-import { SubtaskResponseDto, TodoResponseDto, UserResponse } from "../types";
+import {
+  ProjectResponse,
+  SubtaskResponseDto,
+  TodoResponseDto,
+  UserResponse,
+} from "../types";
 import { api } from "../utils/apiAxiosInstance";
 
 export const getCurrentUserQuery = (token: string) =>
@@ -28,4 +33,14 @@ export const getUserTodoSubtaskQuery = async (
 ) =>
   await api(token)
     .get<SubtaskResponseDto>(`/todo/${parentId}/todossubtasks/${id}`)
+    .then((d) => d.data);
+
+export const getUserProjectsListQuery = async (token: string) =>
+  await api(token)
+    .get<ProjectResponse[]>(`/projects`)
+    .then((d) => d.data);
+
+export const getUserProjectsQuery = async (token: string, id: number) =>
+  await api(token)
+    .get<ProjectResponse>(`/projects/${id}`)
     .then((d) => d.data);
