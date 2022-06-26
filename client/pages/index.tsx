@@ -14,7 +14,7 @@ const Home: NextPage = () => {
   );
 
   if (!data) return <div>loading...</div>;
-  console.log("DATA: ", data);
+
   return (
     <Grid.Container direction='column' alignItems='flex-end'>
       <Grid>
