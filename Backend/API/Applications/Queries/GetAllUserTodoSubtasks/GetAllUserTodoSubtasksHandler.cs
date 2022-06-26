@@ -1,3 +1,4 @@
+using System.Net;
 using API.Application.Results;
 using API.Data;
 using API.Data.Entities;
@@ -22,8 +23,10 @@ public class GetAllUserTodoSubtasksHandler : BaseHandler<SubTask>, IRequestHandl
     {
         var currentUserName = _context.User.Identity.Name;
         var currentUser = await _db.Users.SingleAsync(u => u.Username.Equals(currentUserName));
+        if (!await _db.Todos.AnyAsync(td => td.Id == request.Id))
+            throw new HttpRequestException($"Todo item with id {request.Id} doesn't exist", null, HttpStatusCode.NotFound);
 
-        var result = await _db.SubTasks.Where(u => u.Todo.User.Id == currentUser.Id).Where(st => st.Todo.Id == request.Id).ToListAsync();
+        var result = await _db.SubTasks.Include(st => st.Todo).Where(u => u.Todo.User.Id == currentUser.Id).Where(st => st.Todo.Id == request.Id).ToListAsync();
         return _mapper.Map<IEnumerable<SubTaskResponseDto>>(result);
     }
 }

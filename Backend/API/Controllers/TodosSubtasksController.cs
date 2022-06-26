@@ -1,5 +1,5 @@
 using API.Application.Commands;
-using API.Application.Dtos;
+using API.Application.Dtos.CommandsDtos;
 using API.Application.Queries;
 using API.Application.Results;
 using API.Exceptions;
@@ -31,10 +31,10 @@ public class TodosSubtasksController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(SubTaskResponseDto))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ExceptionMessage))]
     [ProducesResponseType(typeof(ExceptionMessage), StatusCodes.Status401Unauthorized)]
-    public async Task<ActionResult> CreateSubTaskItem(int id, CreateTodoCommand request)
+    public async Task<ActionResult> CreateSubTaskItem(int id, CreateSubtaskRequestDto request)
     {
         var response = await _mediator.Send(new CreateSubTaskCommand() { ParentId = id, Title = request.Title, Description = request.Description });
-        return CreatedAtAction(nameof(GetUserTodoSubTaskItem), new { id = response.Todo.Id, subtaskId = response.Id }, response);
+        return CreatedAtAction(nameof(GetUserTodoSubTaskItem), new { id = response.TodoId, subtaskId = response.Id }, response);
     }
 
     /// <summary>

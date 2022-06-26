@@ -13,6 +13,9 @@ public class UpdateTodoStatusCommand : IRequest<TodoResponseDto>
     public int? Id { get; set; } = null;
 
     [Required]
+    public int ProjectId { get; set; }
+
+    [Required]
     [Newtonsoft.Json.JsonConverter(typeof(StringEnumConverter))]
     public ProgressStatus Status { get; set; }
 }

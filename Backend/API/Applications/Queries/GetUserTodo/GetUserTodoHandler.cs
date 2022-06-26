@@ -26,13 +26,13 @@ public class GetUserTodoHandler : BaseHandler<Todo>, IRequestHandler<GetUserTodo
 
         try
         {
-            var result = await _db.Todos.SingleAsync(td => td.User.Id == currentUser.Id && td.Id == request.Id);
+            var result = await _db.Todos.Include(td => td.SubTask).SingleAsync(td => td.User.Id == currentUser.Id && td.Id == request.Id && td.Project.Id == request.ProjectId);
 
             return _mapper.Map<TodoResponseDto>(result);
         }
         catch (Exception)
         {
-            throw new HttpRequestException($"A Todo item with the id {request.Id} doesn't exist", null, HttpStatusCode.NotFound);
+            throw new HttpRequestException($"A Todo item with the id {request.Id} in project ${request.ProjectId} doesn't exist", null, HttpStatusCode.NotFound);
         }
     }
 }

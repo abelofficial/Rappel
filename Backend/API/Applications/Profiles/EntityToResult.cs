@@ -9,9 +9,13 @@ public class EntityToResult : Profile
 
     public EntityToResult()
     {
+        CreateMap<Project, ProjectResponseDto>();
         CreateMap<User, UserResponseDto>();
         CreateMap<Todo, TodoResponseDto>().ReverseMap();
-        CreateMap<SubTask, SubTaskResponseDto>().ReverseMap();
+        CreateMap<SubTaskResponseDto, SubTask>().ReverseMap()
+       .ForMember(dest =>
+            dest.TodoId,
+            src => src.MapFrom(it => it.Todo.Id));
     }
 }
 

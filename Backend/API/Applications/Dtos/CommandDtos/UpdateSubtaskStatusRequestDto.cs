@@ -3,9 +3,9 @@ using API.Data.Entities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace API.Application.Dtos;
+namespace API.Application.Dtos.CommandsDtos;
 
-public class UpdateTodoStatusRequestDto
+public class UpdateSubtaskStatusRequestDto
 {
 
     [Required]

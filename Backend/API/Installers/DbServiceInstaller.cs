@@ -32,8 +32,9 @@ public class DbServicesInstaller : IInstaller
         else
         {
             connectionString = config.GetConnectionString("AppDbContext");
-            services.AddDbContext<AppDbContext>(options =>
-                  options.UseSqlServer(config.GetConnectionString("AppDbContext") ?? throw new InvalidOperationException("Connection string 'AppDbContext' not found.")));
+            // services.AddDbContext<AppDbContext>(options =>
+            //       options.UseSqlServer(config.GetConnectionString("AppDbContext") ?? throw new InvalidOperationException("Connection string 'AppDbContext' not found.")));
+            services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
         }
     }
 }

@@ -14,6 +14,8 @@ public class AppDbContext : DbContext
 
     public DbSet<SubTask> SubTasks { get; set; }
 
+    public DbSet<Project> Projects { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Todo>()

@@ -12,6 +12,6 @@ public class TodoResponseDto
     [Newtonsoft.Json.JsonConverter(typeof(StringEnumConverter))]
     public ProgressStatus Status { get; set; }
 
-    public UserResponseDto User { get; set; }
+    public IEnumerable<SubTaskResponseDto> SubTask { get; set; }
 
 }

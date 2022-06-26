@@ -23,6 +23,10 @@ public class Todo : IEntity
 
     [Required]
     [JsonIgnore]
+    public virtual Project Project { get; set; }
+
+    [Required]
+    [JsonIgnore]
     public virtual IEnumerable<SubTask> SubTask { get; set; }
 
     public virtual void AddSubTask(SubTask todo)

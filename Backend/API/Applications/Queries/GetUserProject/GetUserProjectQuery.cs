@@ -4,9 +4,7 @@ using MediatR;
 namespace API.Application.Queries;
 
 
-public class GetUserTodoQuery : IRequest<TodoResponseDto>
+public class GetUserProjectQuery : IRequest<ProjectResponseDto>
 {
     public int Id { get; set; }
-
-    public int ProjectId { get; set; }
 }

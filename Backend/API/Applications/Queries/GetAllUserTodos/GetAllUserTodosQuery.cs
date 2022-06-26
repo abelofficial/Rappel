@@ -6,5 +6,5 @@ namespace API.Application.Queries;
 
 public class GetAllUserTodosQuery : IRequest<IEnumerable<TodoResponseDto>>
 {
-    public string? Filter { get; set; }
+    public int ProjectId { get; set; }
 }

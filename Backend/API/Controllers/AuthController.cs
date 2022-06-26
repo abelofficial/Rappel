@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers;
 
 
-[Route("[controller]"), Authorize]
+[Route("[controller]")]
 [ApiController]
 [Produces("application/json")]
 

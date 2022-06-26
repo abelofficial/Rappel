@@ -24,7 +24,7 @@ public class UpdateTodoStatusHandler : BaseHandler<SubTask>, IRequestHandler<Upd
 
         try
         {
-            var todoItem = await _db.Todos.SingleAsync(td => td.User.Id == currentUser.Id && td.Id == request.Id);
+            var todoItem = await _db.Todos.SingleAsync(td => td.User.Id == currentUser.Id && td.Id == request.Id && td.Project.Id == request.ProjectId);
             todoItem.Status = request.Status;
             var result = _db.Todos.Update(todoItem).Entity;
             await _db.SaveChangesAsync();
@@ -32,7 +32,7 @@ public class UpdateTodoStatusHandler : BaseHandler<SubTask>, IRequestHandler<Upd
         }
         catch (Exception)
         {
-            throw new HttpRequestException($"A Todo item with the id {request.Id} doesn't exist", null, HttpStatusCode.NotFound);
+            throw new HttpRequestException($"A Todo item with the id {request.Id} in project {request.ProjectId} doesn't exist", null, HttpStatusCode.NotFound);
         }
     }
 }
