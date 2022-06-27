@@ -1,5 +1,4 @@
 using API.Application.Commands;
-using API.Application.Dtos;
 using API.Application.Dtos.CommandsDtos;
 using AutoMapper;
 
@@ -13,6 +12,8 @@ public class DtoToCommand : Profile
         CreateMap<UpdateTodoStatusRequestDto, UpdateTodoStatusCommand>();
         CreateMap<UpdateSubtaskStatusRequestDto, UpdateSubtaskStatusCommand>();
         CreateMap<CreateTodoRequestDto, CreateTodoCommand>();
+        CreateMap<UpdateProjectRequestDto, UpdateProjectCommand>();
+        CreateMap<UpdateTodoRequestDto, UpdateTodoCommand>();
     }
 }
 

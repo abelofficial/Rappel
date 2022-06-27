@@ -22,11 +22,11 @@ public class GetUserTodoSubtaskHandler : BaseHandler<SubTask>, IRequestHandler<G
     {
         var currentUserName = _context.User.Identity.Name;
         var currentUser = await _db.Users.SingleAsync(u => u.Username.Equals(currentUserName));
-        var parentTodoItem = await _db.Todos.SingleAsync(td => td.Id == request.TodoId);
 
         try
         {
-            var result = await _db.SubTasks.Where(st => st.Id == request.SubTaskId).Where(u => u.Todo.User.Id == currentUser.Id).Where(u => u.Todo.Id == request.TodoId).SingleAsync();
+            var parentTodoItem = await _db.Todos.SingleAsync(td => td.Id == request.TodoId);
+            var result = await _db.SubTasks.Where(st => st.Id == request.SubTaskId).Where(u => u.Todo.User.Id == currentUser.Id).SingleAsync(u => u.Todo.Id == request.TodoId);
             return _mapper.Map<SubTaskResponseDto>(result);
         }
         catch (Exception e)

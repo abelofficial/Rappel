@@ -43,6 +43,24 @@ public class TodosController : ControllerBase
     }
 
     /// <summary>
+    /// Update Todo item.
+    /// </summary>
+    [HttpPut("{id}/[controller]/{todoId}")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(TodoResponseDto))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ExceptionMessage))]
+    [ProducesResponseType(typeof(ExceptionMessage), StatusCodes.Status401Unauthorized)]
+    public async Task<ActionResult> UpdateTodoItem(int id, int todoId, UpdateTodoRequestDto request)
+    {
+        var command = _mapper.Map<UpdateTodoCommand>(request);
+        command.Id = id;
+        command.ProjectId = todoId;
+
+        var response = await _mediator.Send(command);
+        return Ok(response);
+    }
+
+    /// <summary>
     /// Update Todo items progress status.
     /// </summary>
     [HttpPatch("{id}/[controller]/{todoId}/status")]
