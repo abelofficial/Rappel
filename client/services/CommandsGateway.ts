@@ -10,3 +10,5 @@ export const UpdateSubtaskStatusURL = (id: number, subTaskId: number) =>
   `/todo/${id}/todossubtasks/${subTaskId}`;
 
 export const CreateProjectURL = () => `/projects`;
+
+export const UpdateProjectURL = (id: number) => `/projects/${id}`;

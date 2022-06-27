@@ -1,14 +1,18 @@
 import { Grid, Row, Text } from "@nextui-org/react";
 import type { NextPage } from "next";
+import { v4 as uuid } from "uuid";
 import Lottie from "react-lottie-player";
 import { useContext } from "react";
 import { AuthContext, AuthContextInterface } from "../Contexts/Auth";
 import AddProjectFormModal from "../components/AddProjectFormModal";
 import { getUserProjectsListQuery } from "../services/Queries";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 import ProjectCard from "../components/ProjectCard";
 import { UserProjectsListURL } from "../services/QueriesGateway";
 import * as notItemAnim from "../utils/Anims/no-item-anim.json";
+import { createProjectCommand } from "../services/commands";
+import { CreateProjectRequestDto, ProjectResponse } from "../types";
+import * as Gateway from "../services/QueriesGateway";
 
 const Home: NextPage = () => {
   const { user, token } = useContext<AuthContextInterface>(AuthContext);
@@ -18,6 +22,13 @@ const Home: NextPage = () => {
 
   if (!data) return <div>loading...</div>;
 
+  const onAddProjectHandler = async (values: CreateProjectRequestDto) => {
+    mutate(Gateway.UserProjectsListURL(), async (data: ProjectResponse[]) => {
+      const newProject = await createProjectCommand(token + "", values);
+      return [...data, newProject];
+    });
+  };
+
   return (
     <Grid.Container
       direction='column'
@@ -25,13 +36,16 @@ const Home: NextPage = () => {
       justify='space-around'
     >
       <Grid>
-        <AddProjectFormModal />
+        <AddProjectFormModal
+          buttonTitle='Create'
+          onSubmit={onAddProjectHandler}
+        />
       </Grid>
       <Row justify='center'>
         {data.length > 0 ? (
           <Grid.Container alignItems='flex-end' gap={1}>
             {data.map((p) => (
-              <Grid xs={12} key={p.id}>
+              <Grid xs={12} key={uuid()}>
                 <ProjectCard id={p.id} />
               </Grid>
             ))}

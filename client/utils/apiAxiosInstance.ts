@@ -7,5 +7,7 @@ export const api = (token?: string) =>
       Authorization: `bearer ${token}`,
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+      "Content-Type": "application/json",
+      Accept: "application/json",
     },
   });

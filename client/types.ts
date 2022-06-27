@@ -43,6 +43,11 @@ export interface CreateProjectRequestDto {
   isOrdered: boolean;
 }
 
+export interface UpdateProjectRequestDto {
+  title: string;
+  description: string;
+}
+
 export interface ProjectResponse {
   id: number;
   title: string;

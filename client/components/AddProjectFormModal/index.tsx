@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { Form, Formik } from "formik";
 import {
   initialValues,
@@ -6,7 +6,7 @@ import {
   fieldNames,
   fieldLabels,
 } from "./addTodoFormProps";
-import { CreateProjectRequestDto, ProjectResponse } from "../../types";
+import { CreateProjectRequestDto } from "../../types";
 import {
   Button,
   Card,
@@ -17,12 +17,21 @@ import {
   useTheme,
 } from "@nextui-org/react";
 import TextField, { TextAreaField } from "../TextField";
-import { AuthContext, AuthContextInterface } from "../../Contexts/Auth";
-import { createProjectCommand } from "../../services/commands";
-import { mutate } from "swr";
-import * as Gateway from "../../services/QueriesGateway";
 
-const Index = () => {
+export interface AddProjectFormModalProps {
+  propsValues?: CreateProjectRequestDto;
+  actionButton?: JSX.Element;
+  buttonTitle?: string;
+
+  onSubmit: (values: CreateProjectRequestDto) => Promise<void>;
+}
+
+const Index = ({
+  propsValues,
+  actionButton,
+  buttonTitle,
+  onSubmit,
+}: AddProjectFormModalProps) => {
   const { theme } = useTheme();
   const [visible, setVisible] = React.useState(false);
 
@@ -32,15 +41,10 @@ const Index = () => {
     setVisible(false);
   };
   const [errors, setErrors] = useState<string[] | undefined>();
-  const { token } = useContext<AuthContextInterface>(AuthContext);
 
   const onSubmitHandler = async (values: CreateProjectRequestDto) => {
     try {
-      mutate(Gateway.UserProjectsListURL(), async (data: ProjectResponse[]) => {
-        const newProject = await createProjectCommand(token + "", values);
-        return [...data, newProject];
-      });
-
+      await onSubmit(values);
       setVisible(false);
     } catch (e: any) {
       setErrors(e?.response?.data?.errors);
@@ -60,13 +64,17 @@ const Index = () => {
   );
   return (
     <Grid.Container
-      gap={2}
+      gap={1}
       css={{ backgroundColor: theme?.colors.backgroundContrast }}
     >
       <Grid xs={12}>
-        <Button auto color='success' shadow onClick={handler}>
-          Add new project
-        </Button>
+        {actionButton ? (
+          <div onClick={handler}>{actionButton}</div>
+        ) : (
+          <Button auto color='success' shadow onClick={handler}>
+            Add new project
+          </Button>
+        )}
       </Grid>
       <Modal
         closeButton
@@ -85,7 +93,7 @@ const Index = () => {
         </Modal.Header>
         <Modal.Body>
           <Formik
-            initialValues={initialValues}
+            initialValues={propsValues ? propsValues : initialValues}
             onSubmit={onSubmitHandler}
             validationSchema={validationSchema}
           >
@@ -124,7 +132,7 @@ const Index = () => {
                         color='success'
                         disabled={isSubmitting}
                       >
-                        Create
+                        {buttonTitle ? buttonTitle : "Create"}
                       </Button>
                     </Grid>
                   </Grid.Container>
