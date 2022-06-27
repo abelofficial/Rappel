@@ -27,11 +27,21 @@ const Index = () => {
         padding: "$1 $8",
       }}
     >
-      <Grid css={{ display: "flex" }}>
-        <Image src='/note-img.svg' alt='start-icon' width={30} height={30} />
-        <Spacer />
-        <Text h4> Todo</Text>
-      </Grid>
+      {router.pathname === "/" ? (
+        <Grid css={{ display: "flex" }}>
+          <Image src='/note-img.svg' alt='start-icon' width={30} height={30} />
+          <Spacer />
+          <Text h4> Todo</Text>
+        </Grid>
+      ) : (
+        <Image
+          src='/back-icon.svg'
+          alt='start-icon'
+          width={30}
+          height={30}
+          onClick={() => router.push("/")}
+        />
+      )}
       <Grid>
         {user && (
           <Row>

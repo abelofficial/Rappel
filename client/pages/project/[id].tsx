@@ -16,7 +16,7 @@ const Home: NextPage = () => {
   var projectId: number = +(id + "");
   const { token } = useContext<AuthContextInterface>(AuthContext);
 
-  const { data } = useSWR(UserTodoListURL(), () =>
+  const { data } = useSWR(UserTodoListURL(projectId), () =>
     getUserTodoListQuery(token + "", projectId)
   );
 
