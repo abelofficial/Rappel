@@ -20,6 +20,7 @@ import TextField, { TextAreaField } from "../TextField";
 import { AuthContext, AuthContextInterface } from "../../Contexts/Auth";
 import { createTodoCommand } from "../../services/commands";
 import { useSWRConfig } from "swr";
+import Image from "next/image";
 
 export interface AddTodoFormModalProps {
   id: number;
@@ -64,20 +65,30 @@ const Index = ({ id }: AddTodoFormModalProps) => {
   );
   return (
     <Grid.Container
+      justify='center'
       gap={2}
       css={{ backgroundColor: theme?.colors.backgroundContrast }}
     >
-      <Grid xs={12}>
-        <Button auto color='success' shadow onClick={handler}>
-          Add new todo
-        </Button>
+      <Grid
+        css={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+      >
+        <Button
+          auto
+          css={{ bg: theme?.colors.background.value }}
+          rounded
+          onClick={handler}
+          icon={<Image src='/add-icon.svg' alt='' width={36} height={36} />}
+        />
+        <Text h4>Add new task</Text>
       </Grid>
       <Modal
+        noPadding
         closeButton
         blur
         aria-labelledby='modal-title'
         open={visible}
         onClose={closeHandler}
+        css={{ margin: "$10" }}
       >
         <Modal.Header>
           <Text id='modal-title' size={18}>

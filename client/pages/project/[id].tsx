@@ -1,4 +1,4 @@
-import { Container, Grid } from "@nextui-org/react";
+import { Grid } from "@nextui-org/react";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useContext } from "react";
@@ -22,29 +22,33 @@ const Home: NextPage = () => {
   if (!data) return <div>loading...</div>;
 
   return (
-    <Container>
-      <AddTodoFormModal id={projectId} />
-      <Grid.Container
-        gap={1}
-        css={{
-          display: "flex",
-          alignItem: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        {data?.map((td) => (
-          <Grid xs={12} key={td.id}>
-            <TodoItem
-              id={td.id}
-              projectId={projectId}
-              title={td.title}
-              description={td.description}
-              status={td.status}
-            />
-          </Grid>
-        ))}
-      </Grid.Container>
-    </Container>
+    <Grid.Container direction='column'>
+      <Grid>
+        <AddTodoFormModal id={projectId} />
+      </Grid>
+      <Grid>
+        <Grid.Container
+          gap={1}
+          css={{
+            display: "flex",
+            alignItem: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          {data?.map((td) => (
+            <Grid xs={12} key={td.id}>
+              <TodoItem
+                id={td.id}
+                projectId={projectId}
+                title={td.title}
+                description={td.description}
+                status={td.status}
+              />
+            </Grid>
+          ))}
+        </Grid.Container>
+      </Grid>
+    </Grid.Container>
   );
 };
 
