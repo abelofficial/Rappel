@@ -5,8 +5,8 @@ import {
   validationSchema,
   fieldNames,
   fieldLabels,
-} from "./addTodoFormProps";
-import { CreateProjectRequestDto } from "../../types";
+} from "./todoFormProps";
+import { CreateTodoCommand } from "../../types";
 import {
   Button,
   Card,
@@ -17,38 +17,44 @@ import {
   useTheme,
 } from "@nextui-org/react";
 import TextField, { TextAreaField } from "../TextField";
+import Image from "next/image";
 
-export interface AddProjectFormModalProps {
-  propsValues?: CreateProjectRequestDto;
+export interface TodoFormModalProps {
+  id: number;
+  propsValues?: CreateTodoCommand;
   actionButton?: JSX.Element;
-  buttonTitle?: string;
+  buttonTitle: string;
+  title: string;
 
-  onSubmit: (values: CreateProjectRequestDto) => Promise<void>;
+  onSubmit: (values: CreateTodoCommand) => Promise<void>;
 }
 
 const Index = ({
+  id,
+  title,
   propsValues,
   actionButton,
   buttonTitle,
   onSubmit,
-}: AddProjectFormModalProps) => {
+}: TodoFormModalProps) => {
   const { theme } = useTheme();
   const [visible, setVisible] = React.useState(false);
+  const [errors, setErrors] = useState<string[] | undefined>();
+
+  const onSubmitHandler = async (values: CreateTodoCommand) => {
+    try {
+      await onSubmit(values);
+      setVisible(false);
+    } catch (e: any) {
+      console.log("Error: ", e);
+      setErrors(e?.response?.data?.errors);
+    }
+  };
 
   const handler = () => setVisible(true);
 
   const closeHandler = () => {
     setVisible(false);
-  };
-  const [errors, setErrors] = useState<string[] | undefined>();
-
-  const onSubmitHandler = async (values: CreateProjectRequestDto) => {
-    try {
-      await onSubmit(values);
-      setVisible(false);
-    } catch (e: any) {
-      setErrors(e?.response?.data?.errors);
-    }
   };
 
   const displayErrors = () => (
@@ -64,31 +70,43 @@ const Index = ({
   );
   return (
     <Grid.Container
-      gap={1}
+      justify='center'
+      gap={2}
       css={{ backgroundColor: theme?.colors.backgroundContrast }}
     >
-      <Grid xs={12}>
-        {actionButton ? (
-          <div onClick={handler}>{actionButton}</div>
-        ) : (
-          <Button auto color='success' shadow onClick={handler}>
-            Add new project
-          </Button>
-        )}
-      </Grid>
+      {actionButton ? (
+        <div onClick={handler}>{actionButton}</div>
+      ) : (
+        <Grid
+          css={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Button
+            auto
+            css={{ bg: theme?.colors.background.value }}
+            rounded
+            onClick={handler}
+            icon={<Image src='/add-icon.svg' alt='' width={36} height={36} />}
+          />
+          <Text h4>Add new task</Text>
+        </Grid>
+      )}
+
       <Modal
+        noPadding
         closeButton
         blur
         aria-labelledby='modal-title'
         open={visible}
         onClose={closeHandler}
+        css={{ margin: "$10" }}
       >
         <Modal.Header>
           <Text id='modal-title' size={18}>
-            Add your new{" "}
-            <Text b size={18}>
-              project
-            </Text>
+            {title}
           </Text>
         </Modal.Header>
         <Modal.Body>
@@ -132,7 +150,7 @@ const Index = ({
                         color='success'
                         disabled={isSubmitting}
                       >
-                        {buttonTitle ? buttonTitle : "Create"}
+                        {buttonTitle}
                       </Button>
                     </Grid>
                   </Grid.Container>

@@ -1,12 +1,12 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { Form, Formik } from "formik";
 import {
   initialValues,
   validationSchema,
   fieldNames,
   fieldLabels,
-} from "./addTodoFormProps";
-import { CreateTodoCommand, TodoResponseDto } from "../../types";
+} from "./projectFormProps";
+import { CreateProjectRequestDto } from "../../types";
 import {
   Button,
   Card,
@@ -17,18 +17,24 @@ import {
   useTheme,
 } from "@nextui-org/react";
 import TextField, { TextAreaField } from "../TextField";
-import { AuthContext, AuthContextInterface } from "../../Contexts/Auth";
-import { createTodoCommand } from "../../services/commands";
-import { useSWRConfig } from "swr";
-import Image from "next/image";
-import * as Gateway from "../../services/QueriesGateway";
 
-export interface AddTodoFormModalProps {
-  id: number;
+export interface ProjectFormModalProps {
+  propsValues?: CreateProjectRequestDto;
+  actionButton?: JSX.Element;
+  buttonTitle: string;
+  title: string;
+
+  onSubmit: (values: CreateProjectRequestDto) => Promise<void>;
 }
-const Index = ({ id }: AddTodoFormModalProps) => {
+
+const Index = ({
+  title,
+  propsValues,
+  actionButton,
+  buttonTitle,
+  onSubmit,
+}: ProjectFormModalProps) => {
   const { theme } = useTheme();
-  const { mutate } = useSWRConfig();
   const [visible, setVisible] = React.useState(false);
 
   const handler = () => setVisible(true);
@@ -37,18 +43,12 @@ const Index = ({ id }: AddTodoFormModalProps) => {
     setVisible(false);
   };
   const [errors, setErrors] = useState<string[] | undefined>();
-  const { token } = useContext<AuthContextInterface>(AuthContext);
 
-  const onSubmitHandler = async (values: CreateTodoCommand) => {
+  const onSubmitHandler = async (values: CreateProjectRequestDto) => {
     try {
-      mutate(Gateway.UserTodoListURL(id), async (data: TodoResponseDto[]) => {
-        const newTodo = await createTodoCommand(token + "", id, values);
-        return [...data, newTodo];
-      });
-
+      await onSubmit(values);
       setVisible(false);
     } catch (e: any) {
-      console.log("Error: ", e);
       setErrors(e?.response?.data?.errors);
     }
   };
@@ -66,42 +66,33 @@ const Index = ({ id }: AddTodoFormModalProps) => {
   );
   return (
     <Grid.Container
-      justify='center'
-      gap={2}
+      gap={1}
       css={{ backgroundColor: theme?.colors.backgroundContrast }}
     >
-      <Grid
-        css={{ display: "flex", flexDirection: "column", alignItems: "center" }}
-      >
-        <Button
-          auto
-          css={{ bg: theme?.colors.background.value }}
-          rounded
-          onClick={handler}
-          icon={<Image src='/add-icon.svg' alt='' width={36} height={36} />}
-        />
-        <Text h4>Add new task</Text>
+      <Grid xs={12}>
+        {actionButton ? (
+          <div onClick={handler}>{actionButton}</div>
+        ) : (
+          <Button auto color='success' shadow onClick={handler}>
+            Add new project
+          </Button>
+        )}
       </Grid>
       <Modal
-        noPadding
         closeButton
         blur
         aria-labelledby='modal-title'
         open={visible}
         onClose={closeHandler}
-        css={{ margin: "$10" }}
       >
         <Modal.Header>
           <Text id='modal-title' size={18}>
-            Add your new{" "}
-            <Text b size={18}>
-              todo item
-            </Text>
+            {title}
           </Text>
         </Modal.Header>
         <Modal.Body>
           <Formik
-            initialValues={initialValues}
+            initialValues={propsValues ? propsValues : initialValues}
             onSubmit={onSubmitHandler}
             validationSchema={validationSchema}
           >
@@ -140,7 +131,7 @@ const Index = ({ id }: AddTodoFormModalProps) => {
                         color='success'
                         disabled={isSubmitting}
                       >
-                        Create
+                        {buttonTitle ? buttonTitle : "Create"}
                       </Button>
                     </Grid>
                   </Grid.Container>

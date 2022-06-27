@@ -71,8 +71,19 @@ export const updateProjectCommand = (
   body: UpdateProjectRequestDto
 ) => {
   const url = Gateway.UpdateProjectURL(id);
-  console.log("Id: ", url);
   return api(token)
     .put<ProjectResponse>(url, body)
+    .then((d) => d.data);
+};
+
+export const updateTodoCommand = (
+  token: string,
+  id: number,
+  projectId: number,
+  body: CreateTodoCommand
+) => {
+  const url = Gateway.UpdateTodoURL(id, projectId);
+  return api(token)
+    .put<TodoResponseDto>(url, body)
     .then((d) => d.data);
 };

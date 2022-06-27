@@ -4,7 +4,7 @@ import { v4 as uuid } from "uuid";
 import Lottie from "react-lottie-player";
 import { useContext } from "react";
 import { AuthContext, AuthContextInterface } from "../Contexts/Auth";
-import AddProjectFormModal from "../components/AddProjectFormModal";
+import ProjectFormModal from "../components/ProjectFormModal";
 import { getUserProjectsListQuery } from "../services/Queries";
 import useSWR, { mutate } from "swr";
 import ProjectCard from "../components/ProjectCard";
@@ -36,9 +36,10 @@ const Home: NextPage = () => {
       justify='space-around'
     >
       <Grid>
-        <AddProjectFormModal
+        <ProjectFormModal
           buttonTitle='Create'
           onSubmit={onAddProjectHandler}
+          title='Create new project'
         />
       </Grid>
       <Row justify='center'>

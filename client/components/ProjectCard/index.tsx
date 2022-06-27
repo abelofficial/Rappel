@@ -9,7 +9,7 @@ import { updateProjectCommand } from "../../services/commands";
 import { getUserProjectsQuery } from "../../services/Queries";
 import { UserProjectsURL } from "../../services/QueriesGateway";
 import { ProjectResponse, UpdateProjectRequestDto } from "../../types";
-import AddProjectFormModal from "../AddProjectFormModal";
+import ProjectFormModal from "../ProjectFormModal";
 import * as Gateway from "../../services/QueriesGateway";
 ("../../types");
 
@@ -34,7 +34,7 @@ const Index = ({ id }: ProjectCardProps) => {
     };
 
     try {
-      mutate(Gateway.UserProjectsURL(id), async (data: ProjectResponse) => {
+      mutate(Gateway.UserProjectsURL(id), async (_d: ProjectResponse) => {
         const updatedProject = await updateProjectCommand(
           token + "",
           id,
@@ -63,7 +63,7 @@ const Index = ({ id }: ProjectCardProps) => {
           <Grid>
             <Grid.Container alignItems='center' justify='flex-end' gap={1}>
               <Grid>
-                <AddProjectFormModal
+                <ProjectFormModal
                   onSubmit={onUpdateProjectHandler}
                   propsValues={data}
                   actionButton={
