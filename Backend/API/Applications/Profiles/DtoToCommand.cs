@@ -13,6 +13,7 @@ public class DtoToCommand : Profile
         CreateMap<UpdateSubtaskStatusRequestDto, UpdateSubtaskStatusCommand>();
         CreateMap<CreateTodoRequestDto, CreateTodoCommand>();
         CreateMap<UpdateProjectRequestDto, UpdateProjectCommand>();
+        CreateMap<UpdateTodoRequestDto, UpdateTodoCommand>();
     }
 }
 
