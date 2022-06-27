@@ -1,11 +1,12 @@
 import { NextUIProvider } from "@nextui-org/react";
 import Layout from "../components/Layout";
 import { AuthProvider } from "../Contexts/Auth";
+import theme from "../utils/Theme";
 
 function MyApp({ Component, pageProps, fallback }: any) {
   return (
     // 2. Use at the root of your app
-    <NextUIProvider>
+    <NextUIProvider theme={theme}>
       <AuthProvider>
         <Layout>
           <Component {...pageProps} />

@@ -17,7 +17,7 @@ export interface AuthContextInterface {
   registerErrors: string[];
   setUser: Dispatch<SetStateAction<UserResponse | undefined>>;
   setToken: Dispatch<SetStateAction<string | undefined>>;
-
+  logoutUser: () => void;
   loginUser: (values: LoginUserRequest) => Promise<boolean>;
   registerUser: (values: RegisterUserRequest) => Promise<boolean>;
 }
@@ -99,6 +99,14 @@ function AuthActions(): AuthContextInterface {
     }
   };
 
+  const logoutUser = () => {
+    localStorage.removeItem("user");
+    localStorage.removeItem(`${user?.username}`);
+
+    setUser(undefined);
+    setToken(undefined);
+  };
+
   return {
     user,
     token,
@@ -108,5 +116,6 @@ function AuthActions(): AuthContextInterface {
     logInErrors,
     registerUser,
     registerErrors,
+    logoutUser,
   };
 }

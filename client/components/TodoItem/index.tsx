@@ -10,6 +10,8 @@ import { AuthContextInterface, AuthContext } from "../../Contexts/Auth";
 import SubtaskItem from "../SubtaskItem";
 import AddSubtaskFormModal from "../AddSubtaskFormModal";
 import FilterBar from "../FilterBar";
+import * as Gateway from "../../services/QueriesGateway";
+import { UserTodoItemURL } from "../../services/QueriesGateway";
 ("../../types");
 
 export interface TodoItemProps extends Omit<TodoResponseDto, "user"> {
@@ -28,10 +30,10 @@ const Index = ({ id, projectId }: TodoItemProps) => {
     ShowFilterType.ALL
   );
   const { token } = useContext<AuthContextInterface>(AuthContext);
-  const { data, error } = useSWR(`project/${projectId}/todo/${id}`, () =>
+  const { data, error } = useSWR(UserTodoItemURL(id, projectId), () =>
     getUserTodoItemQuery(token + "", id, projectId)
   );
-  const tasks = useSWR(`/todo/${id}/todossubtasks`, () =>
+  const tasks = useSWR(Gateway.UserTodoSubtasksListURL(id), () =>
     getUserTodoSubtasksListQuery(token + "", id)
   );
   console.log(error);

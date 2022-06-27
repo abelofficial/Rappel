@@ -9,6 +9,8 @@ import { getUserTodoSubtaskQuery } from "../../services/Queries";
 import { ProgressBar } from "../../types";
 import { ShowFilterType } from "../FilterBar";
 import Statusbar from "../Statusbar";
+import * as Gateway from "../../services/QueriesGateway";
+import { UserTodoSubtaskURL } from "../../services/QueriesGateway";
 ("../../types");
 
 export interface SubtaskItemProps {
@@ -19,7 +21,7 @@ export interface SubtaskItemProps {
 
 const Index = ({ id, parentId, onChange }: SubtaskItemProps) => {
   const { token } = useContext<AuthContextInterface>(AuthContext);
-  const { data } = useSWR(`/todo/${parentId}/todossubtasks/${id}`, () =>
+  const { data } = useSWR(UserTodoSubtaskURL(id, parentId), () =>
     getUserTodoSubtaskQuery(token + "", id, parentId)
   );
 
@@ -29,7 +31,7 @@ const Index = ({ id, parentId, onChange }: SubtaskItemProps) => {
     await updateSubtaskStatusCommand(token + "", parentId, id, {
       status,
     });
-    mutate(`/todo/${parentId}/todossubtasks/${id}`, { ...data, status });
+    mutate(Gateway.UserTodoSubtaskURL(id, parentId), { ...data, status });
     onChange();
   };
 

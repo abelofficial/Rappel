@@ -11,17 +11,18 @@ import {
   UserResponse,
 } from "../types";
 import { api } from "../utils/apiAxiosInstance";
+import * as Gateway from "./CommandsGateway";
 
 export const registerUserCommand = (
   body: Omit<RegisterUserRequest, "confirmPassword">
 ) =>
   api()
-    .post<UserResponse>(`/auth/register`, body)
+    .post<UserResponse>(Gateway.RegisterUserURL(), body)
     .then((d) => d.data);
 
 export const loginUserCommand = (body: LoginUserRequest) =>
   api()
-    .post<LoginUserResponse>(`/auth/login`, body)
+    .post<LoginUserResponse>(Gateway.LoginUserURL(), body)
     .then((d) => d.data);
 
 export const createTodoCommand = (
@@ -30,7 +31,7 @@ export const createTodoCommand = (
   body: CreateTodoCommand
 ) =>
   api(token)
-    .post<TodoResponseDto>(`project/${id}/todos`, body)
+    .post<TodoResponseDto>(Gateway.CreateTodoURL(id), body)
     .then((d) => d.data);
 
 export const createSubtaskCommand = (
@@ -39,7 +40,7 @@ export const createSubtaskCommand = (
   body: CreateSubtaskCommand
 ) =>
   api(token)
-    .post<CreateSubtaskCommand>(`/todo/${id}/todossubtasks`, body)
+    .post<CreateSubtaskCommand>(Gateway.CreateSubtaskURL(id), body)
     .then((d) => d.data);
 
 export const updateSubtaskStatusCommand = (
@@ -49,7 +50,10 @@ export const updateSubtaskStatusCommand = (
   body: UpdateSubtaskStatusCommandDto
 ) =>
   api(token)
-    .patch<CreateSubtaskCommand>(`/todo/${id}/todossubtasks/${subTaskId}`, body)
+    .patch<CreateSubtaskCommand>(
+      Gateway.UpdateSubtaskStatusURL(id, subTaskId),
+      body
+    )
     .then((d) => d.data);
 
 export const createProjectCommand = (
@@ -57,5 +61,5 @@ export const createProjectCommand = (
   body: CreateProjectRequestDto
 ) =>
   api(token)
-    .post<ProjectResponse>(`/projects`, body)
+    .post<ProjectResponse>(Gateway.CreateProjectURL(), body)
     .then((d) => d.data);
