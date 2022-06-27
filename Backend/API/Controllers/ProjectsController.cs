@@ -1,7 +1,9 @@
 using API.Application.Commands;
+using API.Application.Dtos.CommandsDtos;
 using API.Application.Queries;
 using API.Application.Results;
 using API.Exceptions;
+using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,11 +17,13 @@ public class ProjectsController : ControllerBase
 {
     private readonly ILogger<ProjectsController> _logger;
     private readonly IMediator _mediator;
+    private readonly IMapper _mapper;
 
-    public ProjectsController(ILogger<ProjectsController> logger, IMediator mediator)
+    public ProjectsController(ILogger<ProjectsController> logger, IMediator mediator, IMapper mapper)
     {
         _logger = logger;
         _mediator = mediator;
+        _mapper = mapper;
     }
 
     /// <summary>
@@ -34,6 +38,23 @@ public class ProjectsController : ControllerBase
     {
         var response = await _mediator.Send(request);
         return CreatedAtAction(nameof(GetUserProject), new { id = response.Id }, response);
+
+    }
+
+    /// <summary>
+    /// Update Project item.
+    /// </summary>
+    [HttpPut("{id}")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(ProjectResponseDto))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ExceptionMessage))]
+    [ProducesResponseType(typeof(ExceptionMessage), StatusCodes.Status401Unauthorized)]
+    public async Task<ActionResult> UpdateProjectItem(int id, UpdateProjectRequestDto request)
+    {
+        var command = _mapper.Map<UpdateProjectCommand>(request);
+        command.Id = id;
+        var response = await _mediator.Send(command);
+        return Ok(response);
 
     }
 
