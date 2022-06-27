@@ -6,7 +6,7 @@ defaults:
 
 on:
   pull_request:
-    branches: [main]
+    branches: [main, dev]
     paths:
       - "**.cs"
       - "**.csproj"
