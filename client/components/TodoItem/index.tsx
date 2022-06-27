@@ -1,6 +1,12 @@
 import { Card, Text, Grid, Collapse } from "@nextui-org/react";
+import Image from "next/image";
 import React, { useContext, useState } from "react";
-import { ProgressBar, SubtaskResponseDto, TodoResponseDto } from "../../types";
+import {
+  CreateTodoCommand,
+  ProgressBar,
+  SubtaskResponseDto,
+  TodoResponseDto,
+} from "../../types";
 import useSWR, { useSWRConfig } from "swr";
 import {
   getUserTodoItemQuery,
@@ -12,6 +18,8 @@ import AddSubtaskFormModal from "../AddSubtaskFormModal";
 import FilterBar from "../FilterBar";
 import * as Gateway from "../../services/QueriesGateway";
 import { UserTodoItemURL } from "../../services/QueriesGateway";
+import TodoFormModal from "../TodoFormModal";
+import { updateTodoCommand } from "../../services/commands";
 ("../../types");
 
 export interface TodoItemProps extends Omit<TodoResponseDto, "user"> {
@@ -56,7 +64,22 @@ const Index = ({ id, projectId }: TodoItemProps) => {
 
   const onChangeHandler = (value?: ShowFilterType) => {
     value && setCurrentShowing(value);
-    mutate(`/todo/${id}/todossubtasks`, subTasks, true);
+    mutate(Gateway.UserTodoSubtasksListURL(id), subTasks, true);
+  };
+
+  const onUpdateTodoHandler = async (values: CreateTodoCommand) => {
+    mutate(
+      Gateway.UserTodoItemURL(id, projectId),
+      async (_d: TodoResponseDto) => {
+        const newTodo = await updateTodoCommand(
+          token + "",
+          id,
+          projectId,
+          values
+        );
+        return newTodo;
+      }
+    );
   };
 
   const displayFilterSubtaskList = () => {
@@ -112,7 +135,35 @@ const Index = ({ id, projectId }: TodoItemProps) => {
             <Text b>{data.title}</Text>
           </Grid>
           <Grid>
-            <AddSubtaskFormModal todoId={data.id} />
+            <Grid.Container alignItems='center' justify='flex-end' gap={1}>
+              <Grid>
+                <AddSubtaskFormModal todoId={data.id} />
+              </Grid>
+              <Grid>
+                <TodoFormModal
+                  buttonTitle='Update'
+                  title='Update todo item'
+                  propsValues={data}
+                  onSubmit={onUpdateTodoHandler}
+                  actionButton={
+                    <Image
+                      src='/edit-icon.svg'
+                      alt='An SVG of an eye'
+                      width={20}
+                      height={20}
+                    />
+                  }
+                />
+              </Grid>
+              <Grid>
+                <Image
+                  src='/settings-icon.svg'
+                  alt='An SVG of an eye'
+                  width={20}
+                  height={20}
+                />
+              </Grid>
+            </Grid.Container>
           </Grid>
         </Grid.Container>
       </Card.Header>

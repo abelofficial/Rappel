@@ -41,7 +41,6 @@ const Home: NextPage = () => {
     <Grid.Container direction='column'>
       <Grid>
         <TodoFormModal
-          id={projectId}
           buttonTitle='Create'
           title='Create new todo'
           onSubmit={onAddTodoHandler}

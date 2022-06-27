@@ -20,7 +20,6 @@ import TextField, { TextAreaField } from "../TextField";
 import Image from "next/image";
 
 export interface TodoFormModalProps {
-  id: number;
   propsValues?: CreateTodoCommand;
   actionButton?: JSX.Element;
   buttonTitle: string;
@@ -30,7 +29,6 @@ export interface TodoFormModalProps {
 }
 
 const Index = ({
-  id,
   title,
   propsValues,
   actionButton,
