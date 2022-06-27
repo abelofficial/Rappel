@@ -95,6 +95,7 @@ function AuthActions(): AuthContextInterface {
 
       if (typeof e?.response?.data.errors === "string")
         setRegisterErrors(e?.response?.data.errors);
+      else setRegisterErrors(Object.values(e?.response?.data.errors));
       return false;
     }
   };

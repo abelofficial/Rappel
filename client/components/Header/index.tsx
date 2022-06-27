@@ -27,7 +27,7 @@ const Index = () => {
         padding: "$1 $8",
       }}
     >
-      {router.pathname === "/" ? (
+      {!router.pathname.startsWith("/project") ? (
         <Grid css={{ display: "flex" }}>
           <Image src='/note-img.svg' alt='start-icon' width={30} height={30} />
           <Spacer />
