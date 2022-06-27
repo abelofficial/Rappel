@@ -75,6 +75,7 @@ const Index = ({ id }: ProjectCardProps) => {
                     />
                   }
                   buttonTitle='Update'
+                  title={"Update project"}
                 />
               </Grid>
               <Grid>
