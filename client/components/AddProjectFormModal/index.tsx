@@ -20,6 +20,7 @@ import TextField, { TextAreaField } from "../TextField";
 import { AuthContext, AuthContextInterface } from "../../Contexts/Auth";
 import { createProjectCommand } from "../../services/commands";
 import { mutate } from "swr";
+import * as Gateway from "../../services/QueriesGateway";
 
 const Index = () => {
   const { theme } = useTheme();
@@ -35,7 +36,7 @@ const Index = () => {
 
   const onSubmitHandler = async (values: CreateProjectRequestDto) => {
     try {
-      mutate(`/projects`, async (data: ProjectResponse[]) => {
+      mutate(Gateway.UserProjectsListURL(), async (data: ProjectResponse[]) => {
         const newProject = await createProjectCommand(token + "", values);
         return [...data, newProject];
       });

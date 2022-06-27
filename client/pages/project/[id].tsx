@@ -8,6 +8,7 @@ import AddTodoFormModal from "../../components/AddTodoFormModal";
 import TodoItem from "../../components/TodoItem";
 import { AuthContextInterface, AuthContext } from "../../Contexts/Auth";
 import { getUserTodoListQuery } from "../../services/Queries";
+import { UserTodoListURL } from "../../services/QueriesGateway";
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -15,7 +16,7 @@ const Home: NextPage = () => {
   var projectId: number = +(id + "");
   const { token } = useContext<AuthContextInterface>(AuthContext);
 
-  const { data } = useSWR(`projects/${id}/todos`, () =>
+  const { data } = useSWR(UserTodoListURL(), () =>
     getUserTodoListQuery(token + "", projectId)
   );
 

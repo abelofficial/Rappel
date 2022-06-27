@@ -21,6 +21,7 @@ import { AuthContext, AuthContextInterface } from "../../Contexts/Auth";
 import { createTodoCommand } from "../../services/commands";
 import { useSWRConfig } from "swr";
 import Image from "next/image";
+import * as Gateway from "../../services/QueriesGateway";
 
 export interface AddTodoFormModalProps {
   id: number;
@@ -40,7 +41,7 @@ const Index = ({ id }: AddTodoFormModalProps) => {
 
   const onSubmitHandler = async (values: CreateTodoCommand) => {
     try {
-      mutate(`projects/${id}/todos`, async (data: TodoResponseDto[]) => {
+      mutate(Gateway.UserTodoListURL(id), async (data: TodoResponseDto[]) => {
         const newTodo = await createTodoCommand(token + "", id, values);
         return [...data, newTodo];
       });

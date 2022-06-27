@@ -20,6 +20,7 @@ import TextField, { TextAreaField } from "../TextField";
 import { AuthContext, AuthContextInterface } from "../../Contexts/Auth";
 import { createSubtaskCommand } from "../../services/commands";
 import { mutate } from "swr";
+import * as Gateway from "../../services/QueriesGateway";
 
 export interface AddSubtaskFormModal {
   todoId: number;
@@ -40,7 +41,7 @@ const Index = ({ todoId }: AddSubtaskFormModal) => {
   const onSubmitHandler = async (values: CreateSubtaskCommand) => {
     try {
       mutate(
-        `/todo/${todoId}/todossubtasks`,
+        Gateway.UserTodoSubtasksListURL(todoId),
         async (data: SubtaskResponseDto[]) => {
           const newSubTask = await createSubtaskCommand(
             token + "",

@@ -6,6 +6,7 @@ import useSWR from "swr";
 
 import { AuthContextInterface, AuthContext } from "../../Contexts/Auth";
 import { getUserProjectsQuery } from "../../services/Queries";
+import { UserProjectsURL } from "../../services/QueriesGateway";
 ("../../types");
 
 export interface ProjectCardProps {
@@ -16,7 +17,7 @@ const Index = ({ id }: ProjectCardProps) => {
   const router = useRouter();
   const { user, token } = useContext<AuthContextInterface>(AuthContext);
 
-  const { data } = useSWR(`/project/${id}`, () =>
+  const { data } = useSWR(UserProjectsURL(id), () =>
     getUserProjectsQuery(token + "", id)
   );
 

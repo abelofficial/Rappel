@@ -6,10 +6,11 @@ import AddProjectFormModal from "../components/AddProjectFormModal";
 import { getUserProjectsListQuery } from "../services/Queries";
 import useSWR from "swr";
 import ProjectCard from "../components/ProjectCard";
+import { UserProjectsListURL } from "../services/QueriesGateway";
 
 const Home: NextPage = () => {
   const { user, token } = useContext<AuthContextInterface>(AuthContext);
-  const { data } = useSWR(`/projects`, () =>
+  const { data } = useSWR(UserProjectsListURL(), () =>
     getUserProjectsListQuery(token + "")
   );
 
