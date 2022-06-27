@@ -20,7 +20,7 @@ public class GetAllUserProjectsHandler : BaseHandler<User>, IRequestHandler<GetA
     {
         var currentUser = await _mediator.Send(new CurrentUserQuery());
         var result = await _db.Projects
-
+        .Include(p => p.Items)
         .Include(p => p.Members)
         .Where(p => p.Owner.Id == currentUser.Id)
         .ToListAsync();

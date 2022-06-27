@@ -53,8 +53,8 @@ public class TodosController : ControllerBase
     public async Task<ActionResult> UpdateTodoItem(int id, int todoId, UpdateTodoRequestDto request)
     {
         var command = _mapper.Map<UpdateTodoCommand>(request);
-        command.Id = id;
-        command.ProjectId = todoId;
+        command.Id = todoId;
+        command.ProjectId = id;
 
         var response = await _mediator.Send(command);
         return Ok(response);

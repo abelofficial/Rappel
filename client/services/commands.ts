@@ -7,6 +7,7 @@ import {
   ProjectResponse,
   RegisterUserRequest,
   TodoResponseDto,
+  UpdateProjectRequestDto,
   UpdateSubtaskStatusCommandDto,
   UserResponse,
 } from "../types";
@@ -63,3 +64,26 @@ export const createProjectCommand = (
   api(token)
     .post<ProjectResponse>(Gateway.CreateProjectURL(), body)
     .then((d) => d.data);
+
+export const updateProjectCommand = (
+  token: string,
+  id: number,
+  body: UpdateProjectRequestDto
+) => {
+  const url = Gateway.UpdateProjectURL(id);
+  return api(token)
+    .put<ProjectResponse>(url, body)
+    .then((d) => d.data);
+};
+
+export const updateTodoCommand = (
+  token: string,
+  id: number,
+  projectId: number,
+  body: CreateTodoCommand
+) => {
+  const url = Gateway.UpdateTodoURL(id, projectId);
+  return api(token)
+    .put<TodoResponseDto>(url, body)
+    .then((d) => d.data);
+};

@@ -26,7 +26,10 @@ public class GetUserTodoHandler : BaseHandler<Todo>, IRequestHandler<GetUserTodo
 
         try
         {
-            var result = await _db.Todos.Include(td => td.SubTask).SingleAsync(td => td.User.Id == currentUser.Id && td.Id == request.Id && td.Project.Id == request.ProjectId);
+            var result = await _db.Todos
+            .Include(td => td.SubTask)
+            .Include(td => td.User)
+            .SingleAsync(td => td.Project.Members.Any(m => m.Id == currentUser.Id) && td.Id == request.Id && td.Project.Id == request.ProjectId);
 
             return _mapper.Map<TodoResponseDto>(result);
         }

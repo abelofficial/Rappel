@@ -21,6 +21,7 @@ public class UpdateProjectHandler : BaseHandler<Project>, IRequestHandler<Update
         var targetProject = await _mediator.Send(new GetUserProjectQuery() { Id = request.Id });
         var project = await _db.Projects.FindAsync(targetProject.Id);
         _mapper.Map(request, project);
+        project.Id = targetProject.Id;
         _db.Projects.Update(project);
         await _db.SaveChangesAsync();
         return _mapper.Map<ProjectResponseDto>(project);

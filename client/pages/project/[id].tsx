@@ -4,13 +4,16 @@ import { useRouter } from "next/router";
 import { useContext } from "react";
 import Lottie from "react-lottie-player";
 
-import useSWR from "swr";
-import AddTodoFormModal from "../../components/AddTodoFormModal";
+import useSWR, { mutate } from "swr";
+import TodoFormModal from "../../components/TodoFormModal";
 import TodoItem from "../../components/TodoItem";
 import { AuthContextInterface, AuthContext } from "../../Contexts/Auth";
 import { getUserTodoListQuery } from "../../services/Queries";
 import { UserTodoListURL } from "../../services/QueriesGateway";
+import { CreateTodoCommand, TodoResponseDto } from "../../types";
 import * as notItemAnim from "../../utils/Anims/not-found.json";
+import * as Gateway from "../../services/QueriesGateway";
+import { createTodoCommand } from "../../services/commands";
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -24,10 +27,24 @@ const Home: NextPage = () => {
 
   if (!data) return <div>loading...</div>;
 
+  const onAddTodoHandler = async (values: CreateTodoCommand) => {
+    mutate(
+      Gateway.UserTodoListURL(projectId),
+      async (data: TodoResponseDto[]) => {
+        const newTodo = await createTodoCommand(token + "", projectId, values);
+        return [...data, newTodo];
+      }
+    );
+  };
+
   return (
     <Grid.Container direction='column'>
       <Grid>
-        <AddTodoFormModal id={projectId} />
+        <TodoFormModal
+          buttonTitle='Create'
+          title='Create new todo'
+          onSubmit={onAddTodoHandler}
+        />
       </Grid>
       <Row justify='center'>
         {data.length > 0 ? (
