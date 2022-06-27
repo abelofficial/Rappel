@@ -1,8 +1,10 @@
 import {
+  CreateProjectRequestDto,
   CreateSubtaskCommand,
   CreateTodoCommand,
   LoginUserRequest,
   LoginUserResponse,
+  ProjectResponse,
   RegisterUserRequest,
   TodoResponseDto,
   UpdateSubtaskStatusCommandDto,
@@ -22,9 +24,13 @@ export const loginUserCommand = (body: LoginUserRequest) =>
     .post<LoginUserResponse>(`/auth/login`, body)
     .then((d) => d.data);
 
-export const createTodoCommand = (token: string, body: CreateTodoCommand) =>
+export const createTodoCommand = (
+  token: string,
+  id: number,
+  body: CreateTodoCommand
+) =>
   api(token)
-    .post<TodoResponseDto>(`/todos`, body)
+    .post<TodoResponseDto>(`project/${id}/todos`, body)
     .then((d) => d.data);
 
 export const createSubtaskCommand = (
@@ -44,4 +50,12 @@ export const updateSubtaskStatusCommand = (
 ) =>
   api(token)
     .patch<CreateSubtaskCommand>(`/todo/${id}/todossubtasks/${subTaskId}`, body)
+    .then((d) => d.data);
+
+export const createProjectCommand = (
+  token: string,
+  body: CreateProjectRequestDto
+) =>
+  api(token)
+    .post<ProjectResponse>(`/projects`, body)
     .then((d) => d.data);

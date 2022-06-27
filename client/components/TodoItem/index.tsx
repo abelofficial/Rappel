@@ -12,7 +12,9 @@ import AddSubtaskFormModal from "../AddSubtaskFormModal";
 import FilterBar from "../FilterBar";
 ("../../types");
 
-export interface TodoItemProps extends Omit<TodoResponseDto, "user"> {}
+export interface TodoItemProps extends Omit<TodoResponseDto, "user"> {
+  projectId: number;
+}
 
 export enum ShowFilterType {
   ALL = "all",
@@ -20,19 +22,19 @@ export enum ShowFilterType {
   STARTED = "started",
 }
 
-const Index = ({ id }: TodoItemProps) => {
+const Index = ({ id, projectId }: TodoItemProps) => {
   const { mutate } = useSWRConfig();
   const [currentShowing, setCurrentShowing] = useState<ShowFilterType>(
     ShowFilterType.ALL
   );
   const { token } = useContext<AuthContextInterface>(AuthContext);
-  const { data } = useSWR(`/todo/${id}`, () =>
-    getUserTodoItemQuery(token + "", id)
+  const { data, error } = useSWR(`project/${projectId}/todo/${id}`, () =>
+    getUserTodoItemQuery(token + "", id, projectId)
   );
   const tasks = useSWR(`/todo/${id}/todossubtasks`, () =>
     getUserTodoSubtasksListQuery(token + "", id)
   );
-
+  console.log(error);
   const subTasks = tasks.data;
 
   if (!data || !subTasks) return <div>loading subtasks...</div>;

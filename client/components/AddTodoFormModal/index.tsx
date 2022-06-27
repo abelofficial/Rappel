@@ -19,9 +19,14 @@ import {
 import TextField, { TextAreaField } from "../TextField";
 import { AuthContext, AuthContextInterface } from "../../Contexts/Auth";
 import { createTodoCommand } from "../../services/commands";
-import { mutate } from "swr";
-const Index = () => {
+import { useSWRConfig } from "swr";
+
+export interface AddTodoFormModalProps {
+  id: number;
+}
+const Index = ({ id }: AddTodoFormModalProps) => {
   const { theme } = useTheme();
+  const { mutate } = useSWRConfig();
   const [visible, setVisible] = React.useState(false);
 
   const handler = () => setVisible(true);
@@ -34,13 +39,14 @@ const Index = () => {
 
   const onSubmitHandler = async (values: CreateTodoCommand) => {
     try {
-      mutate("/todos", async (data: TodoResponseDto[]) => {
-        await createTodoCommand(token + "", values);
-        return [...data, values];
+      mutate(`projects/${id}/todos`, async (data: TodoResponseDto[]) => {
+        const newTodo = await createTodoCommand(token + "", id, values);
+        return [...data, newTodo];
       });
 
       setVisible(false);
     } catch (e: any) {
+      console.log("Error: ", e);
       setErrors(e?.response?.data?.errors);
     }
   };
@@ -62,7 +68,7 @@ const Index = () => {
       css={{ backgroundColor: theme?.colors.backgroundContrast }}
     >
       <Grid xs={12}>
-        <Button auto color='warning' shadow onClick={handler}>
+        <Button auto color='success' shadow onClick={handler}>
           Add new todo
         </Button>
       </Grid>

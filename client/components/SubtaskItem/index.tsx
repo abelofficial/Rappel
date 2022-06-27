@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-no-undef */
 import Image from "next/image";
-import { Card, Button, Text, Grid } from "@nextui-org/react";
+import { Card, Button, Text, Grid, Row } from "@nextui-org/react";
 import React, { useContext } from "react";
 import useSWR, { mutate } from "swr";
 import { AuthContextInterface, AuthContext } from "../../Contexts/Auth";
@@ -45,7 +45,9 @@ const Index = ({ id, parentId, onChange }: SubtaskItemProps) => {
               justifyContent: "Space-between",
             }}
           >
-            <Text b>{data.title}</Text>
+            <Row>
+              <Text b>{data.title}</Text>
+            </Row>
             {data.status !== ProgressBar.COMPLETED ? (
               <Grid.Container justify='flex-end' gap={1}>
                 <Grid>

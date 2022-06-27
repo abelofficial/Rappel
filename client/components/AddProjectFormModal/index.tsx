@@ -5,8 +5,8 @@ import {
   validationSchema,
   fieldNames,
   fieldLabels,
-} from "./addSubtaskFormProps";
-import { CreateSubtaskCommand, SubtaskResponseDto } from "../../types";
+} from "./addTodoFormProps";
+import { CreateProjectRequestDto, ProjectResponse } from "../../types";
 import {
   Button,
   Card,
@@ -18,14 +18,10 @@ import {
 } from "@nextui-org/react";
 import TextField, { TextAreaField } from "../TextField";
 import { AuthContext, AuthContextInterface } from "../../Contexts/Auth";
-import { createSubtaskCommand } from "../../services/commands";
+import { createProjectCommand } from "../../services/commands";
 import { mutate } from "swr";
 
-export interface AddSubtaskFormModal {
-  todoId: number;
-}
-
-const Index = ({ todoId }: AddSubtaskFormModal) => {
+const Index = () => {
   const { theme } = useTheme();
   const [visible, setVisible] = React.useState(false);
 
@@ -37,19 +33,13 @@ const Index = ({ todoId }: AddSubtaskFormModal) => {
   const [errors, setErrors] = useState<string[] | undefined>();
   const { token } = useContext<AuthContextInterface>(AuthContext);
 
-  const onSubmitHandler = async (values: CreateSubtaskCommand) => {
+  const onSubmitHandler = async (values: CreateProjectRequestDto) => {
     try {
-      mutate(
-        `/todo/${todoId}/todossubtasks`,
-        async (data: SubtaskResponseDto[]) => {
-          const newSubTask = await createSubtaskCommand(
-            token + "",
-            todoId,
-            values
-          );
-          return [...data, newSubTask];
-        }
-      );
+      mutate(`/projects`, async (data: ProjectResponse[]) => {
+        const newProject = await createProjectCommand(token + "", values);
+        return [...data, newProject];
+      });
+
       setVisible(false);
     } catch (e: any) {
       setErrors(e?.response?.data?.errors);
@@ -70,14 +60,11 @@ const Index = ({ todoId }: AddSubtaskFormModal) => {
   return (
     <Grid.Container
       gap={2}
-      css={{
-        width: "fit-content",
-        backgroundColor: theme?.colors.backgroundContrast,
-      }}
+      css={{ backgroundColor: theme?.colors.backgroundContrast }}
     >
       <Grid xs={12}>
-        <Button auto color='success' size='sm' shadow onClick={handler}>
-          Add subtask
+        <Button auto color='success' shadow onClick={handler}>
+          Add new project
         </Button>
       </Grid>
       <Modal
@@ -89,9 +76,9 @@ const Index = ({ todoId }: AddSubtaskFormModal) => {
       >
         <Modal.Header>
           <Text id='modal-title' size={18}>
-            Create new{" "}
+            Add your new{" "}
             <Text b size={18}>
-              subtask
+              project
             </Text>
           </Text>
         </Modal.Header>

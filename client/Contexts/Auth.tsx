@@ -78,7 +78,8 @@ function AuthActions(): AuthContextInterface {
       localStorage.setItem(userResp.username, JSON.stringify(result.token));
       return true;
     } catch (e: any) {
-      setLogInErrors(e?.response?.errors);
+      console.log("ERROR: ", e);
+      setLogInErrors(e?.response?.data.errors);
       return false;
     }
   };
@@ -90,7 +91,10 @@ function AuthActions(): AuthContextInterface {
       await registerUserCommand(values);
       return await loginUser(values);
     } catch (e: any) {
-      setRegisterErrors(e?.response?.errors);
+      console.log("ERROR: ", e);
+
+      if (typeof e?.response?.data.errors === "string")
+        setRegisterErrors(e?.response?.data.errors);
       return false;
     }
   };

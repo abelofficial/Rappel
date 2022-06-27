@@ -19,7 +19,11 @@ public class GetAllUserProjectsHandler : BaseHandler<User>, IRequestHandler<GetA
     public async Task<IEnumerable<ProjectResponseDto>> Handle(GetAllUserProjectsQuery request, CancellationToken cancellationToken)
     {
         var currentUser = await _mediator.Send(new CurrentUserQuery());
-        var result = await _db.Projects.Where(p => p.Members.Any(m => m.Id == currentUser.Id)).Include(p => p.Items).Include(p => p.Owner).ToListAsync();
+        var result = await _db.Projects
+
+        .Include(p => p.Members)
+        .Where(p => p.Owner.Id == currentUser.Id)
+        .ToListAsync();
 
         return result.Select(u => _mapper.Map<ProjectResponseDto>(u));
     }
