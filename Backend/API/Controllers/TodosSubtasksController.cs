@@ -38,6 +38,26 @@ public class TodosSubtasksController : ControllerBase
     }
 
     /// <summary>
+    /// Update subtask item
+    /// </summary>
+    [HttpPut("{id}/[controller]/{subtaskId}")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SubTaskResponseDto))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
+    [ProducesResponseType(typeof(ExceptionMessage), StatusCodes.Status401Unauthorized)]
+    public async Task<ActionResult> UpdateSubtaskItemItem(int id, int subtaskId, UpdateSubtaskRequestDto request)
+    {
+        var response = await _mediator.Send(new UpdateSubtaskCommand()
+        {
+            TodoId = id,
+            SubTaskId = subtaskId,
+            Title = request.Title,
+            Description = request.Description
+        });
+        return Ok(response);
+    }
+
+    /// <summary>
     /// Update SUbtask items progress status
     /// </summary>
     [HttpPatch("{id}/[controller]/{subtaskId}")]
@@ -45,7 +65,7 @@ public class TodosSubtasksController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SubTaskResponseDto))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
     [ProducesResponseType(typeof(ExceptionMessage), StatusCodes.Status401Unauthorized)]
-    public async Task<ActionResult> CreateTodoItem(int id, int subtaskId, UpdateTodoStatusRequestDto request)
+    public async Task<ActionResult> PatchSubtaskStatusItem(int id, int subtaskId, UpdateTodoStatusRequestDto request)
     {
         var response = await _mediator.Send(new UpdateSubtaskStatusCommand() { TodoId = id, SubTaskId = subtaskId, Status = request.Status });
         return Ok(response);

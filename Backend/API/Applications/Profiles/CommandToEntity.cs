@@ -10,6 +10,7 @@ public class CommandToEntity : Profile
 
     public CommandToEntity()
     {
+        CreateMap<UpdateSubtaskCommand, SubTask>();
         CreateMap<UpdateTodoCommand, Todo>();
         CreateMap<CreateProjectCommand, Project>();
         CreateMap<CreateSubTaskCommand, SubTask>();
