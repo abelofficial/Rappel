@@ -21,13 +21,11 @@ public class GetAllUserTodosHandler : BaseHandler<Todo>, IRequestHandler<GetAllU
     {
         var currentUser = await _mediator.Send(new CurrentUserQuery());
 
-        if (!await _db.Projects.AnyAsync(p => p.Id == request.ProjectId &&
-            p.Members.Any(m => m.Id == currentUser.Id)
-          ))
+        if (!await _db.Projects.Include(p => p.Owner).Where(p => p.Owner.Id == currentUser.Id).AnyAsync(p => p.Id == request.ProjectId))
             throw new HttpRequestException($"Project with id {request.ProjectId} doesn't exist", null, HttpStatusCode.NotFound);
 
         var result = await _db.Todos
-        .Include(td => td.SubTask)
+          .Include(td => td.SubTask)
           .Where(td => td.Project.Id == request.ProjectId)
           .Where(u => u.User.Id == currentUser.Id).ToListAsync();
 

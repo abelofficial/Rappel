@@ -10,6 +10,7 @@ public class CreateProjectCommand : IRequest<ProjectResponseDto>
     public new string Title { get; set; }
 
     [Required]
+    [MinLength(5)]
     public new string Description { get; set; }
 
     [Required]

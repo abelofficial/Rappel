@@ -11,22 +11,21 @@ namespace API.Application.Queries;
 public class GetUserProjectHandler : BaseHandler<Todo>, IRequestHandler<GetUserProjectQuery, ProjectResponseDto>
 {
 
-    private readonly HttpContext _context;
+    private readonly IMediator _mediator;
 
-    public GetUserProjectHandler(IMapper mapper, AppDbContext db, IHttpContextAccessor httpContextAccessor)
+    public GetUserProjectHandler(IMapper mapper, AppDbContext db, IMediator mediator)
             : base(mapper, db)
     {
-        _context = httpContextAccessor.HttpContext;
+        _mediator = mediator;
     }
 
     public async Task<ProjectResponseDto> Handle(GetUserProjectQuery request, CancellationToken cancellationToken)
     {
-        var currentUserName = _context.User.Identity.Name;
-        var currentUser = await _db.Users.SingleAsync(u => u.Username.Equals(currentUserName));
+        var currentUser = await _mediator.Send(new CurrentUserQuery());
 
         try
         {
-            var result = await _db.Projects.SingleAsync(p => p.Id == request.Id && (p.Owner.Id == currentUser.Id || p.Members.Any(m => m.Id == currentUser.Id)));
+            var result = await _db.Projects.Where(p => p.Members.Any(m => m.Id == currentUser.Id)).SingleAsync(p => p.Id == request.Id);
 
             return _mapper.Map<ProjectResponseDto>(result);
         }

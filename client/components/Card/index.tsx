@@ -31,7 +31,7 @@ const Index = ({
   };
 
   return (
-    <>
+    <div style={{ width: "100%" }}>
       <Card
         variant='bordered'
         css={{
@@ -68,7 +68,7 @@ const Index = ({
         )}
       </Card>
       <Spacer />
-    </>
+    </div>
   );
 };
 
