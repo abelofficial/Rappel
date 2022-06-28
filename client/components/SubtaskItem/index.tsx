@@ -10,6 +10,13 @@ import { ProgressBar } from "../../types";
 import { ShowFilterType } from "../FilterBar";
 import * as Gateway from "../../services/QueriesGateway";
 import { UserTodoSubtaskURL } from "../../services/QueriesGateway";
+import {
+  EditIconButton,
+  OffIconButton,
+  RestartIconButton,
+  SettingIconButton,
+  StartIconButton,
+} from "../Buttons";
 ("../../types");
 
 export interface SubtaskItemProps {
@@ -68,48 +75,40 @@ const Index = ({ id, parentId, onChange }: SubtaskItemProps) => {
               <Grid.Container justify='flex-end' gap={1}>
                 <Grid css={{ padding: "$0 $2" }}>
                   {data.status === ProgressBar.CREATED ? (
-                    <Image
-                      src='/play-icon.svg'
-                      alt='start-icon'
-                      width={17}
-                      height={17}
-                      onClick={() => subTaskStatusChangeHandler(1)}
+                    <StartIconButton
+                      iconWidth={17}
+                      iconHeight={17}
+                      onSubmitHandler={() => subTaskStatusChangeHandler(1)}
                     />
                   ) : (
-                    <Image
-                      src='/turnoff-icon.svg'
-                      alt='restart-icon'
-                      width={17}
-                      height={17}
-                      onClick={() => subTaskStatusChangeHandler(0)}
+                    <OffIconButton
+                      iconWidth={17}
+                      iconHeight={17}
+                      onSubmitHandler={() => subTaskStatusChangeHandler(0)}
                     />
                   )}
                 </Grid>
                 <Grid css={{ padding: "$0 $2" }}>
-                  <Image
-                    src='/edit-icon.svg'
-                    alt='An SVG of an eye'
-                    width={17}
-                    height={17}
+                  <EditIconButton
+                    iconWidth={17}
+                    iconHeight={17}
+                    onSubmitHandler={() => {}}
                   />
                 </Grid>
                 <Grid css={{ padding: "$0 $2" }}>
-                  <Image
-                    src='/settings-icon.svg'
-                    alt='An SVG of an eye'
-                    width={17}
-                    height={17}
+                  <SettingIconButton
+                    iconWidth={17}
+                    iconHeight={17}
+                    onSubmitHandler={() => {}}
                   />
                 </Grid>
               </Grid.Container>
             ) : (
               <Grid.Container justify='flex-end' gap={1}>
-                <Image
-                  src='/restart-icon.svg'
-                  alt='start-icon'
-                  width={17}
-                  height={17}
-                  onClick={() => subTaskStatusChangeHandler(0)}
+                <RestartIconButton
+                  iconWidth={17}
+                  iconHeight={17}
+                  onSubmitHandler={() => subTaskStatusChangeHandler(0)}
                 />
               </Grid.Container>
             )}
@@ -135,11 +134,11 @@ const Index = ({ id, parentId, onChange }: SubtaskItemProps) => {
             <Image
               src='/done-icon.svg'
               alt='start-icon'
-              width={30}
+              width={23}
               height={30}
               onClick={() => subTaskStatusChangeHandler(2)}
             />
-            <Text h4 css={{ p: "$0 $2" }}>
+            <Text h4 css={{ p: "$0 $2", color: "green" }}>
               Done
             </Text>
           </Grid.Container>

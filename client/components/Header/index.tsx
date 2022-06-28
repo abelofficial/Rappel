@@ -3,6 +3,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useContext } from "react";
 import { AuthContextInterface, AuthContext } from "../../Contexts/Auth";
+import { BackIconButton } from "../Buttons";
 
 const Index = () => {
   const router = useRouter();
@@ -34,13 +35,13 @@ const Index = () => {
           <Text h4> Todo</Text>
         </Grid>
       ) : (
-        <Image
-          src='/back-icon.svg'
-          alt='start-icon'
-          width={30}
-          height={30}
-          onClick={() => router.push("/")}
-        />
+        <Row align='center' css={{ width: "fit-content" }}>
+          <BackIconButton
+            iconHeight={30}
+            onSubmitHandler={() => router.push("/")}
+          />
+          <Text h5>Projects</Text>
+        </Row>
       )}
       <Grid>
         {user && (

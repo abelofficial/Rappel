@@ -17,7 +17,7 @@ import {
   useTheme,
 } from "@nextui-org/react";
 import TextField, { TextAreaField } from "../TextField";
-import Image from "next/image";
+import { AddRoundedIconButton } from "../Buttons";
 
 export interface TodoFormModalProps {
   propsValues?: CreateTodoCommand;
@@ -81,14 +81,9 @@ const Index = ({
             flexDirection: "column",
             alignItems: "center",
           }}
+          onClick={handler}
         >
-          <Button
-            auto
-            css={{ bg: theme?.colors.background.value }}
-            rounded
-            onClick={handler}
-            icon={<Image src='/add-icon.svg' alt='' width={36} height={36} />}
-          />
+          <AddRoundedIconButton iconWidth={36} iconHeight={36} />
           <Text h4>Add new task</Text>
         </Grid>
       )}

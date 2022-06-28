@@ -1,5 +1,4 @@
 import { Card, Text, Grid, Collapse, Row } from "@nextui-org/react";
-import Image from "next/image";
 import React, { useContext, useState } from "react";
 import {
   CreateTodoCommand,
@@ -20,6 +19,7 @@ import * as Gateway from "../../services/QueriesGateway";
 import { UserTodoItemURL } from "../../services/QueriesGateway";
 import TodoFormModal from "../TodoFormModal";
 import { updateTodoCommand } from "../../services/commands";
+import { EditIconButton, SettingIconButton } from "../Buttons";
 ("../../types");
 
 export interface TodoItemProps extends Omit<TodoResponseDto, "user"> {
@@ -27,15 +27,15 @@ export interface TodoItemProps extends Omit<TodoResponseDto, "user"> {
 }
 
 export enum ShowFilterType {
-  STARTED = "started",
   ALL = "all",
+  STARTED = "started",
   COMPLETED = "completed",
 }
 
 const Index = ({ id, projectId }: TodoItemProps) => {
   const { mutate } = useSWRConfig();
   const [currentShowing, setCurrentShowing] = useState<ShowFilterType>(
-    ShowFilterType.STARTED
+    ShowFilterType.ALL
   );
   const { token } = useContext<AuthContextInterface>(AuthContext);
   const { data } = useSWR(UserTodoItemURL(id, projectId), () =>
@@ -144,22 +144,12 @@ const Index = ({ id, projectId }: TodoItemProps) => {
                   propsValues={data}
                   onSubmit={onUpdateTodoHandler}
                   actionButton={
-                    <Image
-                      src='/edit-icon.svg'
-                      alt='An SVG of an eye'
-                      width={18}
-                      height={18}
-                    />
+                    <EditIconButton iconWidth={18} iconHeight={18} />
                   }
                 />
               </Grid>
               <Grid css={{ padding: "$0 $2" }}>
-                <Image
-                  src='/settings-icon.svg'
-                  alt='An SVG of an eye'
-                  width={18}
-                  height={18}
-                />
+                <SettingIconButton iconWidth={18} iconHeight={18} />
               </Grid>
             </Grid.Container>
           </Row>
