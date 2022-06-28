@@ -1,4 +1,4 @@
-import { Card, Text, Grid, Collapse } from "@nextui-org/react";
+import { Card, Text, Grid, Collapse, Row } from "@nextui-org/react";
 import Image from "next/image";
 import React, { useContext, useState } from "react";
 import {
@@ -27,25 +27,23 @@ export interface TodoItemProps extends Omit<TodoResponseDto, "user"> {
 }
 
 export enum ShowFilterType {
+  STARTED = "started",
   ALL = "all",
   COMPLETED = "completed",
-  STARTED = "started",
 }
 
 const Index = ({ id, projectId }: TodoItemProps) => {
   const { mutate } = useSWRConfig();
   const [currentShowing, setCurrentShowing] = useState<ShowFilterType>(
-    ShowFilterType.ALL
+    ShowFilterType.STARTED
   );
   const { token } = useContext<AuthContextInterface>(AuthContext);
-  const { data, error } = useSWR(UserTodoItemURL(id, projectId), () =>
+  const { data } = useSWR(UserTodoItemURL(id, projectId), () =>
     getUserTodoItemQuery(token + "", id, projectId)
   );
-  const tasks = useSWR(Gateway.UserTodoSubtasksListURL(id), () =>
+  const { data: subTasks } = useSWR(Gateway.UserTodoSubtasksListURL(id), () =>
     getUserTodoSubtasksListQuery(token + "", id)
   );
-  console.log(error);
-  const subTasks = tasks.data;
 
   if (!data || !subTasks) return <div>loading subtasks...</div>;
 
@@ -86,7 +84,7 @@ const Index = ({ id, projectId }: TodoItemProps) => {
     switch (currentShowing) {
       case ShowFilterType.ALL:
         return subTasks.map((td) => (
-          <Grid xs={12} key={td.id}>
+          <Grid xs={12} key={td.id} css={{ padding: "$0" }}>
             <SubtaskItem id={td.id} parentId={id} onChange={onChangeHandler} />
           </Grid>
         ));
@@ -95,7 +93,7 @@ const Index = ({ id, projectId }: TodoItemProps) => {
         return subTasks
           .filter((td) => td.status === ProgressBar.COMPLETED)
           .map((td) => (
-            <Grid xs={12} key={td.id}>
+            <Grid xs={12} key={td.id} css={{ padding: "$0" }}>
               <SubtaskItem
                 id={td.id}
                 parentId={id}
@@ -107,7 +105,7 @@ const Index = ({ id, projectId }: TodoItemProps) => {
         return subTasks
           .filter((td) => td.status === ProgressBar.STARTED)
           .map((td) => (
-            <Grid xs={12} key={td.id}>
+            <Grid xs={12} key={td.id} css={{ padding: "$0" }}>
               <SubtaskItem
                 id={td.id}
                 parentId={id}
@@ -131,15 +129,15 @@ const Index = ({ id, projectId }: TodoItemProps) => {
         }}
       >
         <Grid.Container justify='space-between'>
-          <Grid>
-            <Text b>{data.title}</Text>
-          </Grid>
-          <Grid>
+          <Row justify='space-between'>
+            <Text b h4 css={{ width: "50%" }}>
+              {data.title}
+            </Text>
             <Grid.Container alignItems='center' justify='flex-end' gap={1}>
-              <Grid>
+              <Grid css={{ padding: "$0 $1" }}>
                 <AddSubtaskFormModal todoId={data.id} />
               </Grid>
-              <Grid>
+              <Grid css={{ padding: "$0 $1" }}>
                 <TodoFormModal
                   buttonTitle='Update'
                   title='Update todo item'
@@ -149,36 +147,44 @@ const Index = ({ id, projectId }: TodoItemProps) => {
                     <Image
                       src='/edit-icon.svg'
                       alt='An SVG of an eye'
-                      width={20}
-                      height={20}
+                      width={18}
+                      height={18}
                     />
                   }
                 />
               </Grid>
-              <Grid>
+              <Grid css={{ padding: "$0 $2" }}>
                 <Image
                   src='/settings-icon.svg'
                   alt='An SVG of an eye'
-                  width={20}
-                  height={20}
+                  width={18}
+                  height={18}
                 />
               </Grid>
             </Grid.Container>
-          </Grid>
+          </Row>
+          <Row>
+            {subTasks.length !== 0 && (
+              <FilterBar current={currentShowing} setter={onChangeHandler} />
+            )}
+          </Row>
         </Grid.Container>
       </Card.Header>
       <Card.Divider />
       <Card.Body>
-        {subTasks.length !== 0 && (
-          <FilterBar current={currentShowing} setter={onChangeHandler} />
-        )}
-        <Text>{data.description}</Text>
+        <Text css={{ padding: "$4" }}>{data.description}</Text>
         {subTasks.length !== 0 && (
           <Collapse
-            title='Sub tasks'
-            subtitle={`${
-              getCompletedCount() + "/" + subTasks.length
-            } competed | ${getStartedCount() + "/" + subTasks.length} on going`}
+            css={{ padding: "$0 $5" }}
+            title={
+              <Text h5 transform='capitalize'>
+                {subTasks.length +
+                  " " +
+                  (subTasks.length === 1 ? "subtask" : "subtasks")}
+              </Text>
+            }
+            bordered
+            subtitle={`${getStartedCount()} on going | ${getCompletedCount()} competed`}
           >
             {displayFilterSubtaskList()}
           </Collapse>

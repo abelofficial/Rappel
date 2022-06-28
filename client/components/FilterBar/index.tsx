@@ -16,12 +16,25 @@ const Index = ({ current, setter }: FilterBarProps) => {
   return (
     <Grid.Container gap={1}>
       <Grid>
+        <Tooltip content='See started item' contentColor='primary'>
+          <Button
+            flat
+            auto
+            size='xs'
+            color={current === ShowFilterType.STARTED ? "success" : "warning"}
+            onPress={() => setter(ShowFilterType.STARTED)}
+          >
+            On going
+          </Button>
+        </Tooltip>
+      </Grid>
+      <Grid>
         <Tooltip content='See all item' contentColor='primary'>
           <Button
             flat
             auto
             size='xs'
-            color={current === ShowFilterType.ALL ? "success" : "error"}
+            color={current === ShowFilterType.ALL ? "success" : "warning"}
             onPress={() => setter(ShowFilterType.ALL)}
           >
             All
@@ -34,23 +47,10 @@ const Index = ({ current, setter }: FilterBarProps) => {
             flat
             auto
             size='xs'
-            color={current === ShowFilterType.COMPLETED ? "success" : "error"}
+            color={current === ShowFilterType.COMPLETED ? "success" : "warning"}
             onPress={() => setter(ShowFilterType.COMPLETED)}
           >
             Completed
-          </Button>
-        </Tooltip>
-      </Grid>
-      <Grid>
-        <Tooltip content='See started item' contentColor='primary'>
-          <Button
-            flat
-            auto
-            size='xs'
-            color={current === ShowFilterType.STARTED ? "success" : "error"}
-            onPress={() => setter(ShowFilterType.STARTED)}
-          >
-            Started
           </Button>
         </Tooltip>
       </Grid>

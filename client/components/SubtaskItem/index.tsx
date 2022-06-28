@@ -8,7 +8,6 @@ import { updateSubtaskStatusCommand } from "../../services/commands";
 import { getUserTodoSubtaskQuery } from "../../services/Queries";
 import { ProgressBar } from "../../types";
 import { ShowFilterType } from "../FilterBar";
-import Statusbar from "../Statusbar";
 import * as Gateway from "../../services/QueriesGateway";
 import { UserTodoSubtaskURL } from "../../services/QueriesGateway";
 ("../../types");
@@ -35,9 +34,24 @@ const Index = ({ id, parentId, onChange }: SubtaskItemProps) => {
     onChange();
   };
 
+  const borderColor = () => {
+    switch (data.status) {
+      case ProgressBar.STARTED:
+        return "$successBorder";
+      case ProgressBar.CREATED:
+        return "$border";
+      default:
+        return "$errorBorder";
+    }
+  };
   return (
-    <Card>
-      <Card.Header>
+    <Card
+      variant='bordered'
+      css={{
+        border: `${borderColor()} 0.1em solid`,
+      }}
+    >
+      <Card.Header css={{ p: "$5 $2" }}>
         <Grid.Container alignItems='center' justify='space-between'>
           <Grid
             xs={12}
@@ -52,39 +66,39 @@ const Index = ({ id, parentId, onChange }: SubtaskItemProps) => {
             </Row>
             {data.status !== ProgressBar.COMPLETED ? (
               <Grid.Container justify='flex-end' gap={1}>
-                <Grid>
+                <Grid css={{ padding: "$0 $2" }}>
                   {data.status === ProgressBar.CREATED ? (
                     <Image
                       src='/play-icon.svg'
                       alt='start-icon'
-                      width={20}
-                      height={20}
+                      width={17}
+                      height={17}
                       onClick={() => subTaskStatusChangeHandler(1)}
                     />
                   ) : (
                     <Image
                       src='/turnoff-icon.svg'
                       alt='restart-icon'
-                      width={20}
-                      height={20}
+                      width={17}
+                      height={17}
                       onClick={() => subTaskStatusChangeHandler(0)}
                     />
                   )}
                 </Grid>
-                <Grid>
+                <Grid css={{ padding: "$0 $2" }}>
                   <Image
                     src='/edit-icon.svg'
                     alt='An SVG of an eye'
-                    width={20}
-                    height={20}
+                    width={17}
+                    height={17}
                   />
                 </Grid>
-                <Grid>
+                <Grid css={{ padding: "$0 $2" }}>
                   <Image
                     src='/settings-icon.svg'
                     alt='An SVG of an eye'
-                    width={20}
-                    height={20}
+                    width={17}
+                    height={17}
                   />
                 </Grid>
               </Grid.Container>
@@ -93,19 +107,12 @@ const Index = ({ id, parentId, onChange }: SubtaskItemProps) => {
                 <Image
                   src='/restart-icon.svg'
                   alt='start-icon'
-                  width={20}
-                  height={20}
+                  width={17}
+                  height={17}
                   onClick={() => subTaskStatusChangeHandler(0)}
                 />
               </Grid.Container>
             )}
-          </Grid>
-          <Grid xs={12}>
-            <Statusbar
-              status={data.status}
-              onStart={() => subTaskStatusChangeHandler(1)}
-              markAsDone={() => subTaskStatusChangeHandler(2)}
-            />
           </Grid>
         </Grid.Container>
       </Card.Header>
@@ -115,11 +122,27 @@ const Index = ({ id, parentId, onChange }: SubtaskItemProps) => {
       </Card.Body>
 
       <Card.Divider />
-      <Card.Footer css={{ display: "flex", justifyContent: "center" }}>
+      <Card.Footer
+        css={{ display: "flex", justifyContent: "center", p: "$3 $2" }}
+      >
         {data.status === ProgressBar.COMPLETED && (
           <Button size='sm' color='error'>
             Archive
           </Button>
+        )}
+        {data.status === ProgressBar.STARTED && (
+          <Grid.Container justify='flex-end'>
+            <Image
+              src='/done-icon.svg'
+              alt='start-icon'
+              width={30}
+              height={30}
+              onClick={() => subTaskStatusChangeHandler(2)}
+            />
+            <Text h4 css={{ p: "$0 $2" }}>
+              Done
+            </Text>
+          </Grid.Container>
         )}
       </Card.Footer>
     </Card>

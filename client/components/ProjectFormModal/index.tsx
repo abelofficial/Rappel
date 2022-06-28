@@ -79,11 +79,13 @@ const Index = ({
         )}
       </Grid>
       <Modal
+        noPadding
         closeButton
         blur
         aria-labelledby='modal-title'
         open={visible}
         onClose={closeHandler}
+        css={{ margin: "$10" }}
       >
         <Modal.Header>
           <Text id='modal-title' size={18}>

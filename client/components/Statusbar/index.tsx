@@ -1,4 +1,4 @@
-import { Button, Grid, Checkbox, Spacer } from "@nextui-org/react";
+import { Button, Grid, Checkbox, Spacer, Text } from "@nextui-org/react";
 import React from "react";
 import { ProgressBar } from "../../types";
 
@@ -20,8 +20,10 @@ const Index = ({ markAsDone, onStart, status }: StatusbarProps) => {
       return (
         <Grid.Container alignItems='center' justify='flex-end'>
           <Grid>
-            <Checkbox color='success' onChange={markAsDone}>
-              mark as done
+            <Checkbox color='success' onChange={markAsDone} size='md'>
+              <Text h4 b css={{ color: "$success" }}>
+                Done
+              </Text>
             </Checkbox>
           </Grid>
           <Spacer />

@@ -82,16 +82,18 @@ const Index = ({ todoId }: AddSubtaskFormModal) => {
           onClick={handler}
           src='/add-icon-round.svg'
           alt='An SVG of an eye'
-          width={20}
-          height={20}
+          width={22}
+          height={22}
         />
       </Grid>
       <Modal
+        noPadding
         closeButton
         blur
         aria-labelledby='modal-title'
         open={visible}
         onClose={closeHandler}
+        css={{ margin: "$10" }}
       >
         <Modal.Header>
           <Text id='modal-title' size={18}>
