@@ -6,6 +6,7 @@ import {
   LoginUserResponse,
   ProjectResponse,
   RegisterUserRequest,
+  SubtaskResponseDto,
   TodoResponseDto,
   UpdateProjectRequestDto,
   UpdateSubtaskStatusCommandDto,
@@ -41,7 +42,7 @@ export const createSubtaskCommand = (
   body: CreateSubtaskCommand
 ) =>
   api(token)
-    .post<CreateSubtaskCommand>(Gateway.CreateSubtaskURL(id), body)
+    .post<SubtaskResponseDto>(Gateway.CreateSubtaskURL(id), body)
     .then((d) => d.data);
 
 export const updateSubtaskStatusCommand = (
@@ -51,7 +52,7 @@ export const updateSubtaskStatusCommand = (
   body: UpdateSubtaskStatusCommandDto
 ) =>
   api(token)
-    .patch<CreateSubtaskCommand>(
+    .patch<SubtaskResponseDto>(
       Gateway.UpdateSubtaskStatusURL(id, subTaskId),
       body
     )

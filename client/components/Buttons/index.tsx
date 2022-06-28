@@ -97,3 +97,29 @@ export const BackIconButton = (props: ButtonProps) => {
     </div>
   );
 };
+
+export const DeleteIconButton = (props: ButtonProps) => {
+  return (
+    <div onClick={props.onSubmitHandler} style={{ padding: "0.3rem 0.3rem" }}>
+      <Image
+        src='/delete-icon.svg'
+        alt='An SVG of an eye'
+        width={props.iconWidth ? props.iconWidth : 22}
+        height={props.iconHeight ? props.iconHeight : 22}
+      />
+    </div>
+  );
+};
+
+export const DoneIconButton = (props: ButtonProps) => {
+  return (
+    <div onClick={props.onSubmitHandler} style={{ padding: "0.3rem 0.3rem" }}>
+      <Image
+        src='/done-icon.svg'
+        alt='An SVG of an eye'
+        width={props.iconWidth ? props.iconWidth : 22}
+        height={props.iconHeight ? props.iconHeight : 22}
+      />
+    </div>
+  );
+};

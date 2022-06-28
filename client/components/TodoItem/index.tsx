@@ -85,7 +85,11 @@ const Index = ({ id, projectId }: TodoItemProps) => {
       case ShowFilterType.ALL:
         return subTasks.map((td) => (
           <Grid xs={12} key={td.id} css={{ padding: "$0" }}>
-            <SubtaskItem id={td.id} parentId={id} onChange={onChangeHandler} />
+            <SubtaskItem
+              id={td.id}
+              parentId={id}
+              notifyChange={onChangeHandler}
+            />
           </Grid>
         ));
 
@@ -97,7 +101,7 @@ const Index = ({ id, projectId }: TodoItemProps) => {
               <SubtaskItem
                 id={td.id}
                 parentId={id}
-                onChange={onChangeHandler}
+                notifyChange={onChangeHandler}
               />
             </Grid>
           ));
@@ -109,7 +113,7 @@ const Index = ({ id, projectId }: TodoItemProps) => {
               <SubtaskItem
                 id={td.id}
                 parentId={id}
-                onChange={onChangeHandler}
+                notifyChange={onChangeHandler}
               />
             </Grid>
           ));
