@@ -1,5 +1,4 @@
 import { Card, Text, Grid, Button } from "@nextui-org/react";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useContext } from "react";
 import useSWR, { mutate } from "swr";
@@ -11,6 +10,7 @@ import { UserProjectsURL } from "../../services/QueriesGateway";
 import { ProjectResponse, UpdateProjectRequestDto } from "../../types";
 import ProjectFormModal from "../ProjectFormModal";
 import * as Gateway from "../../services/QueriesGateway";
+import { EditIconButton, SettingIconButton } from "../Buttons";
 ("../../types");
 
 export interface ProjectCardProps {
@@ -67,24 +67,14 @@ const Index = ({ id }: ProjectCardProps) => {
                   onSubmit={onUpdateProjectHandler}
                   propsValues={data}
                   actionButton={
-                    <Image
-                      src='/edit-icon.svg'
-                      alt='An SVG of an eye'
-                      width={20}
-                      height={20}
-                    />
+                    <EditIconButton iconWidth={20} iconHeight={20} />
                   }
                   buttonTitle='Update'
-                  title={"Update project"}
+                  title='Update project'
                 />
               </Grid>
               <Grid>
-                <Image
-                  src='/settings-icon.svg'
-                  alt='An SVG of an eye'
-                  width={20}
-                  height={20}
-                />
+                <SettingIconButton iconWidth={20} iconHeight={20} />
               </Grid>
             </Grid.Container>
           </Grid>

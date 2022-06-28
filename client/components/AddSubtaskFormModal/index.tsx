@@ -21,7 +21,7 @@ import { AuthContext, AuthContextInterface } from "../../Contexts/Auth";
 import { createSubtaskCommand } from "../../services/commands";
 import { mutate } from "swr";
 import * as Gateway from "../../services/QueriesGateway";
-import Image from "next/image";
+import { AddRoundedIconButton } from "../Buttons";
 
 export interface AddSubtaskFormModal {
   todoId: number;
@@ -78,12 +78,10 @@ const Index = ({ todoId }: AddSubtaskFormModal) => {
       }}
     >
       <Grid xs={12}>
-        <Image
-          onClick={handler}
-          src='/add-icon-round.svg'
-          alt='An SVG of an eye'
-          width={22}
-          height={22}
+        <AddRoundedIconButton
+          iconHeight={22}
+          iconWidth={22}
+          onSubmitHandler={handler}
         />
       </Grid>
       <Modal
