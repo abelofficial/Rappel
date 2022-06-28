@@ -54,7 +54,7 @@ const Index = ({ id, projectId }: TodoItemProps) => {
 
   const onChangeHandler = (value?: ShowFilterType) => {
     value && setCurrentShowing(value);
-    mutate(Gateway.UserTodoSubtasksListURL(id), data.subTask, true);
+    value && mutate(Gateway.UserTodoSubtasksListURL(id), data.subTask, true);
   };
 
   const onUpdateTodoHandler = async (values: CreateTodoCommand) => {
@@ -108,6 +108,7 @@ const Index = ({ id, projectId }: TodoItemProps) => {
           initialFormData={data}
           showFilterBar={data.subTask.length > 0}
           statusUpdateHandler={onUpdateTodoHandler}
+          projectId={projectId}
         />
       }
       status={data.status}

@@ -1,6 +1,6 @@
-import { Button, Grid } from "@nextui-org/react";
+import { Grid, Text } from "@nextui-org/react";
 import React from "react";
-import { DeleteIconButton } from "../Buttons";
+import { DeleteIconButton, DoneIconButton } from "../Buttons";
 
 export interface SubtaskCardFooterProps {
   isCompleted: boolean;
@@ -27,18 +27,15 @@ const Index = ({
       <Grid.Container
         alignItems='center'
         justify='flex-end'
-        css={{ p: "$1" }}
+        css={{ p: "$1 $4" }}
         onClick={() => statusUpdateHandler(2)}
       >
-        <Button
-          rounded
-          bordered
-          auto
-          color='success'
-          onClick={() => statusUpdateHandler(2)}
-        >
-          Done
-        </Button>
+        <DoneIconButton
+          iconWidth={30}
+          iconHeight={30}
+          onSubmitHandler={() => statusUpdateHandler(2)}
+        />
+        <Text h5>Done</Text>
       </Grid.Container>
     );
 

@@ -1,4 +1,4 @@
-import { Card, Grid, Row, Text } from "@nextui-org/react";
+import { Grid, Row, Text } from "@nextui-org/react";
 import React, { Dispatch } from "react";
 import { CreateTodoCommand } from "../../types";
 import AddSubtaskFormModal from "../AddSubtaskFormModal";
@@ -11,6 +11,7 @@ export interface TodoCardHeaderProps {
   setCurrent: Dispatch<React.SetStateAction<ShowFilterType>>;
   id: number;
   title: string;
+  projectId: number;
 
   initialFormData: CreateTodoCommand;
   showFilterBar: boolean;
@@ -25,43 +26,36 @@ const Index = ({
   initialFormData,
   showFilterBar,
   statusUpdateHandler,
+  projectId,
 }: TodoCardHeaderProps) => {
   return (
-    <Card.Header
-      css={{
-        display: "flex",
-        alignItem: "center",
-        justifyContent: "space-between",
-      }}
-    >
-      <Grid.Container justify='space-between'>
-        <Row justify='space-between'>
-          <Text b h4 css={{ width: "50%" }}>
-            {title}
-          </Text>
-          <Grid.Container alignItems='center' justify='flex-end' gap={1}>
-            <Grid css={{ padding: "$0 $1" }}>
-              <AddSubtaskFormModal todoId={id} />
-            </Grid>
-            <Grid css={{ padding: "$0 $1" }}>
-              <TodoFormModal
-                buttonTitle='Update'
-                title='Update todo item'
-                propsValues={initialFormData}
-                onSubmit={statusUpdateHandler}
-                actionButton={<EditIconButton iconWidth={18} iconHeight={18} />}
-              />
-            </Grid>
-            <Grid css={{ padding: "$0 $2" }}>
-              <SettingIconButton iconWidth={18} iconHeight={18} />
-            </Grid>
-          </Grid.Container>
-        </Row>
-        <Row>
-          {showFilterBar && <FilterBar current={current} setter={setCurrent} />}
-        </Row>
-      </Grid.Container>
-    </Card.Header>
+    <Grid.Container justify='space-between'>
+      <Row justify='space-between' align='center' css={{ p: "$0 $3" }}>
+        <Text b h4 css={{ width: "50%" }}>
+          {title}
+        </Text>
+        <Grid.Container alignItems='center' justify='flex-end'>
+          <Grid css={{ padding: "$0" }}>
+            <AddSubtaskFormModal todoId={id} projectId={projectId} />
+          </Grid>
+          <Grid css={{ padding: "$0" }}>
+            <TodoFormModal
+              buttonTitle='Update'
+              title='Update todo item'
+              propsValues={initialFormData}
+              onSubmit={statusUpdateHandler}
+              actionButton={<EditIconButton iconWidth={18} iconHeight={18} />}
+            />
+          </Grid>
+          <Grid css={{ padding: "$0" }}>
+            <SettingIconButton iconWidth={18} iconHeight={18} />
+          </Grid>
+        </Grid.Container>
+      </Row>
+      <Row>
+        {showFilterBar && <FilterBar current={current} setter={setCurrent} />}
+      </Row>
+    </Grid.Container>
   );
 };
 

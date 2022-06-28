@@ -6,7 +6,7 @@ import {
   fieldNames,
   fieldLabels,
 } from "./addSubtaskFormProps";
-import { CreateSubtaskCommand, SubtaskResponseDto } from "../../types";
+import { CreateSubtaskCommand, TodoResponseDto } from "../../types";
 import {
   Button,
   Card,
@@ -25,9 +25,10 @@ import { AddRoundedIconButton } from "../Buttons";
 
 export interface AddSubtaskFormModal {
   todoId: number;
+  projectId: number;
 }
 
-const Index = ({ todoId }: AddSubtaskFormModal) => {
+const Index = ({ todoId, projectId }: AddSubtaskFormModal) => {
   const { theme } = useTheme();
   const [visible, setVisible] = React.useState(false);
 
@@ -42,18 +43,21 @@ const Index = ({ todoId }: AddSubtaskFormModal) => {
   const onSubmitHandler = async (values: CreateSubtaskCommand) => {
     try {
       mutate(
-        Gateway.UserTodoSubtasksListURL(todoId),
-        async (data: SubtaskResponseDto[]) => {
+        Gateway.UserTodoItemURL(todoId, projectId),
+        async (data: TodoResponseDto) => {
           const newSubTask = await createSubtaskCommand(
             token + "",
             todoId,
             values
           );
-          return [...data, newSubTask];
-        }
+          data.subTask = [...data.subTask, newSubTask];
+          return data;
+        },
+        true
       );
       setVisible(false);
     } catch (e: any) {
+      console.log(e);
       setErrors(e?.response?.data?.errors);
     }
   };

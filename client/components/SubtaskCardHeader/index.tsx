@@ -1,4 +1,4 @@
-import { Card, Grid, Row, Text } from "@nextui-org/react";
+import { Grid, Row, Text } from "@nextui-org/react";
 import React from "react";
 import {
   StartIconButton,
@@ -22,63 +22,62 @@ const Index = ({
   isStarted,
 }: SubtaskCardHeaderProps) => {
   return (
-    <Card.Header css={{ p: "$5 $2" }}>
-      <Grid.Container alignItems='center' justify='space-between'>
-        <Grid
-          xs={12}
-          css={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "Space-between",
-          }}
-        >
-          <Row>
-            <Text b>{title}</Text>
-          </Row>
-          {!isCompleted ? (
-            <Grid.Container justify='flex-end' gap={1}>
-              <Grid css={{ padding: "$0 $2" }}>
-                {!isStarted ? (
-                  <StartIconButton
-                    iconWidth={17}
-                    iconHeight={17}
-                    onSubmitHandler={() => statusUpdateHandler(1)}
-                  />
-                ) : (
-                  <OffIconButton
-                    iconWidth={17}
-                    iconHeight={17}
-                    onSubmitHandler={() => statusUpdateHandler(0)}
-                  />
-                )}
-              </Grid>
-              <Grid css={{ padding: "$0 $2" }}>
-                <EditIconButton
+    <Grid.Container alignItems='center' justify='space-between'>
+      <Grid
+        xs={12}
+        css={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "Space-between",
+          p: "$0 $3",
+        }}
+      >
+        <Row>
+          <Text b>{title}</Text>
+        </Row>
+        {!isCompleted ? (
+          <Grid.Container justify='flex-end' gap={1}>
+            <Grid css={{ padding: "$0 $2" }}>
+              {!isStarted ? (
+                <StartIconButton
                   iconWidth={17}
                   iconHeight={17}
-                  onSubmitHandler={() => {}}
+                  onSubmitHandler={() => statusUpdateHandler(1)}
                 />
-              </Grid>
-              <Grid css={{ padding: "$0 $2" }}>
-                <SettingIconButton
+              ) : (
+                <OffIconButton
                   iconWidth={17}
                   iconHeight={17}
-                  onSubmitHandler={() => {}}
+                  onSubmitHandler={() => statusUpdateHandler(0)}
                 />
-              </Grid>
-            </Grid.Container>
-          ) : (
-            <Grid.Container justify='flex-end' gap={1}>
-              <RestartIconButton
+              )}
+            </Grid>
+            <Grid css={{ padding: "$0 $2" }}>
+              <EditIconButton
                 iconWidth={17}
                 iconHeight={17}
-                onSubmitHandler={() => statusUpdateHandler(0)}
+                onSubmitHandler={() => {}}
               />
-            </Grid.Container>
-          )}
-        </Grid>
-      </Grid.Container>
-    </Card.Header>
+            </Grid>
+            <Grid css={{ padding: "$0 $2" }}>
+              <SettingIconButton
+                iconWidth={17}
+                iconHeight={17}
+                onSubmitHandler={() => {}}
+              />
+            </Grid>
+          </Grid.Container>
+        ) : (
+          <Grid.Container justify='flex-end' gap={1}>
+            <RestartIconButton
+              iconWidth={17}
+              iconHeight={17}
+              onSubmitHandler={() => statusUpdateHandler(0)}
+            />
+          </Grid.Container>
+        )}
+      </Grid>
+    </Grid.Container>
   );
 };
 

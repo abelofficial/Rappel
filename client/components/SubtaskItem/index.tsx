@@ -61,11 +61,13 @@ const Index = ({ id, parentId, notifyChange }: SubtaskItemProps) => {
       }
       body={<Text css={{ padding: "$4" }}> {data.description}</Text>}
       footer={
-        <SubtaskCardFooter
-          isStarted={data.status === ProgressBar.STARTED}
-          isCompleted={data.status === ProgressBar.COMPLETED}
-          statusUpdateHandler={subTaskStatusChangeHandler}
-        />
+        data.status !== ProgressBar.CREATED ? (
+          <SubtaskCardFooter
+            isStarted={data.status === ProgressBar.STARTED}
+            isCompleted={data.status === ProgressBar.COMPLETED}
+            statusUpdateHandler={subTaskStatusChangeHandler}
+          />
+        ) : undefined
       }
       showStatus={true}
     />
