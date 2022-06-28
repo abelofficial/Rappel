@@ -34,7 +34,7 @@ export interface TodoResponseDto {
   title: string;
   description: string;
   status: ProgressBar;
-  user: UserResponse;
+  subTask: SubtaskResponseDto[];
 }
 
 export interface CreateProjectRequestDto {

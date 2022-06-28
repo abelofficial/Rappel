@@ -12,6 +12,7 @@ import { UserTodoSubtaskURL } from "../../services/QueriesGateway";
 import SubtaskCardHeader from "../SubtaskCardHeader";
 import Card from "../Card";
 import SubtaskCardFooter from "../SubtaskCardFooter";
+import { Text } from "@nextui-org/react";
 ("../../types");
 
 export interface SubtaskItemProps {
@@ -58,7 +59,7 @@ const Index = ({ id, parentId, notifyChange }: SubtaskItemProps) => {
           statusUpdateHandler={subTaskStatusChangeHandler}
         />
       }
-      bodyText={data.description}
+      body={<Text css={{ padding: "$4" }}> {data.description}</Text>}
       footer={
         <SubtaskCardFooter
           isStarted={data.status === ProgressBar.STARTED}
@@ -66,6 +67,7 @@ const Index = ({ id, parentId, notifyChange }: SubtaskItemProps) => {
           statusUpdateHandler={subTaskStatusChangeHandler}
         />
       }
+      showStatus={true}
     />
   );
 };

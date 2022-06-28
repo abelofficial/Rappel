@@ -1,4 +1,4 @@
-import { Card, Text } from "@nextui-org/react";
+import { Card } from "@nextui-org/react";
 import React from "react";
 import { ProgressBar } from "../../types";
 
@@ -6,12 +6,19 @@ import { ProgressBar } from "../../types";
 
 export interface CardProps {
   headerContent: JSX.Element;
-  bodyText: string;
+  body: JSX.Element;
   status: ProgressBar;
-  footer: JSX.Element;
+  showStatus: boolean;
+  footer?: JSX.Element;
 }
 
-const Index = ({ status, headerContent, bodyText, footer }: CardProps) => {
+const Index = ({
+  status,
+  headerContent,
+  body,
+  footer,
+  showStatus,
+}: CardProps) => {
   const borderColor = () => {
     switch (status) {
       case ProgressBar.STARTED:
@@ -27,7 +34,9 @@ const Index = ({ status, headerContent, bodyText, footer }: CardProps) => {
     <Card
       variant='bordered'
       css={{
-        border: `${borderColor()} 0.1em solid`,
+        border: showStatus
+          ? `${borderColor()} 0.1em solid`
+          : "$border 0.1em solid",
       }}
     >
       <Card.Header
@@ -41,21 +50,21 @@ const Index = ({ status, headerContent, bodyText, footer }: CardProps) => {
         {headerContent}
       </Card.Header>
       <Card.Divider />
-      <Card.Body>
-        <Text css={{ padding: "$4" }}> {bodyText}</Text>
-      </Card.Body>
+      <Card.Body>{body}</Card.Body>
 
       <Card.Divider />
-      <Card.Footer
-        css={{
-          display: "flex",
-          alignItem: "center",
-          justifyContent: "space-evenly",
-          padding: "$1",
-        }}
-      >
-        {footer}
-      </Card.Footer>
+      {footer && (
+        <Card.Footer
+          css={{
+            display: "flex",
+            alignItem: "center",
+            justifyContent: "space-evenly",
+            padding: "$1",
+          }}
+        >
+          {footer}
+        </Card.Footer>
+      )}
     </Card>
   );
 };
