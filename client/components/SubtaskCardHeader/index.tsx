@@ -1,4 +1,4 @@
-import { Grid, Row, Text } from "@nextui-org/react";
+import { Button, Grid, Row, Text, Tooltip } from "@nextui-org/react";
 import React from "react";
 import {
   StartIconButton,
@@ -32,9 +32,25 @@ const Index = ({
           p: "$0 $3",
         }}
       >
-        <Row>
-          <Text b>{title}</Text>
-        </Row>
+        <Grid.Container>
+          <Row>
+            <Text b transform='capitalize'>
+              {title}
+            </Text>
+          </Row>
+          <Row align='center' css={{ p: "$2 $1" }}>
+            <Tooltip content='See all item' contentColor='primary'>
+              <Button
+                flat
+                auto
+                size='xs'
+                color={isCompleted ? "success" : "warning"}
+              >
+                {isCompleted ? "completed" : "not completed"}
+              </Button>
+            </Tooltip>
+          </Row>
+        </Grid.Container>
         {!isCompleted ? (
           <Grid.Container justify='flex-end' gap={1}>
             <Grid css={{ padding: "$0 $2" }}>
