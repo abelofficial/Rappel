@@ -6,16 +6,18 @@ defaults:
 
 on:
   push:
-    branches:
-      - dev
-    paths:
-      - "**.cs"
-      - "**.csproj"
-  pull_request:
     branches: [main, dev]
     paths:
       - "**.cs"
       - "**.csproj"
+      - "Dockerfile"
+
+  pull_request:
+    branches: [main, dev]
+    paths:
+      - "Backend/**.cs"
+      - "Backend/**.csproj"
+      - "Dockerfile"
 
 jobs:
   build:
