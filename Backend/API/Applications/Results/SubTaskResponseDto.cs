@@ -1,4 +1,4 @@
-using API.Data.Entities;
+using API.Domain.Entities;
 using Newtonsoft.Json.Converters;
 
 namespace API.Application.Results;

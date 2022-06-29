@@ -1,5 +1,5 @@
-using API.Exceptions;
-using API.Installers;
+using API.RestApi.Exceptions;
+using API.RestApi.Installers;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.InstallServicesFromAssembly(builder.Configuration);

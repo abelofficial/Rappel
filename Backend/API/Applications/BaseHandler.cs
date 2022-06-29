@@ -1,5 +1,5 @@
-using API.Data;
-using API.Data.Entities;
+using API.Domain.Entities;
+using API.Infrastructure.Data;
 using AutoMapper;
 
 namespace API.Application;
