@@ -5,7 +5,6 @@ using API.Infrastructure.Data;
 using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-
 namespace API.Application.Queries;
 
 public class GetAllSubtasksHandler : BaseHandler<SubTask>, IRequestHandler<GetAllSubtasksQuery, IEnumerable<SubTaskResponseDto>>
@@ -16,7 +15,6 @@ public class GetAllSubtasksHandler : BaseHandler<SubTask>, IRequestHandler<GetAl
             : base(mapper, db)
     {
         _context = httpContextAccessor.HttpContext;
-
     }
 
     public async Task<IEnumerable<SubTaskResponseDto>> Handle(GetAllSubtasksQuery request, CancellationToken cancellationToken)

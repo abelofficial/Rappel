@@ -10,7 +10,6 @@ namespace API.Application.Queries;
 
 public class GetTodoHandler : BaseHandler<Todo>, IRequestHandler<GetTodoQuery, TodoResponseDto>
 {
-
     private readonly HttpContext _context;
 
     public GetTodoHandler(IMapper mapper, AppDbContext db, IHttpContextAccessor httpContextAccessor)
