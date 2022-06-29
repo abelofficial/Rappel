@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using API.Application.Results;
-using API.Data.Entities;
+using API.Domain.Entities;
 using MediatR;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;

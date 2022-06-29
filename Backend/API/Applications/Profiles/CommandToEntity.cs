@@ -1,6 +1,6 @@
 using API.Application.Commands;
-using API.Data.Entities;
-using API.Data.ValueObjects;
+using API.Domain.Entities;
+using API.Domain.ValueObjects;
 using AutoMapper;
 
 namespace API.Application.Profiles;

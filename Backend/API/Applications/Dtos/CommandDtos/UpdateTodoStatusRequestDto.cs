@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-using API.Data.Entities;
+using API.Domain.Entities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 

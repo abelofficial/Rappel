@@ -1,5 +1,5 @@
 using API.Application.Results;
-using API.Data.Entities;
+using API.Domain.Entities;
 using AutoMapper;
 
 namespace API.Application.Profiles;

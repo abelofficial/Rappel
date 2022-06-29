@@ -1,7 +1,7 @@
 using System.Net;
 using API.Application.Results;
-using API.Data;
-using API.Data.Entities;
+using API.Domain.Entities;
+using API.Infrastructure.Data;
 using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
