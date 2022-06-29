@@ -31,32 +31,22 @@ export const AuthProvider = ({ children }: { children: JSX.Element }) => {
   const router = useRouter();
 
   useEffect(() => {
-    if (router.pathname != "/auth") {
-      const redirectToAuth = async () => {
-        await router.push("/auth");
-      };
+    if (!auth.user) {
+      const savedUserString = localStorage.getItem("user");
 
-      const redirectToHome = async () => {
-        await router.push("/");
-      };
-
-      if (!auth.user) {
-        const savedUserString = localStorage.getItem("user");
-        console.log("savedUserString: ", savedUserString);
-
-        if (savedUserString) {
-          const savedUser: UserResponse = JSON.parse(savedUserString + "");
-          const userToken = localStorage.getItem(savedUser.username);
-          const token = ("" + userToken)?.replaceAll('"', "");
-          auth.setUser(savedUser);
-          auth.setToken(token);
-          redirectToHome();
-        }
-
-        redirectToAuth();
+      const savedUser: UserResponse = JSON.parse(savedUserString + "");
+      const userToken = localStorage.getItem(savedUser.username);
+      const token = ("" + userToken)?.replaceAll('"', "");
+      console.log("check: ", token);
+      if (savedUser && token) {
+        auth.setUser(savedUser);
+        auth.setToken(token);
+        router.push("/");
       }
+      router.push("/auth");
     }
-  }, []);
+    router.push("/");
+  }, [auth.user]);
 
   return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
 };
