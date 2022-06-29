@@ -6,7 +6,7 @@ import {
   fieldNames,
   fieldLabels,
 } from "./addSubtaskFormProps";
-import { CreateSubtaskCommand, TodoResponseDto } from "../../types";
+import { CreateSubtaskCommand, SubtaskResponseDto } from "../../types";
 import {
   Button,
   Card,
@@ -40,21 +40,22 @@ const Index = ({ todoId, projectId }: AddSubtaskFormModal) => {
   const [errors, setErrors] = useState<string[] | undefined>();
   const { token } = useContext<AuthContextInterface>(AuthContext);
 
-  const onSubmitHandler = async (values: CreateSubtaskCommand) => {
+  const onSubmitHandler = async (
+    values: Omit<CreateSubtaskCommand, "projectId">
+  ) => {
     try {
       mutate(
-        Gateway.UserTodoItemURL(todoId, projectId),
-        async (data: TodoResponseDto) => {
-          const newSubTask = await createSubtaskCommand(
-            token + "",
-            todoId,
-            values
-          );
-          data.subTask = [...data.subTask, newSubTask];
-          return data;
+        Gateway.UserTodoSubtasksListURL(todoId),
+        async (data: SubtaskResponseDto[]) => {
+          const newSubTask = await createSubtaskCommand(token + "", todoId, {
+            ...values,
+            projectId,
+          });
+          return [...data, newSubTask];
         },
         true
       );
+
       setVisible(false);
     } catch (e: any) {
       console.log(e);

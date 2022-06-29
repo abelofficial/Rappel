@@ -23,12 +23,6 @@ public class Project : IEntity
     [Required]
     public virtual IEnumerable<Todo> Items { get; set; }
 
-
-    public Project()
-    {
-        Members = new List<User>();
-        Items = new List<Todo>();
-    }
     public virtual void AddItem(Todo todo)
     {
         Items.Append(todo);

@@ -10,29 +10,36 @@ namespace API.Application.Queries;
 
 public class GetSubtaskHandler : BaseHandler<SubTask>, IRequestHandler<GetSubtaskQuery, SubTaskResponseDto>
 {
-    private readonly HttpContext _context;
+    private readonly IMediator _mediator;
 
-    public GetSubtaskHandler(IMapper mapper, AppDbContext db, IHttpContextAccessor httpContextAccessor)
+    public GetSubtaskHandler(IMapper mapper, AppDbContext db, IMediator mediator)
             : base(mapper, db)
     {
-        _context = httpContextAccessor.HttpContext;
+        _mediator = mediator;
     }
 
     public async Task<SubTaskResponseDto> Handle(GetSubtaskQuery request, CancellationToken cancellationToken)
     {
-        var currentUserName = _context.User.Identity.Name;
-        var currentUser = await _db.Users.SingleAsync(u => u.Username.Equals(currentUserName));
+
+        var currentUser = await _mediator.Send(new CurrentUserQuery());
+        var parentTodoItem = await _mediator.Send(new GetTodoQuery()
+        {
+            Id = request.TodoId,
+            ProjectId = request.ProjectId
+        });
 
         try
         {
-            var parentTodoItem = await _db.Todos.SingleAsync(td => td.Id == request.TodoId);
-            var result = await _db.SubTasks.Where(st => st.Id == request.SubTaskId).Where(u => u.Todo.User.Id == currentUser.Id).SingleAsync(u => u.Todo.Id == request.TodoId);
+            var result = await _db.SubTasks
+             .Include(st => st.Todo.Project)
+             .Where(st => st.Todo.Id == request.TodoId)
+             .SingleAsync(st => st.Id == request.SubTaskId);
             return _mapper.Map<SubTaskResponseDto>(result);
         }
-        catch (Exception e)
+        catch (Exception)
         {
-            Console.WriteLine(e);
-            throw new HttpRequestException($"A subtask with id {request.SubTaskId} for the Todo item id {request.TodoId} doesn't exist", null, HttpStatusCode.NotFound);
+            throw new HttpRequestException($"A subtask item with id {request.SubTaskId} doesn't exist", null, HttpStatusCode.NotFound);
         }
+
     }
 }

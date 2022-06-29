@@ -18,13 +18,14 @@ import { Text } from "@nextui-org/react";
 export interface SubtaskItemProps {
   parentId: number;
   id: number;
+  projectId: number;
   notifyChange: (value?: ShowFilterType) => void;
 }
 
-const Index = ({ id, parentId, notifyChange }: SubtaskItemProps) => {
+const Index = ({ id, parentId, projectId, notifyChange }: SubtaskItemProps) => {
   const { token } = useContext<AuthContextInterface>(AuthContext);
-  const { data } = useSWR(UserTodoSubtaskURL(id, parentId), () =>
-    getUserTodoSubtaskQuery(token + "", id, parentId)
+  const { data } = useSWR(UserTodoSubtaskURL(id, parentId, projectId), () =>
+    getUserTodoSubtaskQuery(token + "", id, parentId, projectId)
   );
 
   if (!data) return <h1>loading</h1>;
@@ -32,7 +33,7 @@ const Index = ({ id, parentId, notifyChange }: SubtaskItemProps) => {
   const subTaskStatusChangeHandler = (status: number) => {
     console.log("S: ", status);
     mutate(
-      Gateway.UserTodoSubtaskURL(id, parentId),
+      Gateway.UserTodoSubtaskURL(id, parentId, projectId),
       async (_d: SubtaskResponseDto) => {
         const updated = await updateSubtaskStatusCommand(
           token + "",

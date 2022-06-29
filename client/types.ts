@@ -62,10 +62,13 @@ export interface SubtaskResponseDto {
   title: string;
   description: string;
   status: ProgressBar;
-  todo: TodoResponseDto;
+  todo: number;
+  projectId: number;
 }
 
-export interface CreateSubtaskCommand extends CreateTodoCommand {}
+export interface CreateSubtaskCommand extends CreateTodoCommand {
+  projectId: number;
+}
 
 export enum ProgressBar {
   COMPLETED = 2,

@@ -3,6 +3,7 @@ using API.Application.Commands.Dtos;
 using API.Application.Queries;
 using API.Application.Results;
 using API.Domain.Exceptions;
+using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,11 +17,13 @@ public class TodosSubtasksController : ControllerBase
 {
     private readonly ILogger<TodosSubtasksController> _logger;
     private readonly IMediator _mediator;
+    private readonly IMapper _mapper;
 
-    public TodosSubtasksController(ILogger<TodosSubtasksController> logger, IMediator mediator)
+    public TodosSubtasksController(ILogger<TodosSubtasksController> logger, IMediator mediator, IMapper mapper)
     {
         _logger = logger;
         _mediator = mediator;
+        _mapper = mapper;
     }
 
     /// <summary>
@@ -33,7 +36,9 @@ public class TodosSubtasksController : ControllerBase
     [ProducesResponseType(typeof(ExceptionMessage), StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult> CreateSubTaskItem(int id, CreateSubtaskRequestDto request)
     {
-        var response = await _mediator.Send(new CreateSubTaskCommand() { ParentId = id, Title = request.Title, Description = request.Description });
+        var command = _mapper.Map<CreateSubTaskCommand>(request);
+        command.ParentId = id;
+        var response = await _mediator.Send(command);
         return CreatedAtAction(nameof(GetUserTodoSubTaskItem), new { id = response.TodoId, subtaskId = response.Id }, response);
     }
 
@@ -79,9 +84,9 @@ public class TodosSubtasksController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SubTaskResponseDto))]
     [ProducesResponseType(typeof(ExceptionMessage), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ExceptionMessage), StatusCodes.Status401Unauthorized)]
-    public async Task<ActionResult> GetUserTodoSubTaskItem(int id, int subtaskId)
+    public async Task<ActionResult> GetUserTodoSubTaskItem(int id, int subtaskId, int projectId)
     {
-        var response = await _mediator.Send(new GetSubtaskQuery() { TodoId = id, SubTaskId = subtaskId });
+        var response = await _mediator.Send(new GetSubtaskQuery() { TodoId = id, SubTaskId = subtaskId, ProjectId = projectId });
         return Ok(response);
     }
 

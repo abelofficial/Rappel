@@ -16,5 +16,7 @@ public class SubTaskResponseDto
     public ProgressStatus Status { get; set; }
 
     public int TodoId { get; set; }
+
+    public int ProjectId { get; set; }
 }
 

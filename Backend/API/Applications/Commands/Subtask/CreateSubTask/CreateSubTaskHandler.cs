@@ -1,4 +1,4 @@
-using System.Net;
+using API.Application.Queries;
 using API.Application.Results;
 using API.Domain.Entities;
 using API.Infrastructure.Data;
@@ -10,30 +10,27 @@ namespace API.Application.Commands;
 
 public class CreateSubTaskHandler : BaseHandler<SubTask>, IRequestHandler<CreateSubTaskCommand, SubTaskResponseDto>
 {
-    private readonly HttpContext _context;
-    public CreateSubTaskHandler(IMapper mapper, AppDbContext db, IHttpContextAccessor httpContextAccessor)
+    private readonly IMediator _mediator;
+    public CreateSubTaskHandler(IMapper mapper, AppDbContext db, IMediator mediator)
             : base(mapper, db)
     {
-        _context = httpContextAccessor.HttpContext;
+        _mediator = mediator; ;
     }
 
     public async Task<SubTaskResponseDto> Handle(CreateSubTaskCommand request, CancellationToken cancellationToken)
     {
-        var currentUserName = _context.User.Identity.Name;
-        var targetUser = await _db.Users.SingleAsync(u => u.Username.Equals(currentUserName));
-
-        var newTodoItem = _mapper.Map<SubTask>(request);
-
-        try
+        var currentUSer = await _mediator.Send(new CurrentUserQuery());
+        var parentTodoItem = await _mediator.Send(new GetTodoQuery()
         {
-            newTodoItem.Todo = await _db.Todos.SingleAsync(td => td.Id == request.ParentId && td.User.Id == targetUser.Id);
-        }
-        catch (Exception)
-        {
-            throw new HttpRequestException($"A todo item with id {request.ParentId} doesn't exists", null, HttpStatusCode.NotFound);
-        }
+            Id = request.ParentId,
+            ProjectId = request.ProjectId,
+        });
 
-        var result = _db.SubTasks.Add(newTodoItem).Entity;
+        var newSubtaskItem = _mapper.Map<SubTask>(request);
+        newSubtaskItem.Todo = await _db.Todos
+            .SingleAsync(td => td.Id == parentTodoItem.Id);
+
+        var result = _db.SubTasks.Add(newSubtaskItem).Entity;
         await _db.SaveChangesAsync();
 
         return _mapper.Map<SubTaskResponseDto>(result);

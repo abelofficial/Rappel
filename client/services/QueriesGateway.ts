@@ -8,8 +8,11 @@ export const UserTodoListURL = (id: number) => `project/${id}/todos`;
 export const UserTodoSubtasksListURL = (id: number) =>
   `/todo/${id}/todossubtasks`;
 
-export const UserTodoSubtaskURL = (id: number, parentId: number) =>
-  `/todo/${parentId}/todossubtasks/${id}`;
+export const UserTodoSubtaskURL = (
+  id: number,
+  parentId: number,
+  projectId: number
+) => `/todo/${parentId}/todossubtasks/${id}?projectId=${projectId}`;
 
 export const UserProjectsListURL = () => `/projects`;
 

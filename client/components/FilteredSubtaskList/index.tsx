@@ -30,12 +30,13 @@ const Index = ({
     case ShowFilterType.ALL:
       return (
         <>
-          {data.map((td) => (
-            <Grid xs={12} key={td.id} css={{ padding: "$0" }}>
+          {data.map((st) => (
+            <Grid xs={12} key={st.id} css={{ padding: "$0" }}>
               <SubtaskItem
-                id={td.id}
+                id={st.id}
                 parentId={id}
                 notifyChange={onFilterChange}
+                projectId={st.projectId}
               />
             </Grid>
           ))}
@@ -46,13 +47,14 @@ const Index = ({
       return (
         <>
           {data
-            .filter((td) => td.status === ProgressBar.COMPLETED)
-            .map((td) => (
-              <Grid xs={12} key={td.id} css={{ padding: "$0" }}>
+            .filter((st) => st.status === ProgressBar.COMPLETED)
+            .map((st) => (
+              <Grid xs={12} key={st.id} css={{ padding: "$0" }}>
                 <SubtaskItem
-                  id={td.id}
+                  id={st.id}
                   parentId={id}
                   notifyChange={onFilterChange}
+                  projectId={st.projectId}
                 />
               </Grid>
             ))}
@@ -62,13 +64,14 @@ const Index = ({
       return (
         <>
           {data
-            .filter((td) => td.status === ProgressBar.STARTED)
-            .map((td) => (
-              <Grid xs={12} key={td.id} css={{ padding: "$0" }}>
+            .filter((st) => st.status === ProgressBar.STARTED)
+            .map((st) => (
+              <Grid xs={12} key={st.id} css={{ padding: "$0" }}>
                 <SubtaskItem
-                  id={td.id}
+                  id={st.id}
                   parentId={id}
                   notifyChange={onFilterChange}
+                  projectId={st.projectId}
                 />
               </Grid>
             ))}

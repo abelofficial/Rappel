@@ -26,7 +26,7 @@ public class GetAllSubtasksHandler : BaseHandler<SubTask>, IRequestHandler<GetAl
         if (!await _db.Todos.AnyAsync(td => td.Id == request.Id))
             throw new HttpRequestException($"Todo item with id {request.Id} doesn't exist", null, HttpStatusCode.NotFound);
 
-        var result = await _db.SubTasks.Include(st => st.Todo).Where(u => u.Todo.User.Id == currentUser.Id).Where(st => st.Todo.Id == request.Id).ToListAsync();
+        var result = await _db.SubTasks.Include(st => st.Todo.Project).Where(u => u.Todo.User.Id == currentUser.Id).Where(st => st.Todo.Id == request.Id).ToListAsync();
         return _mapper.Map<IEnumerable<SubTaskResponseDto>>(result);
     }
 }

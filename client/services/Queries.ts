@@ -34,10 +34,13 @@ export const getUserTodoSubtasksListQuery = async (token: string, id: number) =>
 export const getUserTodoSubtaskQuery = async (
   token: string,
   id: number,
-  parentId: number
+  parentId: number,
+  projectId: number
 ) =>
   await api(token)
-    .get<SubtaskResponseDto>(Gateway.UserTodoSubtaskURL(id, parentId))
+    .get<SubtaskResponseDto>(
+      Gateway.UserTodoSubtaskURL(id, parentId, projectId)
+    )
     .then((d) => d.data);
 
 export const getUserProjectsListQuery = async (token: string) =>
