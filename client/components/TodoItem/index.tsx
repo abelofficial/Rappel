@@ -36,15 +36,14 @@ const Index = ({ id, projectId }: TodoItemProps) => {
     ShowFilterType.ALL
   );
   const { token } = useContext<AuthContextInterface>(AuthContext);
+  const { data: subtasks } = useSWR(Gateway.UserTodoSubtasksListURL(id), () =>
+    getUserTodoSubtasksListQuery(token + "", id)
+  );
   const { data } = useSWR(UserTodoItemURL(id, projectId), () =>
     getUserTodoItemQuery(token + "", id, projectId)
   );
 
-  const { data: subtasks } = useSWR(Gateway.UserTodoSubtasksListURL(id), () =>
-    getUserTodoSubtasksListQuery(token + "", id)
-  );
-
-  if (!data || !subtasks) return <div>loading subtasks...</div>;
+  if (!data || subtasks === undefined) return <div>loading subtasks...</div>;
 
   const getCompletedCount = () =>
     subtasks?.reduce(
