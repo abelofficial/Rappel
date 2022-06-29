@@ -81,7 +81,7 @@ public class TodosSubtasksController : ControllerBase
     [ProducesResponseType(typeof(ExceptionMessage), StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult> GetUserTodoSubTaskItem(int id, int subtaskId)
     {
-        var response = await _mediator.Send(new GetUserTodoSubtaskQuery() { TodoId = id, SubTaskId = subtaskId });
+        var response = await _mediator.Send(new GetSubtaskQuery() { TodoId = id, SubTaskId = subtaskId });
         return Ok(response);
     }
 
@@ -94,7 +94,7 @@ public class TodosSubtasksController : ControllerBase
     [ProducesResponseType(typeof(ExceptionMessage), StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult> GetAllUserTodoSubtasks(int id)
     {
-        var response = await _mediator.Send(new GetAllUserTodoSubtasksQuery() { Id = id });
+        var response = await _mediator.Send(new GetAllSubtasksQuery() { Id = id });
         return Ok(response);
     }
 }

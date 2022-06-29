@@ -67,7 +67,7 @@ public class ProjectsController : ControllerBase
     [ProducesResponseType(typeof(ExceptionMessage), StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult> GetAllUserProjects()
     {
-        var response = await _mediator.Send(new GetAllUserProjectsQuery());
+        var response = await _mediator.Send(new GetAllProjectsQuery());
         return Ok(response);
     }
 
@@ -82,7 +82,7 @@ public class ProjectsController : ControllerBase
     [ProducesResponseType(typeof(ExceptionMessage), StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult> GetUserProject(int id)
     {
-        var response = await _mediator.Send(new GetUserProjectQuery { Id = id });
+        var response = await _mediator.Send(new GetProjectQuery { Id = id });
         return Ok(response);
     }
 

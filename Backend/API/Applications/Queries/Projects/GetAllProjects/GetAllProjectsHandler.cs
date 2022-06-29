@@ -7,16 +7,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Application.Queries;
 
-public class GetAllUserProjectsHandler : BaseHandler<User>, IRequestHandler<GetAllUserProjectsQuery, IEnumerable<ProjectResponseDto>>
+public class GetAllProjectsHandler : BaseHandler<User>, IRequestHandler<GetAllProjectsQuery, IEnumerable<ProjectResponseDto>>
 {
     private readonly IMediator _mediator;
-    public GetAllUserProjectsHandler(IMapper mapper, AppDbContext db, IMediator mediator)
+    public GetAllProjectsHandler(IMapper mapper, AppDbContext db, IMediator mediator)
             : base(mapper, db)
     {
         _mediator = mediator;
     }
 
-    public async Task<IEnumerable<ProjectResponseDto>> Handle(GetAllUserProjectsQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<ProjectResponseDto>> Handle(GetAllProjectsQuery request, CancellationToken cancellationToken)
     {
         var currentUser = await _mediator.Send(new CurrentUserQuery());
         var result = await _db.Projects

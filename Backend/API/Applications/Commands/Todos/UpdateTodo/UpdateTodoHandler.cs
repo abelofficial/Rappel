@@ -21,7 +21,7 @@ public class UpdateTodoHandler : BaseHandler<Todo>, IRequestHandler<UpdateTodoCo
     public async Task<TodoResponseDto> Handle(UpdateTodoCommand request, CancellationToken cancellationToken)
     {
 
-        var todo = await _mediator.Send(new GetUserTodoQuery()
+        var todo = await _mediator.Send(new GetTodoQuery()
         {
             Id = request.Id,
             ProjectId = request.ProjectId

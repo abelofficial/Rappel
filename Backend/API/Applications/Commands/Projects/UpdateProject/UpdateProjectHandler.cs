@@ -18,7 +18,7 @@ public class UpdateProjectHandler : BaseHandler<Project>, IRequestHandler<Update
 
     public async Task<ProjectResponseDto> Handle(UpdateProjectCommand request, CancellationToken cancellationToken)
     {
-        var targetProject = await _mediator.Send(new GetUserProjectQuery() { Id = request.Id });
+        var targetProject = await _mediator.Send(new GetProjectQuery() { Id = request.Id });
         var project = await _db.Projects.FindAsync(targetProject.Id);
         _mapper.Map(request, project);
         project.Id = targetProject.Id;

@@ -88,7 +88,7 @@ public class TodosController : ControllerBase
     [ProducesResponseType(typeof(ExceptionMessage), StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult> GetAllUserTodos(int id)
     {
-        var response = await _mediator.Send(new GetAllUserTodosQuery() { ProjectId = id });
+        var response = await _mediator.Send(new GetAllTodosQuery() { ProjectId = id });
         return Ok(response);
     }
 
@@ -102,7 +102,7 @@ public class TodosController : ControllerBase
     [ProducesResponseType(typeof(ExceptionMessage), StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult> GetUserTodo(int id, int todoId)
     {
-        var response = await _mediator.Send(new GetUserTodoQuery() { Id = todoId, ProjectId = id });
+        var response = await _mediator.Send(new GetTodoQuery() { Id = todoId, ProjectId = id });
         return Ok(response);
     }
 }

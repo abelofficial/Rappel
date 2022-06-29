@@ -4,7 +4,9 @@ using MediatR;
 namespace API.Application.Queries;
 
 
-public class GetAllUserTodosQuery : IRequest<IEnumerable<TodoResponseDto>>
+public class GetTodoQuery : IRequest<TodoResponseDto>
 {
+    public int Id { get; set; }
+
     public int ProjectId { get; set; }
 }

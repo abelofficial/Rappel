@@ -8,16 +8,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Application.Queries;
 
-public class GetAllUserTodosHandler : BaseHandler<Todo>, IRequestHandler<GetAllUserTodosQuery, IEnumerable<TodoResponseDto>>
+public class GetAllTodosHandler : BaseHandler<Todo>, IRequestHandler<GetAllTodosQuery, IEnumerable<TodoResponseDto>>
 {
     private readonly IMediator _mediator;
 
-    public GetAllUserTodosHandler(IMapper mapper, AppDbContext db, IMediator mediator) : base(mapper, db)
+    public GetAllTodosHandler(IMapper mapper, AppDbContext db, IMediator mediator) : base(mapper, db)
     {
         _mediator = mediator;
     }
 
-    public async Task<IEnumerable<TodoResponseDto>> Handle(GetAllUserTodosQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<TodoResponseDto>> Handle(GetAllTodosQuery request, CancellationToken cancellationToken)
     {
         var currentUser = await _mediator.Send(new CurrentUserQuery());
 

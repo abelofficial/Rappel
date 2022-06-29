@@ -8,18 +8,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Application.Queries;
 
-public class GetUserTodoHandler : BaseHandler<Todo>, IRequestHandler<GetUserTodoQuery, TodoResponseDto>
+public class GetTodoHandler : BaseHandler<Todo>, IRequestHandler<GetTodoQuery, TodoResponseDto>
 {
 
     private readonly HttpContext _context;
 
-    public GetUserTodoHandler(IMapper mapper, AppDbContext db, IHttpContextAccessor httpContextAccessor)
+    public GetTodoHandler(IMapper mapper, AppDbContext db, IHttpContextAccessor httpContextAccessor)
             : base(mapper, db)
     {
         _context = httpContextAccessor.HttpContext;
     }
 
-    public async Task<TodoResponseDto> Handle(GetUserTodoQuery request, CancellationToken cancellationToken)
+    public async Task<TodoResponseDto> Handle(GetTodoQuery request, CancellationToken cancellationToken)
     {
         var currentUserName = _context.User.Identity.Name;
         var currentUser = await _db.Users.SingleAsync(u => u.Username.Equals(currentUserName));

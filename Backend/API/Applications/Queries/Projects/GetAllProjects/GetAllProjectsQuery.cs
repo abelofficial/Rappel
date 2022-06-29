@@ -4,6 +4,6 @@ using MediatR;
 namespace API.Application.Queries;
 
 
-public class GetAllUserProjectsQuery : IRequest<IEnumerable<ProjectResponseDto>>
+public class GetAllProjectsQuery : IRequest<IEnumerable<ProjectResponseDto>>
 {
 }

@@ -8,18 +8,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Application.Queries;
 
-public class GetAllUserTodoSubtasksHandler : BaseHandler<SubTask>, IRequestHandler<GetAllUserTodoSubtasksQuery, IEnumerable<SubTaskResponseDto>>
+public class GetAllSubtasksHandler : BaseHandler<SubTask>, IRequestHandler<GetAllSubtasksQuery, IEnumerable<SubTaskResponseDto>>
 {
     private readonly HttpContext _context;
 
-    public GetAllUserTodoSubtasksHandler(IMapper mapper, AppDbContext db, IHttpContextAccessor httpContextAccessor)
+    public GetAllSubtasksHandler(IMapper mapper, AppDbContext db, IHttpContextAccessor httpContextAccessor)
             : base(mapper, db)
     {
         _context = httpContextAccessor.HttpContext;
 
     }
 
-    public async Task<IEnumerable<SubTaskResponseDto>> Handle(GetAllUserTodoSubtasksQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<SubTaskResponseDto>> Handle(GetAllSubtasksQuery request, CancellationToken cancellationToken)
     {
         var currentUserName = _context.User.Identity.Name;
         var currentUser = await _db.Users.SingleAsync(u => u.Username.Equals(currentUserName));

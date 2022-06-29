@@ -19,7 +19,7 @@ public class UpdateSubtaskHandler : BaseHandler<SubTask>, IRequestHandler<Update
 
     public async Task<SubTaskResponseDto> Handle(UpdateSubtaskCommand request, CancellationToken cancellationToken)
     {
-        var targetSubtask = await _mediator.Send(new GetUserTodoSubtaskQuery()
+        var targetSubtask = await _mediator.Send(new GetSubtaskQuery()
         {
             TodoId = request.TodoId,
             SubTaskId = request.SubTaskId
