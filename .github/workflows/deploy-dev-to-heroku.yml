@@ -5,6 +5,12 @@ defaults:
     working-directory: ./Backend
 
 on:
+  push:
+    branches:
+      - dev
+    paths:
+      - "**.cs"
+      - "**.csproj"
   pull_request:
     branches: [main, dev]
     paths:
