@@ -1,5 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using API.Application.Results;
+using API.Domain.Entities;
+using AutoMapper;
 using MediatR;
 
 namespace API.Application.Commands;
@@ -14,4 +16,12 @@ public class CreateSubTaskCommand : IRequest<SubTaskResponseDto>
 
     [Required]
     public int ParentId { get; set; }
+
+    public class CreateSubTaskCommandProfiles : Profile
+    {
+        public CreateSubTaskCommandProfiles()
+        {
+            CreateMap<CreateSubTaskCommand, SubTask>();
+        }
+    }
 }

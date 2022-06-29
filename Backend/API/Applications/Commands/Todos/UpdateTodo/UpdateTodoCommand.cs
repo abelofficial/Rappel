@@ -1,5 +1,8 @@
 using System.ComponentModel.DataAnnotations;
+using API.Application.Commands.Dtos;
 using API.Application.Results;
+using API.Domain.Entities;
+using AutoMapper;
 using MediatR;
 
 namespace API.Application.Commands;
@@ -17,4 +20,13 @@ public class UpdateTodoCommand : IRequest<TodoResponseDto>
     [Required]
     [MinLength(20)]
     public string Description { get; set; }
+
+    public class UpdateTodoCommandProfiles : Profile
+    {
+        public UpdateTodoCommandProfiles()
+        {
+            CreateMap<UpdateTodoCommand, Todo>();
+            CreateMap<UpdateTodoRequestDto, UpdateTodoCommand>();
+        }
+    }
 }

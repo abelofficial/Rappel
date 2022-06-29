@@ -1,14 +1,16 @@
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 
-namespace API.Application.Dtos.CommandsDtos;
+namespace API.Application.Commands.Dtos;
 
-public class CreateSubtaskRequestDto
+public class UpdateProjectRequestDto
 {
-
     [Required]
     public string Title { get; set; }
+
     [Required]
-    [MinLength(20)]
     public string Description { get; set; }
+
+    [Required]
+    public bool IsOrdered { get; set; }
 }

@@ -3,7 +3,7 @@ using API.Domain.Entities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace API.Application.Dtos.CommandsDtos;
+namespace API.Application.Commands.Dtos;
 
 public class UpdateTodoStatusRequestDto
 {

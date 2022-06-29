@@ -1,5 +1,5 @@
 using API.Application.Commands;
-using API.Application.Dtos.CommandsDtos;
+using API.Application.Commands.Dtos;
 using API.Application.Queries;
 using API.Application.Results;
 using API.Domain.Exceptions;

@@ -1,8 +1,7 @@
-using API.Application.Results;
 using API.Domain.Entities;
 using AutoMapper;
 
-namespace API.Application.Profiles;
+namespace API.Application.Results.Profiles;
 
 public class EntityToResult : Profile
 {

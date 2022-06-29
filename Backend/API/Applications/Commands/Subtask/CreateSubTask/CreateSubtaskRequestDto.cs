@@ -1,9 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 
-namespace API.Application.Dtos.CommandsDtos;
+namespace API.Application.Commands.Dtos;
 
-public class CreateTodoRequestDto
+public class CreateSubtaskRequestDto
 {
 
     [Required]
