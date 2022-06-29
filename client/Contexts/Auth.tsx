@@ -27,28 +27,32 @@ export const AuthContext = createContext<AuthContextInterface>(
 );
 
 export const AuthProvider = ({ children }: { children: JSX.Element }) => {
-  const auth = AuthActions();
+  const { user, setUser, setToken, ...rest } = AuthActions();
   const router = useRouter();
 
   useEffect(() => {
-    if (!auth.user) {
+    if (!user) {
       const savedUserString = localStorage.getItem("user");
-
-      const savedUser: UserResponse = JSON.parse(savedUserString + "");
-      const userToken = localStorage.getItem(savedUser.username);
-      const token = ("" + userToken)?.replaceAll('"', "");
-      console.log("check: ", token);
-      if (savedUser && token) {
-        auth.setUser(savedUser);
-        auth.setToken(token);
+      console.log(user);
+      if (savedUserString) {
+        const savedUser: UserResponse = JSON.parse(savedUserString + "");
+        const userToken = localStorage.getItem(savedUser.username);
+        const token = ("" + userToken)?.replaceAll('"', "");
+        setUser(savedUser);
+        setToken(token);
         router.push("/");
       }
-      router.push("/auth");
+      router.pathname !== "/auth" && router.push("/auth");
+    } else {
+      router.push("/");
     }
-    router.push("/");
-  }, [auth.user]);
+  }, [user]);
 
-  return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={{ user, setUser, setToken, ...rest }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
 function AuthActions(): AuthContextInterface {
