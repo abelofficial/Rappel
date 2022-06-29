@@ -2,20 +2,21 @@ name: deploy dev to Heroku
 
 defaults:
   run:
-    working-directory: ./Backend
+    working-directory: ./
 
 on:
   push:
-    branches:
-      - dev
+    branches: [main, dev]
     paths:
-      - "**.cs"
-      - "**.csproj"
+      - "Backend/**.cs"
+      - "Backend/**.csproj"
+      - ".github/**.csproj"
   pull_request:
     branches: [main, dev]
     paths:
-      - "**.cs"
-      - "**.csproj"
+      - "Backend/**.cs"
+      - "Backend/**.csproj"
+      - ".github/**.csproj"
 
 jobs:
   build:

@@ -6,16 +6,17 @@ defaults:
 
 on:
   push:
-    branches:
-      - dev
+    branches: [main, dev]
     paths:
-      - "**.cs"
-      - "**.csproj"
+      - "Backend/**.cs"
+      - "Backend/**.csproj"
+      - ".github/**.csproj"
   pull_request:
     branches: [main, dev]
     paths:
-      - "**.cs"
-      - "**.csproj"
+      - "Backend/**.cs"
+      - "Backend/**.csproj"
+      - ".github/**.csproj"
 
 env:
   DOTNET_VERSION: "6.0.x" # The .NET SDK version to use
@@ -26,7 +27,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macOS-latest]
+        os: [ubuntu-latest, macOS-latest]
 
     steps:
       - uses: actions/checkout@v2
