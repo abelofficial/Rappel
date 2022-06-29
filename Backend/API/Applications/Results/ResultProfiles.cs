@@ -3,10 +3,10 @@ using AutoMapper;
 
 namespace API.Application.Results.Profiles;
 
-public class EntityToResult : Profile
+public class ResultProfiles : Profile
 {
 
-    public EntityToResult()
+    public ResultProfiles()
     {
         CreateMap<Project, ProjectResponseDto>();
         CreateMap<Project, ProjectResponseDto>().ReverseMap();

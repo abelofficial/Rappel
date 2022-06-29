@@ -1,4 +1,4 @@
-using API.Data.Entities;
+using API.Domain.Entities;
 
 public static class MockUsers
 {

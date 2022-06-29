@@ -1,6 +1,6 @@
 using System.Net;
 using API.Application.Commands;
-using API.Data;
+using API.Infrastructure.Data;
 using FluentAssertions;
 
 namespace Api.Tests.CommandsTest;

@@ -1,5 +1,5 @@
-using API.Application.Profiles;
-using API.Data;
+using API.Application.Results.Profiles;
+using API.Infrastructure.Data;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,8 +17,7 @@ public abstract class BaseHandlerTest
 
         var mapperConfig = new MapperConfiguration(c =>
          {
-             c.AddProfile<CommandToEntity>();
-             c.AddProfile<EntityToResult>();
+             c.AddProfile<ResultProfiles>();
          });
 
         _mapper = mapperConfig.CreateMapper();

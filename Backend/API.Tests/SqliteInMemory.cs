@@ -1,6 +1,6 @@
 using System;
 using System.Data.Common;
-using API.Data;
+using API.Infrastructure.Data;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;

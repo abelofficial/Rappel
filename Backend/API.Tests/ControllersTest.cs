@@ -1,6 +1,6 @@
 using API.Application.Commands;
 using API.Application.Results;
-using API.Controllers;
+using API.RestApi.Controllers;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Moq;
