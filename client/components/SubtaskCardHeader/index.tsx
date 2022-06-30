@@ -1,23 +1,31 @@
 import { Button, Grid, Row, Text, Tooltip } from "@nextui-org/react";
 import React from "react";
+import { CreateSubtaskCommand } from "../../types";
 import {
   StartIconButton,
   OffIconButton,
   EditIconButton,
   RestartIconButton,
 } from "../Buttons";
+import SubtaskFormModal from "../SubtaskFormModal";
 
 export interface SubtaskCardHeaderProps {
+  projectId: number;
   title: string;
   isCompleted: boolean;
   isStarted: boolean;
+  initialFormData: CreateSubtaskCommand;
   statusUpdateHandler: (status: number) => void;
+  addSubtaskHandler: (values: CreateSubtaskCommand) => Promise<void>;
 }
 
 const Index = ({
+  projectId,
   isCompleted,
+  initialFormData,
   title,
   statusUpdateHandler,
+  addSubtaskHandler,
   isStarted,
 }: SubtaskCardHeaderProps) => {
   return (
@@ -51,7 +59,7 @@ const Index = ({
           </Row>
         </Grid.Container>
         {!isCompleted ? (
-          <Grid.Container justify='flex-end' gap={1}>
+          <Grid.Container alignItems='center' justify='flex-end' gap={1}>
             <Grid css={{ padding: "$0 $2" }}>
               {!isStarted ? (
                 <StartIconButton
@@ -68,10 +76,13 @@ const Index = ({
               )}
             </Grid>
             <Grid css={{ padding: "$0 $2" }}>
-              <EditIconButton
-                iconWidth={17}
-                iconHeight={17}
-                onSubmitHandler={() => {}}
+              <SubtaskFormModal
+                formInitValues={initialFormData}
+                projectId={projectId}
+                buttonTitle='Update'
+                title='Update subtask'
+                onSubmit={addSubtaskHandler}
+                actionButton={<EditIconButton iconWidth={20} iconHeight={20} />}
               />
             </Grid>
           </Grid.Container>

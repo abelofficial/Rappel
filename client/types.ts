@@ -55,6 +55,7 @@ export interface ProjectResponse {
   isOrdered: boolean;
   owner: UserResponse;
   members: UserResponse[];
+  items: TodoResponseDto[];
 }
 
 export interface SubtaskResponseDto {
@@ -65,6 +66,8 @@ export interface SubtaskResponseDto {
   todo: number;
   projectId: number;
 }
+
+export interface CreateSubtaskCommandDto extends CreateTodoCommand {}
 
 export interface CreateSubtaskCommand extends CreateTodoCommand {
   projectId: number;

@@ -1,32 +1,33 @@
 import { Grid, Row, Text } from "@nextui-org/react";
 import React, { Dispatch } from "react";
-import { CreateTodoCommand } from "../../types";
-import AddSubtaskFormModal from "../AddSubtaskFormModal";
+import { CreateSubtaskCommand, CreateTodoCommand } from "../../types";
 import { EditIconButton } from "../Buttons";
 import FilterBar, { ShowFilterType } from "../FilterBar";
+import SubtaskFormModal from "../SubtaskFormModal";
 import TodoFormModal from "../TodoFormModal";
 
 export interface TodoCardHeaderProps {
   current: ShowFilterType;
   setCurrent: Dispatch<React.SetStateAction<ShowFilterType>>;
-  id: number;
   title: string;
   projectId: number;
 
   initialFormData: CreateTodoCommand;
   showFilterBar: boolean;
-  statusUpdateHandler: (values: CreateTodoCommand) => Promise<void>;
+  taskUpdateHandler: (values: CreateTodoCommand) => Promise<void>;
+
+  addSubtaskHandler: (values: CreateSubtaskCommand) => Promise<void>;
 }
 
 const Index = ({
   current,
   setCurrent,
-  id,
   title,
   initialFormData,
   showFilterBar,
-  statusUpdateHandler,
+  taskUpdateHandler,
   projectId,
+  addSubtaskHandler,
 }: TodoCardHeaderProps) => {
   return (
     <Grid.Container justify='space-between'>
@@ -36,14 +37,19 @@ const Index = ({
         </Text>
         <Grid.Container alignItems='center' justify='flex-end'>
           <Grid css={{ padding: "$0" }}>
-            <AddSubtaskFormModal todoId={id} projectId={projectId} />
+            <SubtaskFormModal
+              projectId={projectId}
+              buttonTitle='Create'
+              title='Create new subtask'
+              onSubmit={addSubtaskHandler}
+            />
           </Grid>
           <Grid css={{ padding: "$0" }}>
             <TodoFormModal
               buttonTitle='Update'
               title='Update todo item'
               propsValues={initialFormData}
-              onSubmit={statusUpdateHandler}
+              onSubmit={taskUpdateHandler}
               actionButton={<EditIconButton iconWidth={18} iconHeight={18} />}
             />
           </Grid>

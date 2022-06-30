@@ -63,13 +63,10 @@ public class TodosSubtasksController : ControllerBase
     public async Task<ActionResult> UpdateSubtaskItemItem(
         int id, int subtaskId, UpdateSubtaskRequestDto request)
     {
-        var response = await _mediator.Send(new UpdateSubtaskCommand()
-        {
-            TodoId = id,
-            SubTaskId = subtaskId,
-            Title = request.Title,
-            Description = request.Description
-        });
+        var command = _mapper.Map<UpdateSubtaskCommand>(request);
+        command.TodoId = id;
+        command.SubTaskId = subtaskId;
+        var response = await _mediator.Send(command);
         return Ok(response);
     }
 

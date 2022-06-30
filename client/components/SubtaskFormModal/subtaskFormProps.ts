@@ -1,24 +1,22 @@
 import { string, SchemaOf, object } from "yup";
-import { CreateSubtaskCommand } from "../../types";
+import { CreateSubtaskCommandDto } from "../../types";
 
-export const fieldLabels: Omit<CreateSubtaskCommand, "projectId"> = {
+export const fieldLabels: CreateSubtaskCommandDto = {
   title: "Title",
   description: "Description",
 };
 
-export const fieldNames: Omit<CreateSubtaskCommand, "projectId"> = {
+export const fieldNames: CreateSubtaskCommandDto = {
   title: "title",
   description: "description",
 };
 
-export const initialValues: Omit<CreateSubtaskCommand, "projectId"> = {
+export const initialValues: CreateSubtaskCommandDto = {
   title: "",
   description: "",
 };
 
-export const validationSchema: SchemaOf<
-  Omit<CreateSubtaskCommand, "projectId">
-> = object({
+export const validationSchema: SchemaOf<CreateSubtaskCommandDto> = object({
   title: string().required("Title is required"),
   description: string()
     .required("Description is required")

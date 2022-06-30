@@ -33,7 +33,6 @@ export const AuthProvider = ({ children }: { children: JSX.Element }) => {
   useEffect(() => {
     if (!user) {
       const savedUserString = localStorage.getItem("user");
-      console.log(user);
       if (savedUserString) {
         const savedUser: UserResponse = JSON.parse(savedUserString + "");
         const userToken = localStorage.getItem(savedUser.username);
@@ -72,7 +71,6 @@ function AuthActions(): AuthContextInterface {
       localStorage.setItem(userResp.username, JSON.stringify(result.token));
       return true;
     } catch (e: any) {
-      console.log("ERROR: ", e);
       setLogInErrors(e?.response?.data.errors);
       return false;
     }
@@ -85,8 +83,6 @@ function AuthActions(): AuthContextInterface {
       await registerUserCommand(values);
       return await loginUser(values);
     } catch (e: any) {
-      console.log("ERROR: ", e);
-
       if (typeof e?.response?.data.errors === "string")
         setRegisterErrors(e?.response?.data.errors);
       else setRegisterErrors(Object.values(e?.response?.data.errors));

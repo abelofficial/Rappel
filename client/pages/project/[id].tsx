@@ -28,11 +28,11 @@ const Home: NextPage = () => {
     getUserTodoListQuery(token + "", projectId)
   );
 
-  const { data: projects } = useSWR(Gateway.UserProjectsURL(projectId), () =>
+  const { data: project } = useSWR(Gateway.UserProjectsURL(projectId), () =>
     getUserProjectsQuery(token + "", projectId)
   );
 
-  if (!data || !projects) return <div>loading...</div>;
+  if (!data || !project) return <div>loading...</div>;
 
   const onAddTodoHandler = async (values: CreateTodoCommand) => {
     mutate(
@@ -44,25 +44,31 @@ const Home: NextPage = () => {
     );
   };
 
+  const countStatus = (status: ProgressBar) =>
+    data.reduce(
+      (t, c) =>
+        (t += c.subTask.reduce(
+          (t2, c2) => (c2.status === status ? (t2 += 1) : t2),
+          0
+        )),
+      0
+    );
+
   return (
     <Grid.Container direction='column'>
       <Grid>
         <Card css={{ w: "100%", m: "$10 $0" }}>
           <Card.Header css={{ justifyContent: "center" }}>
-            <Text b>{projects.title}</Text>
+            <Text b>{project.title}</Text>
           </Card.Header>
           <Card.Divider />
           <Card.Body css={{ py: "$10" }}>
-            <Text>{projects.description}</Text>
-            <Grid.Container justify='space-evenly' css={{ py: "$5" }}>
+            <Text>{project.description}</Text>
+            <Grid.Container justify='space-evenly' gap={2}>
               <Grid>
                 <Card variant='bordered' css={{ textAlign: "center", p: "$5" }}>
                   <Text h4 css={{ color: "$warning" }}>
-                    {data.reduce(
-                      (t, c) =>
-                        c.status === ProgressBar.CREATED ? (t += 1) : t,
-                      0
-                    )}
+                    {countStatus(ProgressBar.CREATED)}
                     <Text>Unassigned tasks</Text>
                   </Text>
                 </Card>
@@ -70,11 +76,7 @@ const Home: NextPage = () => {
               <Grid>
                 <Card variant='bordered' css={{ textAlign: "center", p: "$5" }}>
                   <Text h4 css={{ color: "$warning" }}>
-                    {data.reduce(
-                      (t, c) =>
-                        c.status === ProgressBar.STARTED ? (t += 1) : t,
-                      0
-                    )}
+                    {countStatus(ProgressBar.STARTED)}
                     <Text>on going tasks</Text>
                   </Text>
                 </Card>
@@ -82,11 +84,7 @@ const Home: NextPage = () => {
               <Grid>
                 <Card variant='bordered' css={{ textAlign: "center", p: "$5" }}>
                   <Text h4 css={{ color: "$success" }}>
-                    {data.reduce(
-                      (t, c) =>
-                        c.status === ProgressBar.COMPLETED ? (t += 1) : t,
-                      0
-                    )}
+                    {countStatus(ProgressBar.COMPLETED)}
                     <Text>completed tasks</Text>
                   </Text>
                 </Card>

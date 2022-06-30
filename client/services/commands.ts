@@ -88,3 +88,15 @@ export const updateTodoCommand = (
     .put<TodoResponseDto>(url, body)
     .then((d) => d.data);
 };
+
+export const updateSubtaskCommand = (
+  token: string,
+  id: number,
+  subTaskId: number,
+  body: CreateSubtaskCommand
+) => {
+  const url = Gateway.UpdateSubtaskURL(id, subTaskId);
+  return api(token)
+    .put<SubtaskResponseDto>(url, body)
+    .then((d) => d.data);
+};

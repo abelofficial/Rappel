@@ -2,9 +2,16 @@
 import React, { useContext } from "react";
 import useSWR, { mutate } from "swr";
 import { AuthContextInterface, AuthContext } from "../../Contexts/Auth";
-import { updateSubtaskStatusCommand } from "../../services/commands";
+import {
+  updateSubtaskCommand,
+  updateSubtaskStatusCommand,
+} from "../../services/commands";
 import { getUserTodoSubtaskQuery } from "../../services/Queries";
-import { ProgressBar, SubtaskResponseDto } from "../../types";
+import {
+  CreateTodoCommand,
+  ProgressBar,
+  SubtaskResponseDto,
+} from "../../types";
 import { ShowFilterType } from "../FilterBar";
 import * as Gateway from "../../services/QueriesGateway";
 import { UserTodoSubtaskURL } from "../../services/QueriesGateway";
@@ -30,8 +37,27 @@ const Index = ({ id, parentId, projectId, notifyChange }: SubtaskItemProps) => {
 
   if (!data) return <h1>loading</h1>;
 
+  const onAddSubtaskHandler = async (values: CreateTodoCommand) => {
+    mutate(
+      Gateway.UserTodoSubtaskURL(id, parentId, projectId),
+      async (_d: SubtaskResponseDto) => {
+        const newSubTask = await updateSubtaskCommand(
+          token + "",
+          parentId,
+          id,
+          {
+            ...values,
+            projectId,
+          }
+        );
+        notifyChange();
+        return newSubTask;
+      },
+      true
+    );
+  };
+
   const subTaskStatusChangeHandler = (status: number) => {
-    console.log("S: ", status);
     mutate(
       Gateway.UserTodoSubtaskURL(id, parentId, projectId),
       async (_d: SubtaskResponseDto) => {
@@ -58,6 +84,9 @@ const Index = ({ id, parentId, projectId, notifyChange }: SubtaskItemProps) => {
           isStarted={data.status === ProgressBar.STARTED}
           isCompleted={data.status === ProgressBar.COMPLETED}
           statusUpdateHandler={subTaskStatusChangeHandler}
+          projectId={projectId}
+          addSubtaskHandler={onAddSubtaskHandler}
+          initialFormData={data}
         />
       }
       body={<Text css={{ padding: "$4" }}> {data.description}</Text>}

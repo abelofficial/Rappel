@@ -22,7 +22,8 @@ public class UpdateSubtaskHandler : BaseHandler<SubTask>, IRequestHandler<Update
         var targetSubtask = await _mediator.Send(new GetSubtaskQuery()
         {
             TodoId = request.TodoId,
-            SubTaskId = request.SubTaskId
+            SubTaskId = request.SubTaskId,
+            ProjectId = request.ProjectId
         });
         var subTaskItem = await _db.SubTasks.FindAsync(targetSubtask.Id);
         _mapper.Map(request, subTaskItem);

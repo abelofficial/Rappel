@@ -14,7 +14,10 @@ import {
 import { AuthContextInterface, AuthContext } from "../../Contexts/Auth";
 import * as Gateway from "../../services/QueriesGateway";
 import { UserTodoItemURL } from "../../services/QueriesGateway";
-import { updateTodoCommand } from "../../services/commands";
+import {
+  createSubtaskCommand,
+  updateTodoCommand,
+} from "../../services/commands";
 import FilteredSubtaskList from "../FilteredSubtaskList";
 import TodoCardHeader from "../TodoCardHeader";
 import Card from "../Card";
@@ -69,7 +72,6 @@ const Index = ({ id, projectId }: TodoItemProps) => {
   const onChangeHandler = (value?: ShowFilterType) => {
     value && setCurrentShowing(value);
     mutate(Gateway.UserTodoSubtasksListURL(id), subtasks, true);
-    mutate(Gateway.UserProjectsURL(id), projectId, false);
   };
 
   const onUpdateTodoHandler = async (values: CreateTodoCommand) => {
@@ -84,6 +86,20 @@ const Index = ({ id, projectId }: TodoItemProps) => {
         );
         return newTodo;
       }
+    );
+  };
+
+  const onAddSubtaskHandler = async (values: CreateTodoCommand) => {
+    mutate(
+      Gateway.UserTodoSubtasksListURL(id),
+      async (data: SubtaskResponseDto[]) => {
+        const newSubTask = await createSubtaskCommand(token + "", id, {
+          ...values,
+          projectId,
+        });
+        return [...data, newSubTask];
+      },
+      true
     );
   };
 
@@ -118,12 +134,12 @@ const Index = ({ id, projectId }: TodoItemProps) => {
         <TodoCardHeader
           current={currentShowing}
           setCurrent={setCurrentShowing}
-          id={id}
           title={data.title}
           initialFormData={data}
           showFilterBar={subtasks?.length !== 0}
-          statusUpdateHandler={onUpdateTodoHandler}
+          taskUpdateHandler={onUpdateTodoHandler}
           projectId={projectId}
+          addSubtaskHandler={onAddSubtaskHandler}
         />
       }
       status={data.status}
