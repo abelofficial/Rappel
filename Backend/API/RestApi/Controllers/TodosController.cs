@@ -19,7 +19,8 @@ public class TodosController : ControllerBase
     private readonly IMediator _mediator;
     private readonly IMapper _mapper;
 
-    public TodosController(ILogger<TodosController> logger, IMediator mediator, IMapper mapper)
+    public TodosController(ILogger<TodosController> logger, IMediator mediator,
+                           IMapper mapper)
     {
         _logger = logger;
         _mediator = mediator;
@@ -31,15 +32,25 @@ public class TodosController : ControllerBase
     /// </summary>
     [HttpPost("{id}/[controller]")]
     [Authorize]
-    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(TodoResponseDto))]
-    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ExceptionMessage))]
-    [ProducesResponseType(typeof(ExceptionMessage), StatusCodes.Status401Unauthorized)]
-    public async Task<ActionResult> CreateTodoItem(int id, CreateTodoRequestDto request)
+    [ProducesResponseType(StatusCodes.Status201Created,
+                          Type = typeof(TodoResponseDto))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest,
+                          Type = typeof(ExceptionMessage))]
+    [ProducesResponseType(typeof(ExceptionMessage),
+                          StatusCodes.Status401Unauthorized)]
+    public async Task<ActionResult> CreateTodoItem(
+        int id, CreateTodoRequestDto request)
     {
         var command = _mapper.Map<CreateTodoCommand>(request);
         command.ProjectId = id;
         var response = await _mediator.Send(command);
-        return CreatedAtAction(nameof(GetUserTodo), new { id = response.Id, todoId = id, }, response);
+        return CreatedAtAction(nameof(GetUserTodo),
+                               new
+                               {
+                                   id = response.Id,
+                                   todoId = id,
+                               },
+                               response);
     }
 
     /// <summary>
@@ -47,10 +58,14 @@ public class TodosController : ControllerBase
     /// </summary>
     [HttpPut("{id}/[controller]/{todoId}")]
     [Authorize]
-    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(TodoResponseDto))]
-    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ExceptionMessage))]
-    [ProducesResponseType(typeof(ExceptionMessage), StatusCodes.Status401Unauthorized)]
-    public async Task<ActionResult> UpdateTodoItem(int id, int todoId, UpdateTodoRequestDto request)
+    [ProducesResponseType(StatusCodes.Status201Created,
+                          Type = typeof(TodoResponseDto))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest,
+                          Type = typeof(ExceptionMessage))]
+    [ProducesResponseType(typeof(ExceptionMessage),
+                          StatusCodes.Status401Unauthorized)]
+    public async Task<ActionResult> UpdateTodoItem(
+        int id, int todoId, UpdateTodoRequestDto request)
     {
         var command = _mapper.Map<UpdateTodoCommand>(request);
         command.Id = todoId;
@@ -65,10 +80,14 @@ public class TodosController : ControllerBase
     /// </summary>
     [HttpPatch("{id}/[controller]/{todoId}/status")]
     [Authorize]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TodoResponseDto))]
-    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
-    [ProducesResponseType(typeof(ExceptionMessage), StatusCodes.Status401Unauthorized)]
-    public async Task<ActionResult> CreateTodoItem(int id, int todoId, UpdateTodoStatusRequestDto request)
+    [ProducesResponseType(StatusCodes.Status200OK,
+                          Type = typeof(TodoResponseDto))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest,
+                          Type = typeof(ProblemDetails))]
+    [ProducesResponseType(typeof(ExceptionMessage),
+                          StatusCodes.Status401Unauthorized)]
+    public async Task<ActionResult> CreateTodoItem(
+        int id, int todoId, UpdateTodoStatusRequestDto request)
     {
         var response = await _mediator.Send(new UpdateTodoStatusCommand()
         {
@@ -84,11 +103,14 @@ public class TodosController : ControllerBase
     /// </summary>
     [HttpGet("{id}/[controller]")]
     [Authorize]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<TodoResponseDto>))]
-    [ProducesResponseType(typeof(ExceptionMessage), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status200OK,
+                          Type = typeof(IEnumerable<TodoResponseDto>))]
+    [ProducesResponseType(typeof(ExceptionMessage),
+                          StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult> GetAllUserTodos(int id)
     {
-        var response = await _mediator.Send(new GetAllTodosQuery() { ProjectId = id });
+        var response =
+            await _mediator.Send(new GetAllTodosQuery() { ProjectId = id });
         return Ok(response);
     }
 
@@ -97,12 +119,16 @@ public class TodosController : ControllerBase
     /// </summary>
     [HttpGet("{id}/[controller]/{todoId}")]
     [Authorize]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TodoResponseDto))]
-    [ProducesResponseType(typeof(ExceptionMessage), StatusCodes.Status404NotFound)]
-    [ProducesResponseType(typeof(ExceptionMessage), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status200OK,
+                          Type = typeof(TodoResponseDto))]
+    [ProducesResponseType(typeof(ExceptionMessage),
+                          StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ExceptionMessage),
+                          StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult> GetUserTodo(int id, int todoId)
     {
-        var response = await _mediator.Send(new GetTodoQuery() { Id = todoId, ProjectId = id });
+        var response = await _mediator.Send(
+            new GetTodoQuery() { Id = todoId, ProjectId = id });
         return Ok(response);
     }
 }

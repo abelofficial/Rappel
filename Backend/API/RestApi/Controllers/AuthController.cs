@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.RestApi.Controllers;
 
-
 [Route("[controller]")]
 [ApiController]
 [Produces("application/json")]
@@ -27,7 +26,8 @@ public class AuthController : ControllerBase
     /// <summary>
     /// Register new user.
     /// </summary>
-    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(UserResponseDto))]
+    [ProducesResponseType(StatusCodes.Status201Created,
+                          Type = typeof(UserResponseDto))]
     [HttpPost("register")]
     public async Task<ActionResult> RegisterUser(RegisterUserCommand request)
     {
@@ -38,8 +38,10 @@ public class AuthController : ControllerBase
     /// Authenticate user.
     /// </summary>
     [HttpPost("login")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(LoginResponseDto))]
-    [ProducesResponseType(typeof(ExceptionMessage), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status200OK,
+                          Type = typeof(LoginResponseDto))]
+    [ProducesResponseType(typeof(ExceptionMessage),
+                          StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult> LoginUser(LoginUserCommand request)
     {
         return Ok(await _mediator.Send(request));
@@ -50,8 +52,10 @@ public class AuthController : ControllerBase
 
     [Authorize]
     [HttpGet("user")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserResponseDto))]
-    [ProducesResponseType(typeof(ExceptionMessage), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status200OK,
+                          Type = typeof(UserResponseDto))]
+    [ProducesResponseType(typeof(ExceptionMessage),
+                          StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult> CurrentUser()
     {
         return Ok(await _mediator.Send(new CurrentUserQuery()));
