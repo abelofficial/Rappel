@@ -56,7 +56,7 @@ const Home: NextPage = () => {
             <Text>{projects.description}</Text>
             <Grid.Container justify='space-evenly' css={{ py: "$5" }}>
               <Grid>
-                <Card variant='shadow' css={{ textAlign: "center", p: "$5" }}>
+                <Card variant='bordered' css={{ textAlign: "center", p: "$5" }}>
                   <Text h4 css={{ color: "$warning" }}>
                     {data.reduce(
                       (t, c) =>
@@ -68,7 +68,7 @@ const Home: NextPage = () => {
                 </Card>
               </Grid>
               <Grid>
-                <Card variant='shadow' css={{ textAlign: "center", p: "$5" }}>
+                <Card variant='bordered' css={{ textAlign: "center", p: "$5" }}>
                   <Text h4 css={{ color: "$warning" }}>
                     {data.reduce(
                       (t, c) =>
@@ -80,7 +80,7 @@ const Home: NextPage = () => {
                 </Card>
               </Grid>
               <Grid>
-                <Card variant='shadow' css={{ textAlign: "center", p: "$5" }}>
+                <Card variant='bordered' css={{ textAlign: "center", p: "$5" }}>
                   <Text h4 css={{ color: "$success" }}>
                     {data.reduce(
                       (t, c) =>

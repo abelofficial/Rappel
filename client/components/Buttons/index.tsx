@@ -33,19 +33,6 @@ export const EditIconButton = (props: ButtonProps) => {
   );
 };
 
-export const SettingIconButton = (props: ButtonProps) => {
-  return (
-    <div onClick={props.onSubmitHandler} style={{ padding: "0.3rem 0.3rem" }}>
-      <Image
-        src='/settings-icon.svg'
-        alt='An SVG of an eye'
-        width={props.iconWidth ? props.iconWidth : 22}
-        height={props.iconHeight ? props.iconHeight : 22}
-      />
-    </div>
-  );
-};
-
 export const StartIconButton = (props: ButtonProps) => {
   return (
     <div onClick={props.onSubmitHandler} style={{ padding: "0.3rem 0.3rem" }}>

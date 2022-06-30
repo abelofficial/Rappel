@@ -10,7 +10,7 @@ import { UserProjectsURL } from "../../services/QueriesGateway";
 import { ProjectResponse, UpdateProjectRequestDto } from "../../types";
 import ProjectFormModal from "../ProjectFormModal";
 import * as Gateway from "../../services/QueriesGateway";
-import { EditIconButton, SettingIconButton } from "../Buttons";
+import { EditIconButton } from "../Buttons";
 ("../../types");
 
 export interface ProjectCardProps {
@@ -72,9 +72,6 @@ const Index = ({ id }: ProjectCardProps) => {
                   buttonTitle='Update'
                   title='Update project'
                 />
-              </Grid>
-              <Grid>
-                <SettingIconButton iconWidth={20} iconHeight={20} />
               </Grid>
             </Grid.Container>
           </Grid>

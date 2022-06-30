@@ -4,7 +4,6 @@ import {
   StartIconButton,
   OffIconButton,
   EditIconButton,
-  SettingIconButton,
   RestartIconButton,
 } from "../Buttons";
 
@@ -70,13 +69,6 @@ const Index = ({
             </Grid>
             <Grid css={{ padding: "$0 $2" }}>
               <EditIconButton
-                iconWidth={17}
-                iconHeight={17}
-                onSubmitHandler={() => {}}
-              />
-            </Grid>
-            <Grid css={{ padding: "$0 $2" }}>
-              <SettingIconButton
                 iconWidth={17}
                 iconHeight={17}
                 onSubmitHandler={() => {}}

@@ -2,7 +2,7 @@ import { Grid, Row, Text } from "@nextui-org/react";
 import React, { Dispatch } from "react";
 import { CreateTodoCommand } from "../../types";
 import AddSubtaskFormModal from "../AddSubtaskFormModal";
-import { EditIconButton, SettingIconButton } from "../Buttons";
+import { EditIconButton } from "../Buttons";
 import FilterBar, { ShowFilterType } from "../FilterBar";
 import TodoFormModal from "../TodoFormModal";
 
@@ -46,9 +46,6 @@ const Index = ({
               onSubmit={statusUpdateHandler}
               actionButton={<EditIconButton iconWidth={18} iconHeight={18} />}
             />
-          </Grid>
-          <Grid css={{ padding: "$0" }}>
-            <SettingIconButton iconWidth={18} iconHeight={18} />
           </Grid>
         </Grid.Container>
       </Row>
