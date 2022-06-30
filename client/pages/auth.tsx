@@ -1,36 +1,33 @@
-import { Button, Grid } from "@nextui-org/react";
+import { Grid } from "@nextui-org/react";
 import type { NextPage } from "next";
-import { useState } from "react";
+import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import LoginForm from "../components/LoginForm";
 import RegisterForm from "../components/RegisterForm";
 
 const Auth: NextPage = () => {
-  enum Tabs {
-    REGISTER = "Register",
-    LOGIN = "Login",
-  }
-  const [currentTab, setCurrentTab] = useState<Tabs>(Tabs.LOGIN);
-
   return (
     <Grid.Container
-      direction='column'
       alignItems='center'
-      justify='center'
-      gap={3}
+      css={{
+        h: "100vh",
+        backgroundColor: "transparent",
+        backgroundImage: "/blueprints.svg",
+        backgroundRepeat: "no-repeat, repeat",
+        backgroundSize: "cover",
+      }}
     >
-      <Grid>
-        <Button.Group color='gradient' ghost>
-          <Button onPress={() => setCurrentTab(Tabs.LOGIN)}>
-            {Tabs.LOGIN.toString()}
-          </Button>
-          <Button onPress={() => setCurrentTab(Tabs.REGISTER)}>
-            {Tabs.REGISTER}
-          </Button>
-        </Button.Group>
-      </Grid>
-      <Grid>
-        {currentTab === Tabs.LOGIN ? <LoginForm /> : <RegisterForm />}
-      </Grid>
+      <Tabs>
+        <TabList style={{ display: "flex", justifyContent: "space-around" }}>
+          <Tab>Login</Tab>
+          <Tab>Register</Tab>
+        </TabList>
+        <TabPanel>
+          <LoginForm />
+        </TabPanel>
+        <TabPanel>
+          <RegisterForm />
+        </TabPanel>
+      </Tabs>
     </Grid.Container>
   );
 };
