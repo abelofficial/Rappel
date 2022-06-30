@@ -44,7 +44,7 @@ const Index = ({ id, projectId }: TodoItemProps) => {
     getUserTodoSubtasksListQuery(token + "", id)
   );
 
-  if (!data || !subtasks) return <div>loading subtasks...</div>;
+  if (!data) return <div>loading...</div>;
 
   const getCompletedCount = () =>
     subtasks?.reduce(
@@ -84,14 +84,14 @@ const Index = ({ id, projectId }: TodoItemProps) => {
       body={
         <>
           <Text css={{ padding: "$4" }}>{data.description}</Text>
-          {subtasks.length !== 0 && (
+          {subtasks?.length !== 0 && (
             <Collapse
               css={{ padding: "$0 $5" }}
               title={
                 <Text h5 transform='capitalize'>
-                  {subtasks.length +
+                  {subtasks?.length +
                     " " +
-                    (subtasks.length === 1 ? "subtask" : "subtasks")}
+                    (subtasks?.length === 1 ? "subtask" : "subtasks")}
                 </Text>
               }
               bordered
@@ -113,7 +113,7 @@ const Index = ({ id, projectId }: TodoItemProps) => {
           id={id}
           title={data.title}
           initialFormData={data}
-          showFilterBar={subtasks.length > 0}
+          showFilterBar={subtasks?.length !== 0}
           statusUpdateHandler={onUpdateTodoHandler}
           projectId={projectId}
         />

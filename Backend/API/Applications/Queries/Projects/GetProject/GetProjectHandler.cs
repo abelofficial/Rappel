@@ -25,7 +25,12 @@ public class GetProjectHandler : BaseHandler<Todo>, IRequestHandler<GetProjectQu
 
         try
         {
-            var result = await _db.Projects.Where(p => p.Members.Any(m => m.Id == currentUser.Id)).SingleAsync(p => p.Id == request.Id);
+            var result = await _db.Projects
+            .Include(p => p.Owner)
+            .Include(p => p.Items)
+            .Include(p => p.Members)
+            .Where(p => p.Owner.Id == currentUser.Id || p.Members.Any(m => m.Id == currentUser.Id))
+            .SingleAsync(p => p.Id == request.Id);
 
             return _mapper.Map<ProjectResponseDto>(result);
         }

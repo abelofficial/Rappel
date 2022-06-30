@@ -10,25 +10,26 @@ namespace API.Application.Queries;
 
 public class GetTodoHandler : BaseHandler<Todo>, IRequestHandler<GetTodoQuery, TodoResponseDto>
 {
-    private readonly HttpContext _context;
+    private readonly IMediator _mediator;
 
-    public GetTodoHandler(IMapper mapper, AppDbContext db, IHttpContextAccessor httpContextAccessor)
+    public GetTodoHandler(IMapper mapper, AppDbContext db, IMediator mediator)
             : base(mapper, db)
     {
-        _context = httpContextAccessor.HttpContext;
+        _mediator = mediator;
     }
 
     public async Task<TodoResponseDto> Handle(GetTodoQuery request, CancellationToken cancellationToken)
     {
-        var currentUserName = _context.User.Identity.Name;
-        var currentUser = await _db.Users.SingleAsync(u => u.Username.Equals(currentUserName));
 
+        var currentUser = await _mediator.Send(new CurrentUserQuery());
         try
         {
             var result = await _db.Todos
             .Include(td => td.SubTask)
             .Include(td => td.User)
-            .SingleAsync(td => td.Project.Members.Any(m => m.Id == currentUser.Id) && td.Id == request.Id && td.Project.Id == request.ProjectId);
+            .Where(td => td.Project.Owner.Id == currentUser.Id ||
+                        td.Project.Members.Any(m => m.Id == currentUser.Id))
+            .SingleAsync(td => td.Id == request.Id && td.Project.Id == request.ProjectId);
 
             return _mapper.Map<TodoResponseDto>(result);
         }

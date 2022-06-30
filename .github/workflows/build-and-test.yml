@@ -2,7 +2,7 @@ name: build and test
 
 defaults:
   run:
-    working-directory: ./
+    working-directory: ./Backend
 
 on:
   push:

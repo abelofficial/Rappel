@@ -25,8 +25,8 @@ public class UpdateProjectCommand : IRequest<ProjectResponseDto>
     {
         public UpdateProjectCommandProfiles()
         {
-            CreateMap<UpdateSubtaskCommand, SubTask>();
             CreateMap<UpdateProjectRequestDto, UpdateProjectCommand>();
+            CreateMap<UpdateProjectCommand, Project>();
         }
     }
 }
