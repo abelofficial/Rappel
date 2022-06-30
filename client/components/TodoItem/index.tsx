@@ -28,6 +28,7 @@ export enum ShowFilterType {
   ALL = "all",
   STARTED = "started",
   COMPLETED = "completed",
+  NOT_STARTED = "not started",
 }
 
 const Index = ({ id, projectId }: TodoItemProps) => {
@@ -52,6 +53,12 @@ const Index = ({ id, projectId }: TodoItemProps) => {
         c.status === ProgressBar.COMPLETED ? (p += 1) : p,
       0
     );
+  const getBotStartedCount = () =>
+    subtasks?.reduce(
+      (p: number, c: SubtaskResponseDto) =>
+        c.status === ProgressBar.CREATED ? (p += 1) : p,
+      0
+    );
   const getStartedCount = () =>
     subtasks?.reduce(
       (p: number, c: SubtaskResponseDto) =>
@@ -61,7 +68,8 @@ const Index = ({ id, projectId }: TodoItemProps) => {
 
   const onChangeHandler = (value?: ShowFilterType) => {
     value && setCurrentShowing(value);
-    value && mutate(Gateway.UserTodoSubtasksListURL(id), subtasks, true);
+    mutate(Gateway.UserTodoSubtasksListURL(id), subtasks, true);
+    mutate(Gateway.UserProjectsURL(id), projectId, false);
   };
 
   const onUpdateTodoHandler = async (values: CreateTodoCommand) => {
@@ -95,7 +103,7 @@ const Index = ({ id, projectId }: TodoItemProps) => {
                 </Text>
               }
               bordered
-              subtitle={`${getStartedCount()} on going | ${getCompletedCount()} competed`}
+              subtitle={`${getStartedCount()} on going | ${getCompletedCount()} done | | ${getBotStartedCount()} not started `}
             >
               <FilteredSubtaskList
                 id={id}

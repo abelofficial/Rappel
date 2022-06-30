@@ -10,11 +10,27 @@ export enum ShowFilterType {
   ALL = "all",
   COMPLETED = "completed",
   STARTED = "started",
+  NOT_STARTED = "not started",
 }
 
 const Index = ({ current, setter }: FilterBarProps) => {
   return (
     <Grid.Container gap={1}>
+      <Grid>
+        <Tooltip content='See started item' contentColor='primary'>
+          <Button
+            flat
+            auto
+            size='xs'
+            color={
+              current === ShowFilterType.NOT_STARTED ? "success" : "warning"
+            }
+            onPress={() => setter(ShowFilterType.NOT_STARTED)}
+          >
+            Not started
+          </Button>
+        </Tooltip>
+      </Grid>
       <Grid>
         <Tooltip content='See all item' contentColor='primary'>
           <Button
@@ -47,7 +63,7 @@ const Index = ({ current, setter }: FilterBarProps) => {
             flat
             auto
             size='xs'
-            color={current === ShowFilterType.COMPLETED ? "success" : "warning"}
+            color='error'
             onPress={() => setter(ShowFilterType.COMPLETED)}
           >
             Completed
