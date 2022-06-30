@@ -1,4 +1,4 @@
-import { Grid, Row, Text } from "@nextui-org/react";
+import { Card, Grid, Row, Text } from "@nextui-org/react";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useContext } from "react";
@@ -8,9 +8,12 @@ import useSWR, { mutate } from "swr";
 import TodoFormModal from "../../components/TodoFormModal";
 import TodoItem from "../../components/TodoItem";
 import { AuthContextInterface, AuthContext } from "../../Contexts/Auth";
-import { getUserTodoListQuery } from "../../services/Queries";
+import {
+  getUserProjectsQuery,
+  getUserTodoListQuery,
+} from "../../services/Queries";
 import { UserTodoListURL } from "../../services/QueriesGateway";
-import { CreateTodoCommand, TodoResponseDto } from "../../types";
+import { CreateTodoCommand, ProgressBar, TodoResponseDto } from "../../types";
 import * as notItemAnim from "../../utils/Anims/not-found.json";
 import * as Gateway from "../../services/QueriesGateway";
 import { createTodoCommand } from "../../services/commands";
@@ -25,7 +28,11 @@ const Home: NextPage = () => {
     getUserTodoListQuery(token + "", projectId)
   );
 
-  if (!data) return <div>loading...</div>;
+  const { data: projects } = useSWR(Gateway.UserProjectsURL(projectId), () =>
+    getUserProjectsQuery(token + "", projectId)
+  );
+
+  if (!data || !projects) return <div>loading...</div>;
 
   const onAddTodoHandler = async (values: CreateTodoCommand) => {
     mutate(
@@ -39,6 +46,56 @@ const Home: NextPage = () => {
 
   return (
     <Grid.Container direction='column'>
+      <Grid>
+        <Card css={{ w: "100%", m: "$10 $0" }}>
+          <Card.Header css={{ justifyContent: "center" }}>
+            <Text b>{projects.title}</Text>
+          </Card.Header>
+          <Card.Divider />
+          <Card.Body css={{ py: "$10" }}>
+            <Text>{projects.description}</Text>
+            <Grid.Container justify='space-evenly' css={{ py: "$5" }}>
+              <Grid>
+                <Card variant='shadow' css={{ textAlign: "center", p: "$5" }}>
+                  <Text h4 css={{ color: "$warning" }}>
+                    {data.reduce(
+                      (t, c) =>
+                        c.status === ProgressBar.CREATED ? (t += 1) : t,
+                      0
+                    )}
+                    <Text>Unassigned tasks</Text>
+                  </Text>
+                </Card>
+              </Grid>
+              <Grid>
+                <Card variant='shadow' css={{ textAlign: "center", p: "$5" }}>
+                  <Text h4 css={{ color: "$warning" }}>
+                    {data.reduce(
+                      (t, c) =>
+                        c.status === ProgressBar.STARTED ? (t += 1) : t,
+                      0
+                    )}
+                    <Text>on going tasks</Text>
+                  </Text>
+                </Card>
+              </Grid>
+              <Grid>
+                <Card variant='shadow' css={{ textAlign: "center", p: "$5" }}>
+                  <Text h4 css={{ color: "$success" }}>
+                    {data.reduce(
+                      (t, c) =>
+                        c.status === ProgressBar.COMPLETED ? (t += 1) : t,
+                      0
+                    )}
+                    <Text>completed tasks</Text>
+                  </Text>
+                </Card>
+              </Grid>
+            </Grid.Container>
+          </Card.Body>
+          <Card.Divider />
+        </Card>
+      </Grid>
       <Grid>
         <TodoFormModal
           buttonTitle='Create'
