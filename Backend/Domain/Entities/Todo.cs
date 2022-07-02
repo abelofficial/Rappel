@@ -1,6 +1,5 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
-using Newtonsoft.Json.Converters;
 
 namespace API.Domain.Entities;
 
@@ -9,25 +8,24 @@ public class Todo : IEntity
     [Required]
     public int Id { get; set; }
     [Required]
-    public string Title { get; set; }
+    public string? Title { get; set; }
     [Required]
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
     [Required]
-    [Newtonsoft.Json.JsonConverter(typeof(StringEnumConverter))]
     public ProgressStatus Status { get; set; }
 
     [Required]
     [JsonIgnore]
-    public virtual User User { get; set; }
+    public virtual User? User { get; set; }
 
     [Required]
     [JsonIgnore]
-    public virtual Project Project { get; set; }
+    public virtual Project? Project { get; set; }
 
     [Required]
     [JsonIgnore]
-    public virtual IEnumerable<SubTask> SubTask { get; set; }
+    public virtual IEnumerable<SubTask>? SubTask { get; set; }
 
     public virtual void AddSubTask(SubTask todo)
     {
