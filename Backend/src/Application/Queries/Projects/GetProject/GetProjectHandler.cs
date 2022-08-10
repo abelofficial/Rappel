@@ -23,14 +23,15 @@ public class GetProjectHandler : BaseHandler<Project>, IRequestHandler<GetProjec
         try
         {
             var result = await _db
-              .GetAll(p => (p.Owner.Id == currentUser.Id ||
+              .GetOne(p => (p.Owner.Id == currentUser.Id ||
                   p.Members.Any(m => m.Id == currentUser.Id)) &&
                 p.Id == request.Id);
 
             return _mapper.Map<ProjectResponseDto>(result);
         }
-        catch (Exception)
+        catch (Exception e)
         {
+            Console.WriteLine("Error: " + e);
             throw new HttpRequestException($"Project with the id {request.Id} doesn't exist", null, HttpStatusCode.NotFound);
         }
     }

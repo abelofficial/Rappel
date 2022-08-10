@@ -43,6 +43,7 @@ export const AuthProvider = ({ children }: { children: JSX.Element }) => {
       }
       router.pathname !== "/auth" && router.push("/auth");
     } else {
+      console.log("User", user);
       router.push("/");
     }
   }, [user]);

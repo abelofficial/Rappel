@@ -17,14 +17,14 @@ import * as Gateway from "../services/QueriesGateway";
 const Home: NextPage = () => {
   const { user, token } = useContext<AuthContextInterface>(AuthContext);
   const { data } = useSWR(UserProjectsListURL(), () =>
-    getUserProjectsListQuery(token + "")
+    getUserProjectsListQuery(token as string)
   );
 
   if (!data) return <div>loading...</div>;
 
   const onAddProjectHandler = async (values: CreateProjectRequestDto) => {
     mutate(Gateway.UserProjectsListURL(), async (data: ProjectResponse[]) => {
-      const newProject = await createProjectCommand(token + "", values);
+      const newProject = await createProjectCommand(token as string, values);
       return [...data, newProject];
     });
   };

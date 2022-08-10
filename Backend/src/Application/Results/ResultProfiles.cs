@@ -9,7 +9,6 @@ public class ResultProfiles : Profile
     public ResultProfiles()
     {
         CreateMap<Project, ProjectResponseDto>();
-        CreateMap<Project, ProjectResponseDto>().ReverseMap();
         CreateMap<User, UserResponseDto>();
         CreateMap<Todo, TodoResponseDto>().ReverseMap();
         CreateMap<SubTaskResponseDto, SubTask>().ReverseMap()
