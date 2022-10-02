@@ -1,5 +1,5 @@
 using System.Reflection;
-using API.Application.Settings;
+using API.Domain.Settings;
 
 namespace API.RestApi.Installers;
 

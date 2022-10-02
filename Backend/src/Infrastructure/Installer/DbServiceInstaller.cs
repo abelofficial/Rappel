@@ -1,7 +1,7 @@
 using System;
 using API.Application;
-using API.Application.Settings;
 using API.Domain.Entities;
+using API.Domain.Settings;
 using API.Infrastructure.Data;
 using API.Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;

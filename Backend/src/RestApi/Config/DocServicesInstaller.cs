@@ -1,4 +1,4 @@
-using API.Application.Settings;
+using API.Domain.Settings;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 
@@ -11,17 +11,27 @@ public class DocServicesInstaller : IInstaller
         services.AddHttpContextAccessor();
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(options =>
-{
-    options.AddSecurityDefinition("oauth2", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
-    {
-        Description = "Standard Authorization header using the Bearer scheme (\"bearer {token}\")",
-        In = ParameterLocation.Header,
-        Name = "Authorization",
-        Type = SecuritySchemeType.ApiKey
-    });
+        {
+            options.AddSecurityDefinition("oauth2", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+            {
+                Description = "Standard Authorization header using the Bearer scheme (\"bearer {token}\")",
+                In = ParameterLocation.Header,
+                Name = "Authorization",
+                Type = SecuritySchemeType.ApiKey
+            });
 
-    options.OperationFilter<SecurityRequirementsOperationFilter>();
-});
+            options.OperationFilter<SecurityRequirementsOperationFilter>();
+        });
+        services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                    {
+                        builder.WithOrigins("http://localhost:3000", "https://todo.abelsintaro.com")
+                            .AllowAnyHeader()
+                            .AllowAnyMethod()
+                            .AllowCredentials();
+                    });
+            });
 
     }
 }
