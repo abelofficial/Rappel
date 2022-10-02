@@ -8,20 +8,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.RestApi.Controllers;
 
-[Route("[controller]")]
-[ApiController]
-[Produces("application/json")]
 
-public class AuthController : ControllerBase
+
+public class AuthController : BaseController
 {
-    private readonly ILogger<AuthController> _logger;
-    private readonly IMediator _mediator;
-
-    public AuthController(ILogger<AuthController> logger, IMediator mediator)
-    {
-        _logger = logger;
-        _mediator = mediator;
-    }
+    public AuthController(IMediator mediator) :
+        base(mediator)
+    { }
 
     /// <summary>
     /// Register new user.

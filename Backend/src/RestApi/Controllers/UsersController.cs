@@ -8,9 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.RestApi.Controllers;
 
-[ApiController]
-[Produces("application/json")]
-[Route("[controller]")]
 public class UsersController : ControllerBase
 {
     private readonly ILogger<UsersController> _logger;

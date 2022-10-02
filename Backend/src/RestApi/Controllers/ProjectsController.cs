@@ -3,29 +3,17 @@ using API.Application.Commands.Dtos;
 using API.Application.Queries;
 using API.Application.Results;
 using API.Domain.Exceptions;
-using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.RestApi.Controllers;
 
-[ApiController]
-[Produces("application/json")]
-[Route("[controller]")]
-public class ProjectsController : ControllerBase
+public class ProjectsController : BaseController
 {
-    private readonly ILogger<ProjectsController> _logger;
-    private readonly IMediator _mediator;
-    private readonly IMapper _mapper;
-
-    public ProjectsController(ILogger<ProjectsController> logger,
-                              IMediator mediator, IMapper mapper)
-    {
-        _logger = logger;
-        _mediator = mediator;
-        _mapper = mapper;
-    }
+    public ProjectsController(IMediator mediator) :
+         base(mediator)
+    { }
 
     /// <summary>
     /// Create Project item.

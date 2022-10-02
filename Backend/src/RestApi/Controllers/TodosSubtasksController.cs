@@ -10,22 +10,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.RestApi.Controllers;
 
-[ApiController]
-[Produces("application/json")]
-[Route("todo/")]
-public class TodosSubtasksController : ControllerBase
-{
-    private readonly ILogger<TodosSubtasksController> _logger;
-    private readonly IMediator _mediator;
-    private readonly IMapper _mapper;
 
-    public TodosSubtasksController(ILogger<TodosSubtasksController> logger,
-                                   IMediator mediator, IMapper mapper)
-    {
-        _logger = logger;
-        _mediator = mediator;
-        _mapper = mapper;
-    }
+public class TodosSubtasksController : BaseController
+{
+    public TodosSubtasksController(IMediator mediator, IMapper mapper) :
+        base(mediator, mapper)
+    { }
 
     /// <summary>
     // Create a subtask for a todo item.

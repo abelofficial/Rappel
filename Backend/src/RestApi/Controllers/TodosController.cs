@@ -3,29 +3,18 @@ using API.Application.Commands.Dtos;
 using API.Application.Queries;
 using API.Application.Results;
 using API.Domain.Exceptions;
-using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.RestApi.Controllers;
 
-[ApiController]
-[Produces("application/json")]
-[Route("project/")]
-public class TodosController : ControllerBase
+public class TodosController : BaseController
 {
-    private readonly ILogger<TodosController> _logger;
-    private readonly IMediator _mediator;
-    private readonly IMapper _mapper;
 
-    public TodosController(ILogger<TodosController> logger, IMediator mediator,
-                           IMapper mapper)
-    {
-        _logger = logger;
-        _mediator = mediator;
-        _mapper = mapper;
-    }
+    public TodosController(IMediator mediator) :
+       base(mediator)
+    { }
 
     /// <summary>
     /// Create Todo item.
