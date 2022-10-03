@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace AWSApiGateways.Controllers;
 
 [Route("[controller]")]
+[ApiController]
+[Produces("application/json")]
 public class AuthController : ControllerBase
 {
     // GET api/values

@@ -23,13 +23,18 @@ public class LoginUserHandler : BaseHandler<User>, IRequestHandler<LoginUserComm
 
     public async Task<LoginResponseDto> Handle(LoginUserCommand request, CancellationToken cancellationToken)
     {
-        var targetUser = (await _db.GetOne(u => u.Username == request.Username));
+        try
+        {
+            var targetUser = (await _db.GetOne(u => u.Username == request.Username));
+            if (!Password.VerifyPasswordHash(request.Password, targetUser.PasswordHash, targetUser.PasswordSalt))
+                throw new Exception();
 
-        if (targetUser == null || !Password.VerifyPasswordHash(request.Password, targetUser.PasswordHash, targetUser.PasswordSalt))
+            return new LoginResponseDto() { Token = CreateToken(targetUser) };
+        }
+        catch (Exception)
+        {
             throw new HttpRequestException("Wrong credential", null, HttpStatusCode.Unauthorized);
-
-
-        return new LoginResponseDto() { Token = CreateToken(targetUser) };
+        }
     }
 
     public string CreateToken(User modelUser)

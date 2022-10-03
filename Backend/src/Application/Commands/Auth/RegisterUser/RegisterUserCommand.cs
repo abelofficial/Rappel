@@ -23,12 +23,12 @@ public class RegisterUserCommand : IRequest<UserResponseDto>
         public RegisterUserCommandProfiles()
         {
             CreateMap<RegisterUserCommand, User>()
-         .AfterMap((src, dest) =>
-         {
-             var password = new Password(src.Password);
-             dest.PasswordHash = password.PasswordHash;
-             dest.PasswordSalt = password.PasswordSalt;
-         });
+            .AfterMap((src, dest) =>
+            {
+                var password = new Password(src.Password);
+                dest.PasswordHash = password.PasswordHash;
+                dest.PasswordSalt = password.PasswordSalt;
+            });
         }
     }
 }

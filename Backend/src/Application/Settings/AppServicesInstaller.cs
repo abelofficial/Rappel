@@ -1,8 +1,6 @@
 
 using System.Text;
-using API.Application.Commands;
 using API.Domain.Settings;
-using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
@@ -17,8 +15,6 @@ public class AppServicesInstaller : IInstaller
     {
         services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-        services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<RegisterUserValidator>());
-
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
